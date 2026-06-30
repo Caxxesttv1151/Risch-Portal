@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Risch Network — Portal</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;}
+/* EDITABLE: variables globales de color y dimensiones */
+:root{
+  --bg:#0f0f13;--surface:#17171d;--surface-2:#1e1e26;--surface-3:#252530; /* EDITABLE: fondos (oscuro → claro) */
+  --text:#f0f0f5;--text-muted:#8888a0;--text-dim:#555568; /* EDITABLE: colores de texto */
+  --border:rgba(255,255,255,0.07);--border-h:rgba(255,255,255,0.13);
+  --accent:#6c63ff;--accent-2:#a78bfa;--accent-glow:rgba(108,99,255,0.35); /* EDITABLE: color morado principal */
+  --green:#22d3a0;--green-bg:rgba(34,211,160,0.1);--green-text:#22d3a0; /* EDITABLE: color "activo/en línea" */
+  --yellow:#f59e0b;--yellow-bg:rgba(245,158,11,0.1);--yellow-text:#fbbf24; /* EDITABLE: color "advertencia/adeudo" */
+  --red:#f87171;--red-bg:rgba(248,113,113,0.1);--red-text:#f87171; /* EDITABLE: color "peligro/suspendido" */
+  --blue:#60a5fa;--blue-bg:rgba(96,165,250,0.1);--blue-text:#93c5fd;
+  --sidebar-w:240px;--r:10px; /* EDITABLE: ancho del sidebar y radio de bordes */
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-size:14px;min-height:100vh;overflow-x:hidden;}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border-h);border-radius:2px;}
+
+/* ── LOGIN ── */
+#login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.login-bg{position:absolute;inset:0;z-index:0;}
+.login-bg::before{content:'';position:absolute;top:-30%;left:-20%;width:70%;height:70%;background:radial-gradient(ellipse,rgba(108,99,255,0.18) 0%,transparent 70%);animation:drift 8s ease-in-out infinite alternate;}
+.login-bg::after{content:'';position:absolute;bottom:-20%;right:-10%;width:60%;height:60%;background:radial-gradient(ellipse,rgba(167,139,250,0.12) 0%,transparent 70%);animation:drift 10s ease-in-out infinite alternate-reverse;}
+@keyframes drift{from{transform:translate(0,0);}to{transform:translate(30px,20px);}}
+.grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px);background-size:40px 40px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black,transparent);}
+
+.login-card{position:relative;z-index:1;background:rgba(23,23,29,0.85);border:1px solid var(--border-h);border-radius:20px;padding:2.5rem 2rem;width:100%;max-width:400px;backdrop-filter:blur(20px);animation:slideUp 0.5s cubic-bezier(0.16,1,0.3,1) both;}
+@keyframes slideUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+.login-logo-wrap{text-align:center;margin-bottom:2rem;}
+.login-logo{display:inline-flex;align-items:center;gap:10px;margin-bottom:6px;}
+.logo-mark{width:40px;height:40px;background:linear-gradient(135deg,var(--accent),var(--accent-2));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:white;box-shadow:0 0 20px var(--accent-glow);}
+.logo-text{font-size:20px;font-weight:700;letter-spacing:-0.5px;}
+.login-sub{font-size:12px;color:var(--text-muted);}
+
+.form-group{margin-bottom:1rem;}
+.form-group label{display:block;font-size:11px;font-weight:600;color:var(--text-muted);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:6px;}
+.form-group input,.form-group select,.form-group textarea{
+  width:100%;padding:10px 14px;background:var(--surface-2);border:1px solid var(--border);
+  border-radius:var(--r);font-size:13.5px;color:var(--text);font-family:'Inter',sans-serif;
+  outline:none;transition:border-color 0.2s,box-shadow 0.2s;
+}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow);}
+.form-group select option{background:var(--surface-2);}
+.form-row{display:flex;gap:12px;}
+.form-row .form-group{flex:1;}
+
+.btn{padding:9px 18px;border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:var(--surface-2);color:var(--text);transition:all 0.15s;font-family:'Inter',sans-serif;letter-spacing:0.01em;}
+.btn:hover{border-color:var(--border-h);background:var(--surface-3);}
+.btn:active{transform:scale(0.98);}
+.btn-accent{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:white;border-color:transparent;box-shadow:0 4px 16px var(--accent-glow);}
+.btn-accent:hover{box-shadow:0 6px 24px var(--accent-glow);transform:translateY(-1px);}
+.btn-accent:active{transform:scale(0.97) translateY(0);}
+.btn-sm{padding:5px 12px;font-size:12px;}
+.btn-full{width:100%;padding:11px;font-size:14px;margin-top:4px;}
+.btn-link{background:none;border:none;color:var(--accent);font-size:12px;cursor:pointer;padding:0;font-family:'Inter',sans-serif;}
+.btn-link:hover{color:var(--accent-2);}
+.btn-danger{background:var(--red-bg);color:var(--red-text);border-color:transparent;}
+.btn-success{background:var(--green-bg);color:var(--green-text);border-color:transparent;}
+.btn-wa{background:rgba(37,211,102,0.15);color:#25d366;border-color:transparent;}
+.btn-wa:hover{background:rgba(37,211,102,0.28);}
+a:has(.btn-wa){text-decoration:none;}
+
+#recover-form{display:none;}
+.login-hint{font-size:11px;color:var(--text-dim);margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border);text-align:left;}
+.login-hint span{display:block;margin-bottom:2px;}
+
+/* ── APP ── */
+#app{display:none;min-height:100vh;}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  position:fixed;left:0;top:0;bottom:0;width:var(--sidebar-w);
+  background:linear-gradient(180deg,#13131a 0%,#0f0f15 100%);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;z-index:100;
+}
+.sidebar::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(108,99,255,0.4),transparent);}
+
+.sidebar-header{padding:1.25rem 1rem 1rem;border-bottom:1px solid var(--border);}
+.sidebar-logo{display:flex;align-items:center;gap:10px;margin-bottom:4px;}
+.sidebar-mark{width:30px;height:30px;background:linear-gradient(135deg,var(--accent),var(--accent-2));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;box-shadow:0 0 12px var(--accent-glow);flex-shrink:0;}
+.sidebar-brand{font-size:14px;font-weight:700;letter-spacing:-0.3px;}
+.sidebar-role{font-size:10px;color:var(--text-muted);letter-spacing:0.04em;text-transform:uppercase;}
+
+.sidebar-nav{flex:1;padding:0.75rem 0.5rem;overflow-y:auto;}
+.nav-section{font-size:9px;font-weight:700;color:var(--text-dim);letter-spacing:0.1em;text-transform:uppercase;padding:0.75rem 0.75rem 0.25rem;}
+.nav-item{
+  display:flex;align-items:center;gap:10px;padding:8px 10px;
+  cursor:pointer;color:var(--text-muted);font-size:13px;font-weight:400;
+  border-radius:8px;transition:all 0.15s;border:none;background:none;
+  width:100%;text-align:left;position:relative;overflow:hidden;
+}
+.nav-item::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,var(--accent),var(--accent-2));opacity:0;transition:opacity 0.2s;border-radius:8px;}
+.nav-item:hover{color:var(--text);background:rgba(255,255,255,0.04);}
+.nav-item.active{color:white;background:rgba(108,99,255,0.15);font-weight:500;}
+.nav-item.active::before{opacity:0.08;}
+.nav-item.active .nav-icon-wrap{color:var(--accent-2);}
+.nav-icon-wrap{width:18px;height:18px;flex-shrink:0;display:flex;align-items:center;justify-content:center;position:relative;z-index:1;}
+.nav-icon-wrap svg{width:15px;height:15px;}
+.nav-label{position:relative;z-index:1;}
+.nav-badge{margin-left:auto;background:var(--red-text);color:white;font-size:10px;padding:1px 6px;border-radius:10px;font-weight:600;position:relative;z-index:1;animation:badgePulse 2s ease-in-out infinite;}
+@keyframes badgePulse{0%,100%{box-shadow:0 0 0 0 rgba(248,113,113,0.5);}50%{box-shadow:0 0 0 4px rgba(248,113,113,0);}}
+
+.sidebar-footer{padding:0.75rem 1rem;border-top:1px solid var(--border);}
+.user-pill{display:flex;align-items:center;gap:9px;}
+.avatar{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent-2));font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:white;}
+.user-info{flex:1;min-width:0;}
+.user-name{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.user-email{font-size:10px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.logout-btn{background:none;border:none;cursor:pointer;color:var(--text-dim);padding:4px;border-radius:6px;transition:color 0.15s;}
+.logout-btn:hover{color:var(--red-text);}
+
+/* ── MAIN ── */
+.main{margin-left:var(--sidebar-w);min-height:100vh;display:flex;flex-direction:column;}
+.topbar{
+  background:rgba(15,15,19,0.85);border-bottom:1px solid var(--border);
+  padding:0 1.5rem;height:54px;display:flex;align-items:center;gap:12px;
+  position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);
+}
+.topbar-title{font-size:15px;font-weight:600;flex:1;letter-spacing:-0.2px;}
+.topbar-actions{display:flex;align-items:center;gap:10px;}
+.status-pill{display:flex;align-items:center;gap:6px;font-size:11px;padding:4px 10px;border-radius:20px;background:var(--green-bg);color:var(--green-text);font-weight:500;border:1px solid rgba(34,211,160,0.2);}
+.status-dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:statusPulse 2s infinite;}
+@keyframes statusPulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(34,211,160,0.5);}50%{opacity:0.7;box-shadow:0 0 0 4px rgba(34,211,160,0);}}
+.icon-btn{background:none;border:1px solid var(--border);color:var(--text-muted);padding:7px;border-radius:8px;cursor:pointer;transition:all 0.15s;position:relative;display:flex;}
+.icon-btn:hover{border-color:var(--border-h);color:var(--text);background:var(--surface-2);}
+.notif-dot{position:absolute;top:3px;right:3px;width:7px;height:7px;background:var(--red-text);border-radius:50%;border:2px solid var(--bg);animation:badgePulse 2s infinite;}
+
+.content{padding:1.5rem;flex:1;}
+
+/* ── VIEW TRANSITION ── */
+.view{display:none;animation:fadeInUp 0.3s cubic-bezier(0.16,1,0.3,1) both;}
+.view.active{display:block;}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── CARDS ── */
+.card{
+  background:var(--surface);border:1px solid var(--border);border-radius:14px;
+  padding:1.25rem;transition:border-color 0.2s,transform 0.2s,box-shadow 0.2s;
+  position:relative;overflow:hidden;
+}
+.card:hover{border-color:var(--border-h);}
+.card-glow{border-color:rgba(108,99,255,0.25);box-shadow:0 0 30px rgba(108,99,255,0.07);}
+
+.metric-card{cursor:default;}
+.metric-card::before{content:'';position:absolute;top:0;right:0;width:60%;height:100%;opacity:0.04;border-radius:14px;}
+.metric-card.c-purple::before{background:radial-gradient(ellipse at top right,var(--accent),transparent);}
+.metric-card.c-green::before{background:radial-gradient(ellipse at top right,var(--green),transparent);}
+.metric-card.c-yellow::before{background:radial-gradient(ellipse at top right,var(--yellow),transparent);}
+.metric-card.c-red::before{background:radial-gradient(ellipse at top right,var(--red),transparent);}
+
+.card-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;font-size:16px;}
+.ci-purple{background:rgba(108,99,255,0.15);color:var(--accent-2);}
+.ci-green{background:var(--green-bg);color:var(--green);}
+.ci-yellow{background:var(--yellow-bg);color:var(--yellow);}
+.ci-red{background:var(--red-bg);color:var(--red);}
+.ci-blue{background:var(--blue-bg);color:var(--blue);}
+
+.card-label{font-size:11px;color:var(--text-muted);font-weight:500;letter-spacing:0.03em;margin-bottom:6px;}
+.card-value{font-size:28px;font-weight:700;letter-spacing:-1px;line-height:1;margin-bottom:4px;}
+.card-sub{font-size:11px;color:var(--text-muted);}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.1rem;}
+.section-title{font-size:14px;font-weight:600;letter-spacing:-0.2px;}
+
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.mb-2{margin-bottom:1rem;}.mb-3{margin-bottom:1.5rem;}
+
+/* ── TABLE ── */
+.table-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{text-align:left;padding:8px 12px;font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.07em;border-bottom:1px solid var(--border);}
+td{padding:11px 12px;border-bottom:1px solid var(--border);color:var(--text);}
+tr:last-child td{border-bottom:none;}
+tr{transition:background 0.12s;}
+tbody tr:hover td{background:rgba(255,255,255,0.025);}
+
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:0.02em;}
+.badge-success{background:var(--green-bg);color:var(--green-text);border:1px solid rgba(34,211,160,0.2);}
+.badge-warning{background:var(--yellow-bg);color:var(--yellow-text);border:1px solid rgba(245,158,11,0.2);}
+.badge-danger{background:var(--red-bg);color:var(--red-text);border:1px solid rgba(248,113,113,0.2);}
+.badge-accent{background:rgba(108,99,255,0.15);color:var(--accent-2);border:1px solid rgba(108,99,255,0.25);}
+.badge-gray{background:rgba(255,255,255,0.05);color:var(--text-muted);border:1px solid var(--border);}
+
+/* ── AGENDA ── */
+.agenda-item{display:flex;gap:1rem;padding:11px 0;border-bottom:1px solid var(--border);align-items:flex-start;}
+.agenda-item:last-child{border-bottom:none;}
+.agenda-time{min-width:90px;font-size:11px;color:var(--text-muted);padding-top:2px;}
+.agenda-body{flex:1;}
+.agenda-title{font-size:13px;font-weight:500;margin-bottom:2px;}
+.agenda-detail{font-size:11px;color:var(--text-muted);}
+
+/* ── SPEED ── */
+.speedtest-wrap{display:flex;flex-direction:column;align-items:center;padding:2rem 0;gap:2rem;}
+.speed-ring{position:relative;width:180px;height:180px;}
+.speed-ring svg{position:absolute;inset:0;transform:rotate(-90deg);}
+.speed-track{fill:none;stroke:var(--surface-3);stroke-width:8;}
+.speed-fill{fill:none;stroke:url(#speedGrad);stroke-width:8;stroke-linecap:round;stroke-dasharray:502;stroke-dashoffset:502;transition:stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);}
+.speed-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.speed-value{font-size:42px;font-weight:700;letter-spacing:-2px;line-height:1;}
+.speed-unit{font-size:12px;color:var(--text-muted);margin-top:2px;}
+.speed-label{font-size:11px;color:var(--text-muted);margin-top:2px;}
+.speed-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;width:100%;max-width:380px;}
+.speed-stat{text-align:center;padding:14px;background:var(--surface-2);border-radius:12px;border:1px solid var(--border);transition:border-color 0.2s;}
+.speed-stat.lit{border-color:rgba(108,99,255,0.3);}
+.speed-stat .val{font-size:18px;font-weight:700;letter-spacing:-0.5px;}
+.speed-stat .lbl{font-size:10px;color:var(--text-muted);margin-top:3px;letter-spacing:0.04em;text-transform:uppercase;}
+
+/* ── PROGRESS ── */
+.progress-bar{height:4px;background:var(--surface-3);border-radius:2px;overflow:hidden;margin-top:6px;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));border-radius:2px;transition:width 1s ease;}
+
+/* ── CHART ── */
+.chart-bars{display:flex;align-items:flex-end;gap:8px;height:96px;padding:0 2px;}
+.bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;}
+.bar{width:100%;background:var(--surface-3);border-radius:4px 4px 0 0;min-height:4px;transition:height 1s cubic-bezier(0.16,1,0.3,1);}
+.bar.hi{background:linear-gradient(180deg,var(--accent-2),var(--accent));box-shadow:0 0 12px var(--accent-glow);}
+.bar-label{font-size:10px;color:var(--text-dim);}
+
+/* ── MONITOR ── */
+.monitor-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);}
+.monitor-row:last-child{border-bottom:none;}
+.monitor-icon{width:34px;height:34px;border-radius:9px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;border:1px solid var(--border);}
+.monitor-info{flex:1;min-width:0;}
+.monitor-name{font-size:13px;font-weight:500;}
+.monitor-ip{font-size:11px;color:var(--text-muted);}
+.monitor-ping{font-size:12px;font-weight:600;min-width:50px;text-align:right;}
+.ping-good{color:var(--green);}
+.ping-warn{color:var(--yellow);}
+.ping-bad{color:var(--red);}
+
+/* ── PAYMENT MODAL ── */
+.metodo-card{display:flex;align-items:center;gap:14px;padding:13px 16px;border:1px solid var(--border);border-radius:var(--r);cursor:pointer;transition:all 0.15s;background:var(--surface-2);}
+.metodo-card:hover{border-color:var(--border-h);}
+.metodo-card.selected{border-color:var(--accent);background:rgba(108,99,255,0.08);box-shadow:0 0 0 1px var(--accent);}
+.metodo-icon{font-size:20px;width:34px;text-align:center;}
+.metodo-label{font-size:13px;font-weight:500;}
+.metodo-sub{font-size:11px;color:var(--text-muted);}
+.pago-metodo{display:flex;flex-direction:column;gap:8px;margin:1rem 0;}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:300;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+.modal-overlay.open{display:flex;animation:fadeIn 0.15s ease;}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+.modal{background:var(--surface);border:1px solid var(--border-h);border-radius:16px;padding:1.75rem;width:100%;max-width:460px;box-shadow:0 24px 60px rgba(0,0,0,0.5);animation:slideUp 0.25s cubic-bezier(0.16,1,0.3,1);}
+.modal-title{font-size:16px;font-weight:700;margin-bottom:1.25rem;letter-spacing:-0.3px;}
+.modal-footer{display:flex;gap:10px;justify-content:flex-end;margin-top:1.25rem;}
+
+/* ── NOTIF PANEL ── */
+.notif-panel{position:fixed;top:60px;right:12px;width:300px;background:var(--surface);border:1px solid var(--border-h);border-radius:14px;z-index:200;display:none;box-shadow:0 16px 48px rgba(0,0,0,0.4);}
+.notif-panel.open{display:block;animation:slideDown 0.2s cubic-bezier(0.16,1,0.3,1);}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:translateY(0);}}
+.notif-panel-header{padding:12px 16px;border-bottom:1px solid var(--border);font-size:13px;font-weight:600;display:flex;justify-content:space-between;align-items:center;}
+.notif-item{padding:10px 16px;border-bottom:1px solid var(--border);transition:background 0.1s;}
+.notif-item:last-child{border-bottom:none;}
+.notif-item:hover{background:rgba(255,255,255,0.03);}
+.notif-item-title{font-size:13px;font-weight:500;margin-bottom:2px;}
+.notif-item-sub{font-size:11px;color:var(--text-muted);}
+.notif-item.unread{background:rgba(108,99,255,0.05);}
+.notif-item.unread .notif-item-title::before{content:'● ';color:var(--accent-2);font-size:8px;vertical-align:middle;}
+
+/* ── TOGGLES ── */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--border);}
+.toggle-row:last-child{border-bottom:none;}
+.toggle-info .toggle-label{font-size:13px;font-weight:500;}
+.toggle-info .toggle-sub{font-size:11px;color:var(--text-muted);margin-top:1px;}
+.toggle{position:relative;width:38px;height:21px;flex-shrink:0;}
+.toggle input{opacity:0;width:0;height:0;}
+.toggle-track{position:absolute;inset:0;background:var(--surface-3);border-radius:21px;cursor:pointer;border:1px solid var(--border);transition:background 0.2s,box-shadow 0.2s;}
+.toggle input:checked+.toggle-track{background:linear-gradient(90deg,var(--accent),var(--accent-2));border-color:transparent;box-shadow:0 0 8px var(--accent-glow);}
+.toggle-track::after{content:'';position:absolute;left:2px;top:2px;width:15px;height:15px;background:white;border-radius:50%;transition:left 0.2s cubic-bezier(0.16,1,0.3,1);}
+.toggle input:checked+.toggle-track::after{left:20px;}
+
+/* ── MISC ── */
+.search-bar{width:100%;padding:8px 14px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r);font-size:13px;color:var(--text);outline:none;font-family:'Inter',sans-serif;}
+.search-bar:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow);}
+.action-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:1rem;}
+.system-item{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px;}
+.system-item:last-child{border-bottom:none;}
+.equipo-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);}
+.equipo-row:last-child{border-bottom:none;}
+.equipo-icon{width:34px;height:34px;border-radius:9px;background:rgba(108,99,255,0.1);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.equipo-info{flex:1;}
+.equipo-name{font-size:13px;font-weight:500;}
+.equipo-detail{font-size:11px;color:var(--text-muted);margin-top:1px;}
+.propuesta-step{display:flex;gap:14px;padding:11px 0;border-bottom:1px solid var(--border);}
+.propuesta-step:last-child{border-bottom:none;}
+.step-num{width:22px;height:22px;border-radius:50%;background:rgba(108,99,255,0.15);color:var(--accent-2);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.step-title{font-size:13px;font-weight:500;margin-bottom:3px;}
+.step-desc{font-size:12px;color:var(--text-muted);}
+.map-placeholder{background:var(--surface-2);border-radius:var(--r);height:280px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;border:1px dashed var(--border-h);}
+
+/* ── GLOW LINES ON CARDS ── */
+.card-glow-top::after{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:0.6;}
+
+/* ── ANNOUNCEMENT BANNER ── */
+.alert-banner{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:var(--r);font-size:12px;margin-bottom:12px;}
+.alert-success{background:var(--green-bg);color:var(--green-text);border:1px solid rgba(34,211,160,0.2);}
+.alert-warning{background:var(--yellow-bg);color:var(--yellow-text);border:1px solid rgba(245,158,11,0.2);}
+
+/* ── NUMBER COUNTER ANIMATION ── */
+.count-anim{display:inline-block;transition:transform 0.15s;}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-bg"><div class="grid-bg"></div></div>
+  <div class="login-card">
+    <div class="login-logo-wrap">
+      <div class="login-logo">
+        <div class="logo-mark">R</div>
+        <div class="logo-text"><!-- EDITABLE: nombre del negocio en login -->Risch Network</div>
+      </div>
+      <div class="login-sub"><!-- EDITABLE: subtítulo del login -->Centro de Servicios Tecnológicos · Huandacareo</div>
+    </div>
+
+    <div id="login-form">
+      <!-- EDITABLE: usuario demo (value="admin") -->
+      <div class="form-group"><label>Usuario</label><input type="text" id="login-user" value="admin" placeholder="usuario"></div>
+      <!-- EDITABLE: contraseña demo (value="1234") -->
+      <div class="form-group"><label>Contraseña</label><input type="password" id="login-pass" value="1234" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
+      <!-- EDITABLE: tipos de acceso disponibles -->
+      <div class="form-group"><label>Tipo de acceso</label>
+        <select id="login-role"><option value="admin">Administrador</option><option value="user">Cliente</option></select>
+      </div>
+      <button class="btn btn-accent btn-full" onclick="doLogin()">Entrar al portal</button>
+      <div style="margin-top:12px;text-align:center"><button class="btn-link" onclick="showRecover()">¿Olvidaste tu contraseña?</button></div>
+    </div>
+
+    <div id="recover-form">
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:1rem">Te enviamos un código de acceso por WhatsApp.</p>
+      <!-- EDITABLE: placeholder de teléfono para recuperación -->
+      <div class="form-group"><label>Teléfono</label><input type="tel" placeholder="443 000 0000"></div>
+      <button class="btn btn-accent btn-full" onclick="showAlert('Código enviado por WhatsApp.')">Enviar código</button>
+      <div style="margin-top:12px;text-align:center"><button class="btn-link" onclick="hideRecover()">Volver</button></div>
+    </div>
+
+    <!-- EDITABLE: texto del hint de credenciales demo -->
+    <div class="login-hint"><span>Demo admin: admin / 1234</span><span>Demo cliente: cliente / 1234</span></div>
+  </div>
+</div>
+
+<!-- NOTIF PANEL -->
+<!-- EDITABLE: notificaciones del panel desplegable (título y subtítulo de cada una) -->
+<div class="notif-panel" id="notif-panel">
+  <div class="notif-panel-header">Notificaciones<button class="btn-link" onclick="closeNotif()">Cerrar</button></div>
+  <div class="notif-item unread"><div class="notif-item-title">Pago próximo a vencer</div><div class="notif-item-sub">Juan Pérez · vence en 3 días · $280</div></div>
+  <div class="notif-item unread"><div class="notif-item-title">Antena sin respuesta</div><div class="notif-item-sub">Rocket M5 #003 · Carlos Ruiz</div></div>
+  <div class="notif-item"><div class="notif-item-title">Ticket #001 actualizado</div><div class="notif-item-sub">En revisión · hace 2 h</div></div>
+</div>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="modal-pago">
+  <div class="modal">
+    <div class="modal-title">Realizar pago</div>
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:1rem">Mensualidad junio 2026 — <strong style="color:var(--text)">$280 MXN</strong></p>
+    <div class="pago-metodo">
+      <div class="metodo-card selected" onclick="selectMetodo(this)"><div class="metodo-icon">💳</div><div><div class="metodo-label">Tarjeta de crédito / débito</div><div class="metodo-sub">Visa, Mastercard, American Express</div></div></div>
+      <div class="metodo-card" onclick="selectMetodo(this)"><div class="metodo-icon">🏪</div><div><div class="metodo-label">Pago en OXXO</div><div class="metodo-sub">Genera tu código de pago</div></div></div>
+      <div class="metodo-card" onclick="selectMetodo(this)"><div class="metodo-icon">📲</div><div><div class="metodo-label">Transferencia SPEI</div><div class="metodo-sub">Datos bancarios para transferencia</div></div></div>
+    </div>
+    <div class="modal-footer"><button class="btn" onclick="closeModal('modal-pago')">Cancelar</button><button class="btn btn-accent" onclick="procesarPago()">Pagar $280</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-reg-pago">
+  <div class="modal">
+    <div class="modal-title">Registrar pago recibido</div>
+    <div class="form-group"><label>Cliente</label><select id="pago-cliente"><option>Juan Pérez</option><option>María González</option><option>Carlos Ruiz</option><option>Ana Martínez</option><option>Roberto López</option></select></div>
+    <div class="form-row">
+      <div class="form-group"><label>Monto</label><input id="pago-monto" type="number" placeholder="280"></div>
+      <div class="form-group"><label>Método</label><select id="pago-metodo"><option>Efectivo</option><option>Transferencia</option><option>Tarjeta</option></select></div>
+    </div>
+    <div class="form-group"><label>Mes que cubre</label><input id="pago-mes" type="text" placeholder="Jun 2026"></div>
+    <div class="modal-footer"><button class="btn" onclick="closeModal('modal-reg-pago')">Cancelar</button><button class="btn btn-accent" onclick="guardarPago()">Registrar</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-nuevo-cliente">
+  <div class="modal">
+    <div class="modal-title">Nuevo cliente</div>
+    <div class="form-row"><div class="form-group"><label>Nombre completo</label><input id="nc-nombre" type="text" placeholder="Nombre Apellido"></div><div class="form-group"><label>Teléfono</label><input id="nc-tel" type="tel" placeholder="443 000 0000"></div></div>
+    <div class="form-group"><label>Dirección</label><input id="nc-dir" type="text" placeholder="Calle, número, colonia"></div>
+    <div class="form-row"><div class="form-group"><label>Plan</label><select id="nc-plan"><option value="10 Mbps|$200">10 Mbps — $200</option><option value="20 Mbps|$240">20 Mbps — $240</option><option value="30 Mbps|$280">30 Mbps — $280</option><option value="50 Mbps|$400">50 Mbps — $400</option></select></div><div class="form-group"><label>Día de corte</label><input id="nc-corte" type="number" min="1" max="28" placeholder="5"></div></div>
+    <div class="form-group"><label>Notas</label><textarea id="nc-notas" placeholder="Observaciones..." style="min-height:60px;resize:vertical"></textarea></div>
+    <div class="modal-footer"><button class="btn" onclick="closeModal('modal-nuevo-cliente')">Cancelar</button><button class="btn btn-accent" onclick="guardarNuevoCliente()">Guardar</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-nueva-visita">
+  <div class="modal">
+    <div class="modal-title">Nueva visita / instalación</div>
+    <div class="form-row"><div class="form-group"><label>Tipo</label><select id="visita-tipo"><option>Instalación</option><option>Soporte técnico</option><option>Revisión</option><option>Retiro de equipo</option></select></div><div class="form-group"><label>Técnico</label><select><option>Daniel (Admin)</option><option>Técnico 2</option></select></div></div>
+    <div class="form-group"><label>Cliente</label><input id="visita-cliente" type="text" placeholder="Nombre del cliente"></div>
+    <div class="form-group"><label>Dirección</label><input id="visita-dir" type="text" placeholder="Calle, número, colonia"></div>
+    <div class="form-row"><div class="form-group"><label>Fecha</label><input id="visita-fecha" type="date"></div><div class="form-group"><label>Hora</label><input id="visita-hora" type="time" value="09:00"></div></div>
+    <div class="form-group"><label>Notas</label><textarea id="visita-notas" placeholder="Detalles de la visita..." style="min-height:60px;resize:vertical"></textarea></div>
+    <div class="modal-footer"><button class="btn" onclick="closeModal('modal-nueva-visita')">Cancelar</button><button class="btn btn-accent" onclick="guardarVisita()">Agendar</button></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <nav class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo"><div class="sidebar-mark">R</div><div class="sidebar-brand">Risch Network</div></div>
+      <div class="sidebar-role" id="role-label">Portal</div>
+    </div>
+    <div class="sidebar-nav" id="sidebar-nav"></div>
+    <div class="sidebar-footer">
+      <div class="user-pill">
+        <div class="avatar" id="user-avatar">RN</div>
+        <div class="user-info"><div class="user-name" id="user-display">Usuario</div><div class="user-email" id="user-email-display">--</div></div>
+        <button class="logout-btn" onclick="doLogout()" title="Salir">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-title" id="topbar-title">Dashboard</div>
+      <div class="topbar-actions">
+        <div class="status-pill"><div class="status-dot"></div><span id="status-text">Red operativa</span></div>
+        <button class="icon-btn" onclick="toggleNotif()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="notif-dot" id="notif-dot" style="display:none"></span>
+        </button>
+        <span style="font-size:11px;color:var(--text-muted)" id="topbar-date"></span>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- CLIENTE: DASHBOARD -->
+      <!-- EDITABLE: tarjetas de resumen del cliente (plan, pago, estado de red, velocidad) -->
+      <div class="view active" id="view-dashboard-user">
+        <div class="grid-4 mb-3">
+          <div class="card metric-card c-purple card-glow-top">
+            <div class="card-icon ci-purple">📡</div>
+            <div class="card-label">Plan activo</div>
+            <!-- EDITABLE: plan del cliente demo -->
+            <div class="card-value" style="font-size:16px;margin-top:2px">Internet 30 Mbps</div>
+            <div class="card-sub" style="margin-top:8px"><span class="badge badge-success">Activo</span></div>
+          </div>
+          <div class="card metric-card c-yellow card-glow-top">
+            <div class="card-icon ci-yellow">💰</div>
+            <div class="card-label">Próximo pago</div>
+            <!-- EDITABLE: monto y fecha del próximo pago del cliente -->
+            <div class="card-value">$280</div>
+            <div class="card-sub">Vence 5 jul 2026</div>
+          </div>
+          <div class="card metric-card c-green card-glow-top">
+            <div class="card-icon ci-green">🌐</div>
+            <div class="card-label">Estado de red</div>
+            <div class="card-value" style="font-size:18px;color:var(--green)">En línea</div>
+            <!-- EDITABLE: porcentaje de uptime -->
+            <div class="card-sub">99.2% uptime este mes</div>
+          </div>
+          <div class="card metric-card c-purple card-glow-top">
+            <div class="card-icon ci-blue">⚡</div>
+            <div class="card-label">Última velocidad</div>
+            <div class="card-value" id="quick-speed" style="font-size:20px">—</div>
+            <div class="card-sub">Mbps · <button class="btn-link" onclick="navigate('velocidad')">medir</button></div>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="card card-glow">
+            <div class="card-header"><div class="section-title">Pago pendiente</div></div>
+            <div class="alert-banner alert-warning" style="margin-bottom:1rem">⚠ Tu pago de junio vence en 6 días</div>
+            <p style="font-size:13px;color:var(--text-muted);margin-bottom:1rem">Mensualidad junio 2026 — <strong style="color:var(--text)">$280 MXN</strong></p>
+            <button class="btn btn-accent" onclick="openModal('modal-pago')">Pagar en línea</button>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="section-title">Estado del servicio</div></div>
+            <div class="alert-banner alert-success">✓ Antena en línea · Señal estable</div>
+            <div style="margin-top:1rem;display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--text-muted)">Señal recibida</span><span style="color:var(--green);font-weight:600">Excelente (-65 dBm)</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--text-muted)">Latencia</span><span style="font-weight:500">14 ms</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--text-muted)">Tiempo activo</span><span style="font-weight:500">12 días</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CLIENTE: SERVICIOS -->
+      <!-- EDITABLE: datos del plan contratado e historial técnico del cliente demo -->
+      <div class="view" id="view-servicios">
+        <div class="card mb-2 card-glow">
+          <div class="section-title" style="margin-bottom:1rem">Plan contratado</div>
+          <div style="display:flex;align-items:center;gap:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border)">
+            <div style="width:48px;height:48px;background:rgba(108,99,255,0.15);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px">📡</div>
+            <!-- EDITABLE: nombre del plan y fecha de activación -->
+            <div style="flex:1"><div style="font-weight:600;font-size:14px">Internet Inalámbrico — 30 Mbps</div><div style="font-size:12px;color:var(--text-muted);margin-top:2px">Antena instalada · Activo desde mar 2025</div></div>
+            <span class="badge badge-success">Activo</span>
+          </div>
+          <div style="padding-top:1rem;display:flex;flex-direction:column;gap:9px">
+            <!-- EDITABLE: detalles del plan (velocidad, tipo, costo, corte, instalación) -->
+            <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-muted)">Velocidad contratada</span><span style="font-weight:500">30 Mbps descarga / 10 Mbps subida</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-muted)">Tipo de conexión</span><span style="font-weight:500">Inalámbrica (antena)</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-muted)">Costo mensual</span><span style="font-weight:500">$280 MXN</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-muted)">Día de corte</span><span style="font-weight:500">Día 5 de cada mes</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-muted)">Fecha de instalación</span><span style="font-weight:500">15 mar 2025</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="section-title" style="margin-bottom:1rem">Historial técnico</div>
+          <!-- EDITABLE: filas del historial técnico (fecha, evento, técnico) -->
+          <div class="table-wrap"><table><thead><tr><th>Fecha</th><th>Evento</th><th>Técnico</th></tr></thead>
+          <tbody><tr><td>15 mar 2025</td><td>Instalación inicial</td><td>Daniel R.</td></tr><tr><td>02 may 2025</td><td>Revisión de señal</td><td>Daniel R.</td></tr><tr><td>10 jun 2025</td><td>Cambio de equipo</td><td>Daniel R.</td></tr></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- CLIENTE: PAGOS -->
+      <!-- EDITABLE: métricas de pagos del cliente (vencimiento, cantidad de pagos, total) -->
+      <div class="view" id="view-pagos">
+        <div class="grid-3 mb-3">
+          <!-- EDITABLE: fecha y monto del próximo vencimiento -->
+          <div class="card metric-card c-yellow card-glow-top"><div class="card-icon ci-yellow">📅</div><div class="card-label">Próximo vencimiento</div><div class="card-value">5 jul</div><div class="card-sub">$280 pendiente</div></div>
+          <!-- EDITABLE: número de pagos realizados en el año -->
+          <div class="card metric-card c-green card-glow-top"><div class="card-icon ci-green">✅</div><div class="card-label">Pagos realizados 2026</div><div class="card-value">6</div><div class="card-sub">Al corriente</div></div>
+          <!-- EDITABLE: total acumulado pagado en el año -->
+          <div class="card metric-card c-purple card-glow-top"><div class="card-icon ci-purple">💳</div><div class="card-label">Total pagado 2026</div><div class="card-value">$1,680</div><div class="card-sub">Ene — jun</div></div>
+        </div>
+        <div class="card mb-2 card-glow">
+          <div class="card-header"><div class="section-title">Pago pendiente · jun 2026</div></div>
+          <p style="font-size:13px;color:var(--text-muted);margin-bottom:1rem">Mensualidad <strong style="color:var(--text)">$280 MXN</strong> — vence 5 jul 2026</p>
+          <button class="btn btn-accent" onclick="openModal('modal-pago')">Pagar en línea</button>
+        </div>
+        <div class="card">
+          <div class="section-title" style="margin-bottom:1rem">Historial de pagos</div>
+          <!-- EDITABLE: filas del historial de pagos (mes, monto, fecha, método, estado) -->
+          <div class="table-wrap"><table><thead><tr><th>Mes</th><th>Monto</th><th>Fecha</th><th>Método</th><th>Estado</th><th>Recibo</th></tr></thead>
+          <tbody>
+            <tr><td>Jun 2026</td><td>$280</td><td>—</td><td>—</td><td><span class="badge badge-warning">Pendiente</span></td><td>—</td></tr>
+            <tr><td>May 2026</td><td>$280</td><td>3 may 2026</td><td>Efectivo</td><td><span class="badge badge-success">Pagado</span></td><td><button class="btn btn-sm" onclick="showAlert('Descargando PDF...')">PDF</button></td></tr>
+            <tr><td>Abr 2026</td><td>$280</td><td>4 abr 2026</td><td>Transferencia</td><td><span class="badge badge-success">Pagado</span></td><td><button class="btn btn-sm" onclick="showAlert('Descargando PDF...')">PDF</button></td></tr>
+            <tr><td>Mar 2026</td><td>$280</td><td>2 mar 2026</td><td>Efectivo</td><td><span class="badge badge-success">Pagado</span></td><td><button class="btn btn-sm" onclick="showAlert('Descargando PDF...')">PDF</button></td></tr>
+          </tbody></table></div>
+        </div>
+      </div>
+
+      <!-- CLIENTE: VELOCIDAD -->
+      <div class="view" id="view-velocidad">
+        <div class="card card-glow">
+          <div class="speedtest-wrap">
+            <div style="text-align:center"><div style="font-size:15px;font-weight:600;letter-spacing:-0.3px">Prueba de velocidad</div><div style="font-size:12px;color:var(--text-muted);margin-top:4px">Mide la velocidad real que recibe tu antena</div></div>
+            <div class="speed-ring">
+              <svg viewBox="0 0 180 180" width="180" height="180">
+                <defs><linearGradient id="speedGrad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#6c63ff"/><stop offset="100%" stop-color="#a78bfa"/></linearGradient></defs>
+                <circle class="speed-track" cx="90" cy="90" r="80"/>
+                <circle class="speed-fill" id="speed-arc" cx="90" cy="90" r="80"/>
+              </svg>
+              <div class="speed-center"><div class="speed-value" id="speed-num">—</div><div class="speed-unit">Mbps</div><div class="speed-label" id="speed-phase">listo</div></div>
+            </div>
+            <div class="speed-grid">
+              <div class="speed-stat" id="stat-dl"><div class="val" id="result-dl">—</div><div class="lbl">⬇ Descarga</div></div>
+              <div class="speed-stat" id="stat-ul"><div class="val" id="result-ul">—</div><div class="lbl">⬆ Subida</div></div>
+              <div class="speed-stat" id="stat-ping"><div class="val" id="result-ping">—</div><div class="lbl">◌ Ping</div></div>
+            </div>
+            <div style="display:flex;gap:12px;align-items:center">
+              <button class="btn btn-accent" id="speed-btn" onclick="runSpeedTest()">Iniciar prueba</button>
+              <span style="font-size:12px;color:var(--text-muted)" id="speed-status"></span>
+            </div>
+            <div style="width:100%;max-width:380px">
+              <div style="font-size:10px;color:var(--text-muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.06em">Progreso</div>
+              <div class="progress-bar"><div class="progress-fill" id="speed-progress" style="width:0%"></div></div>
+            </div>
+            <div id="speed-history-wrap" style="width:100%;max-width:380px;display:none">
+              <div style="font-size:12px;font-weight:600;margin-bottom:8px">Últimas pruebas</div>
+              <div class="table-wrap"><table><thead><tr><th>Hora</th><th>Descarga</th><th>Subida</th><th>Ping</th></tr></thead><tbody id="speed-history-body"></tbody></table></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CLIENTE: SOPORTE -->
+      <div class="view" id="view-soporte">
+        <div class="grid-2 mb-3">
+          <div class="card card-glow">
+            <div class="section-title" style="margin-bottom:1rem">Abrir ticket</div>
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <div class="form-group" style="margin:0"><label>Tipo de problema</label><select id="ticket-tipo"><option value="">Selecciona...</option><option>Sin internet</option><option>Velocidad lenta</option><option>Intermitencia</option><option>Equipo dañado</option><option>Otro</option></select></div>
+              <div class="form-group" style="margin:0"><label>Urgencia</label><select><option>Alta — sin servicio</option><option>Media — servicio parcial</option><option>Baja — consulta</option></select></div>
+              <div class="form-group" style="margin:0"><label>Descripción</label><textarea id="ticket-desc" placeholder="Describe el problema..." style="min-height:80px;resize:vertical"></textarea></div>
+              <button class="btn btn-accent" onclick="enviarTicket()">Enviar solicitud</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="section-title" style="margin-bottom:1rem">Mis tickets</div>
+            <div class="agenda-item"><div style="flex:1"><div class="agenda-title">#001 — Sin internet desde ayer</div><div class="agenda-detail">Abierto 28 jun · Alta urgencia</div></div><span class="badge badge-warning">En revisión</span></div>
+            <div style="padding-top:1rem;text-align:center;color:var(--text-muted);font-size:12px">Sin más tickets recientes.</div>
+          </div>
+        </div>
+        <!-- EDITABLE: datos de contacto directo (WhatsApp, horario, ubicación) -->
+        <div class="card"><div class="section-title" style="margin-bottom:1rem">Contacto directo</div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap">
+            <!-- EDITABLE: número de WhatsApp -->
+            <div style="flex:1;min-width:140px;background:var(--surface-2);border-radius:var(--r);padding:1rem;border:1px solid var(--border)"><div style="font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em">WhatsApp</div><div style="font-size:13px;margin-top:4px">+52 443 XXX XXXX</div></div>
+            <!-- EDITABLE: horario de atención -->
+            <div style="flex:1;min-width:140px;background:var(--surface-2);border-radius:var(--r);padding:1rem;border:1px solid var(--border)"><div style="font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em">Horario</div><div style="font-size:13px;margin-top:4px">Lun–Sáb 9:00–18:00</div></div>
+            <!-- EDITABLE: ubicación del negocio -->
+            <div style="flex:1;min-width:140px;background:var(--surface-2);border-radius:var(--r);padding:1rem;border:1px solid var(--border)"><div style="font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em">Ubicación</div><div style="font-size:13px;margin-top:4px">Huandacareo, Mich.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CLIENTE: PERFIL -->
+      <div class="view" id="view-perfil">
+        <div class="card mb-2">
+          <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem">
+            <div class="avatar" style="width:52px;height:52px;font-size:18px;border-radius:14px">CL</div>
+            <div><div style="font-size:16px;font-weight:700">Cliente Demo</div><div style="font-size:12px;color:var(--text-muted)">Huandacareo, Michoacán</div></div>
+          </div>
+          <div class="form-row"><div class="form-group"><label>Nombre completo</label><input type="text" value="Cliente Demo"></div><div class="form-group"><label>Teléfono</label><input type="text" value="443 000 0000"></div></div>
+          <div class="form-row"><div class="form-group"><label>Dirección</label><input type="text" value="Calle Ejemplo #1, Huandacareo"></div><div class="form-group"><label>Correo</label><input type="email" value="cliente@ejemplo.com"></div></div>
+          <button class="btn btn-accent" style="margin-top:0.5rem" onclick="showAlert('Datos actualizados.')">Guardar cambios</button>
+        </div>
+        <div class="card mb-2">
+          <div class="section-title" style="margin-bottom:1rem">Notificaciones</div>
+          <div class="toggle-row"><div class="toggle-info"><div class="toggle-label">Recordatorio de pago</div><div class="toggle-sub">WhatsApp 3 días antes del vencimiento</div></div><label class="toggle"><input type="checkbox" checked><span class="toggle-track"></span></label></div>
+          <div class="toggle-row"><div class="toggle-info"><div class="toggle-label">Actualizaciones de ticket</div><div class="toggle-sub">Cuando el estado de tu soporte cambie</div></div><label class="toggle"><input type="checkbox" checked><span class="toggle-track"></span></label></div>
+          <div class="toggle-row"><div class="toggle-info"><div class="toggle-label">Avisos de mantenimiento</div><div class="toggle-sub">Interrupciones programadas de red</div></div><label class="toggle"><input type="checkbox"><span class="toggle-track"></span></label></div>
+        </div>
+        <div class="card">
+          <div class="section-title" style="margin-bottom:1rem">Cambiar contraseña</div>
+          <div class="form-row"><div class="form-group"><label>Contraseña actual</label><input type="password" placeholder="••••••••"></div><div class="form-group"><label>Nueva contraseña</label><input type="password" placeholder="••••••••"></div></div>
+          <button class="btn" style="margin-top:0.5rem" onclick="showAlert('Contraseña actualizada.')">Actualizar</button>
+        </div>
+      </div>
+
+      <!-- ADMIN: DASHBOARD -->
+      <!-- EDITABLE: métricas del dashboard admin — los valores reales se animan desde JS (ver función animateDashboard) -->
+      <div class="view" id="view-dashboard-admin">
+        <div class="grid-4 mb-3">
+          <!-- EDITABLE: sub-label "+2 este mes" -->
+          <div class="card metric-card c-purple card-glow-top"><div class="card-icon ci-purple">👥</div><div class="card-label">Clientes activos</div><div class="card-value" id="m-clientes">0</div><div class="card-sub">+2 este mes</div></div>
+          <!-- EDITABLE: sub-label "De $13,720 esperado" -->
+          <div class="card metric-card c-green card-glow-top"><div class="card-icon ci-green">💰</div><div class="card-label">Ingresos jun</div><div class="card-value" id="m-ingresos">$0</div><div class="card-sub">De $13,720 esperado</div></div>
+          <!-- EDITABLE: sub-label "3 clientes" -->
+          <div class="card metric-card c-red card-glow-top"><div class="card-icon ci-red">⚠</div><div class="card-label">Cartera vencida</div><div class="card-value" id="m-cartera" style="color:var(--red)">$0</div><div class="card-sub">3 clientes</div></div>
+          <!-- EDITABLE: sub-label "1 urgente" -->
+          <div class="card metric-card c-yellow card-glow-top"><div class="card-icon ci-yellow">🎯</div><div class="card-label">Tickets abiertos</div><div class="card-value" id="m-tickets">0</div><div class="card-sub">1 urgente</div></div>
+        </div>
+        <div class="grid-2 mb-3">
+          <div class="card">
+            <div class="section-title" style="margin-bottom:1.25rem">Ingresos — últimos 6 meses</div>
+            <div class="chart-bars" id="chart-bars">
+              <div class="bar-wrap"><div class="bar" id="b0" style="height:0%"></div><div class="bar-label">E</div></div>
+              <div class="bar-wrap"><div class="bar" id="b1" style="height:0%"></div><div class="bar-label">F</div></div>
+              <div class="bar-wrap"><div class="bar" id="b2" style="height:0%"></div><div class="bar-label">M</div></div>
+              <div class="bar-wrap"><div class="bar" id="b3" style="height:0%"></div><div class="bar-label">A</div></div>
+              <div class="bar-wrap"><div class="bar" id="b4" style="height:0%"></div><div class="bar-label">M</div></div>
+              <div class="bar-wrap"><div class="bar hi" id="b5" style="height:0%"></div><div class="bar-label">J</div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="section-title" style="margin-bottom:1rem">Estado del sistema</div>
+            <div class="system-item"><div><div style="font-weight:500;font-size:13px">API Backend</div></div><span class="badge badge-warning">Sin conectar</span></div>
+            <div class="system-item"><div><div style="font-weight:500;font-size:13px">WhatsApp API</div></div><span class="badge badge-warning">Sin conectar</span></div>
+            <div class="system-item"><div><div style="font-weight:500;font-size:13px">Mercado Pago</div></div><span class="badge badge-warning">Sin conectar</span></div>
+            <div class="system-item"><div><div style="font-weight:500;font-size:13px">Monitoreo de red</div></div><span class="badge badge-success">Activo</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="section-title">Acciones rápidas</div></div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn" onclick="openModal('modal-nuevo-cliente')">+ Nuevo cliente</button>
+            <button class="btn" onclick="openModal('modal-reg-pago')">Registrar pago</button>
+            <button class="btn" onclick="navigate('agenda');setTimeout(()=>openModal('modal-nueva-visita'),100)">Agendar visita</button>
+            <button class="btn" onclick="navigate('prospectos')">Ver prospectos</button>
+            <button class="btn" onclick="navigate('red')">Monitoreo de red</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADMIN: CLIENTES -->
+      <!-- EDITABLE: lista de clientes demo — cada <tr> es un cliente (nombre, tel, plan, dirección, días vencido, estado, próximo pago) -->
+      <div class="view" id="view-clientes">
+        <div class="action-row"><input class="search-bar" style="max-width:280px" placeholder="Buscar cliente..."><div style="display:flex;gap:8px"><button class="btn btn-sm" onclick="openModal('modal-reg-pago')">Registrar pago</button><button class="btn btn-accent btn-sm" onclick="openModal('modal-nuevo-cliente')">+ Nuevo cliente</button></div></div>
+        <div class="card"><div class="table-wrap"><table><thead><tr><th>Cliente</th><th>Plan</th><th>Dirección</th><th>Días vencido</th><th>Estado</th><th>Próx. pago</th><th></th></tr></thead>
+        <tbody>
+          <!-- EDITABLE: cliente 1 -->
+          <tr><td><div style="font-weight:500">Juan Pérez</div><div style="font-size:11px;color:var(--text-muted)">443 111 1111</div></td><td>30 Mbps</td><td>Morelos 12</td><td style="color:var(--text-muted)">—</td><td><span class="badge badge-success">Activo</span></td><td>5 jul · $280</td><td><div style="display:flex;gap:6px"><button class="btn btn-sm">Ver</button><a href="https://wa.me/524432065503?text=Hola%2C%20esta%20es%20una%20prueba%20del%20portal%20Risch%20Network." target="_blank"><button class="btn btn-sm btn-wa">WA</button></a></div></td></tr>
+          <!-- EDITABLE: cliente 2 -->
+          <tr><td><div style="font-weight:500">María González</div><div style="font-size:11px;color:var(--text-muted)">443 222 2222</div></td><td>10 Mbps</td><td>Hidalgo 45</td><td style="color:var(--text-muted)">—</td><td><span class="badge badge-success">Activo</span></td><td>3 jul · $200</td><td><div style="display:flex;gap:6px"><button class="btn btn-sm">Ver</button><a href="https://wa.me/524432222222?text=Hola%20Mar%C3%ADa%2C%20te%20contactamos%20de%20Risch%20Network.%20%C2%BFEn%20qu%C3%A9%20podemos%20ayudarte%3F" target="_blank"><button class="btn btn-sm btn-wa">WA</button></a></div></td></tr>
+          <!-- EDITABLE: cliente 3 (con adeudo) -->
+          <tr><td><div style="font-weight:500">Carlos Ruiz</div><div style="font-size:11px;color:var(--text-muted)">443 333 3333</div></td><td>20 Mbps</td><td>Juárez 7</td><td style="color:var(--yellow);font-weight:600">24 días</td><td><span class="badge badge-warning">Adeudo</span></td><td>Vencido · $240</td><td><div style="display:flex;gap:6px"><button class="btn btn-sm">Ver</button><a href="https://wa.me/524433333333?text=Hola%20Carlos%2C%20te%20recordamos%20que%20tienes%20un%20saldo%20pendiente%20de%20%24240%20con%20Risch%20Network.%20%C2%BFCu%C3%A1ndo%20puedes%20ponerte%20al%20corriente%3F%20Gracias." target="_blank"><button class="btn btn-sm btn-wa">WA</button></a></div></td></tr>
+          <!-- EDITABLE: cliente 4 -->
+          <tr><td><div style="font-weight:500">Ana Martínez</div><div style="font-size:11px;color:var(--text-muted)">443 444 4444</div></td><td>50 Mbps</td><td>Lázaro 22</td><td style="color:var(--text-muted)">—</td><td><span class="badge badge-success">Activo</span></td><td>8 jul · $400</td><td><div style="display:flex;gap:6px"><button class="btn btn-sm">Ver</button><a href="https://wa.me/524444444444?text=Hola%20Ana%2C%20te%20contactamos%20de%20Risch%20Network.%20%C2%BFEn%20qu%C3%A9%20podemos%20ayudarte%3F" target="_blank"><button class="btn btn-sm btn-wa">WA</button></a></div></td></tr>
+          <!-- EDITABLE: cliente 5 (suspendido) -->
+          <tr><td><div style="font-weight:500">Roberto López</div><div style="font-size:11px;color:var(--text-muted)">443 555 5555</div></td><td>30 Mbps</td><td>Centro 15</td><td style="color:var(--red);font-weight:600">58 días</td><td><span class="badge badge-danger">Suspendido</span></td><td>Vencido · $560</td><td><div style="display:flex;gap:6px"><button class="btn btn-sm">Ver</button><a href="https://wa.me/524435555555?text=Hola%20Roberto%2C%20te%20informamos%20que%20tu%20servicio%20con%20Risch%20Network%20est%C3%A1%20suspendido%20por%20un%20adeudo%20de%20%24560.%20Para%20reactivarlo%2C%20ponte%20en%20contacto%20con%20nosotros.%20Gracias." target="_blank"><button class="btn btn-sm btn-wa">WA</button></a></div></td></tr>
+        </tbody></table></div></div>
+      </div>
+
+      <!-- ADMIN: COBROS -->
+      <div class="view" id="view-cobros">
+        <div class="grid-3 mb-3">
+          <div class="card metric-card c-green card-glow-top"><div class="card-icon ci-green">💵</div><div class="card-label">Cobrado en junio</div><div class="card-value">$13,160</div><div class="card-sub">47 de 50 clientes</div></div>
+          <div class="card metric-card c-red card-glow-top"><div class="card-icon ci-red">⚠</div><div class="card-label">Cartera vencida</div><div class="card-value" style="color:var(--red)">$840</div><div class="card-sub">3 clientes · 41 días prom.</div></div>
+          <div class="card metric-card c-yellow card-glow-top"><div class="card-icon ci-yellow">📋</div><div class="card-label">Por cobrar hoy</div><div class="card-value">$560</div><div class="card-sub">2 clientes pendientes</div></div>
+        </div>
+        <div class="action-row"><div class="section-title">Cartera vencida</div><button class="btn btn-sm" onclick="showAlert('Enviando recordatorios por WhatsApp...')">Enviar recordatorios WA</button></div>
+        <div class="card mb-3"><div class="table-wrap"><table id="tabla-cartera"><thead><tr><th>Cliente</th><th>Mes</th><th>Monto</th><th>Estado</th><th>Último pago</th><th></th></tr></thead>
+        <tbody><tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:2rem">Cargando...</td></tr></tbody></table></div></div>
+        <div class="card-header" style="margin-bottom:.75rem"><div class="section-title">Pagos registrados</div><button class="btn btn-accent btn-sm" onclick="openModal('modal-reg-pago')">+ Registrar pago</button></div>
+        <div class="card"><div class="table-wrap"><table id="tabla-pagados"><thead><tr><th>Cliente</th><th>Monto</th><th>Fecha</th><th>Método</th><th>Estado</th></tr></thead>
+        <tbody><tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:2rem">Cargando...</td></tr></tbody></table></div></div>
+      </div>
+
+      <!-- ADMIN: AGENDA -->
+      <!-- EDITABLE: título del período de la agenda y todas las visitas/instalaciones -->
+      <div class="view" id="view-agenda">
+        <!-- EDITABLE: rango de fechas mostrado -->
+        <div class="action-row"><div style="font-size:14px;font-weight:600">Agenda</div><button class="btn btn-accent btn-sm" onclick="openModal('modal-nueva-visita')">+ Nueva visita</button></div>
+        <div class="card"><div id="agenda-lista" style="padding:.5rem"><div style="text-align:center;color:var(--text-muted);padding:2rem">Cargando...</div></div></div>
+      </div>
+
+      <!-- ADMIN: PROSPECTOS -->
+      <!-- EDITABLE: tabla de prospectos — cada <tr> es un prospecto (nombre, tel, interés, seguimiento, estado) -->
+      <div class="view" id="view-prospectos">
+        <div class="action-row"><input class="search-bar" style="max-width:280px" placeholder="Buscar prospecto..."><button class="btn btn-accent btn-sm">+ Nuevo prospecto</button></div>
+        <div class="card mb-2"><div class="table-wrap"><table id="tabla-prospectos"><thead><tr><th>Nombre</th><th>Teléfono</th><th>Interés</th><th>Seguimiento</th><th>Estado</th><th></th></tr></thead>
+        <tbody><tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:2rem">Cargando...</td></tr></tbody></table></div></div>
+        <div class="card">
+          <div class="section-title" style="margin-bottom:1rem">Generar propuesta PDF</div>
+          <div class="propuesta-step"><div class="step-num">1</div><div><div class="step-title">Selecciona el prospecto</div><div class="step-desc">Elige de la lista o captura nuevos datos</div></div></div>
+          <div class="propuesta-step"><div class="step-num">2</div><div><div class="step-title">Elige servicios y precios</div><div class="step-desc">Genera desde <code style="font-size:11px;background:var(--surface-2);padding:1px 5px;border-radius:4px">generar_propuesta.py</code></div></div></div>
+          <div class="propuesta-step"><div class="step-num">3</div><div><div class="step-title">Descarga y envía por WhatsApp</div><div class="step-desc">PDF guardado en <code style="font-size:11px;background:var(--surface-2);padding:1px 5px;border-radius:4px">propuestas/</code></div></div></div>
+          <button class="btn btn-accent" style="margin-top:.75rem" onclick="showAlert('Conecta el backend para generar propuestas automáticamente.')">Generar propuesta</button>
+        </div>
+      </div>
+
+      <!-- ADMIN: EQUIPOS -->
+      <!-- EDITABLE: antenas instaladas e inventario en bodega -->
+      <div class="view" id="view-equipos">
+        <div class="action-row"><input class="search-bar" style="max-width:280px" placeholder="Buscar equipo..."><button class="btn btn-accent btn-sm">+ Registrar equipo</button></div>
+        <div class="grid-2">
+          <div class="card"><div class="section-title" style="margin-bottom:1rem">Antenas instaladas</div>
+            <!-- EDITABLE: antena 1 (modelo, cliente, dirección, estado) -->
+            <div class="equipo-row"><div class="equipo-icon">📡</div><div class="equipo-info"><div class="equipo-name">Ubiquiti LiteBeam #001</div><div class="equipo-detail">Juan Pérez · Morelos 12</div></div><span class="badge badge-success">En línea</span></div>
+            <!-- EDITABLE: antena 2 -->
+            <div class="equipo-row"><div class="equipo-icon">📡</div><div class="equipo-info"><div class="equipo-name">Ubiquiti LiteBeam #002</div><div class="equipo-detail">María González · Hidalgo 45</div></div><span class="badge badge-success">En línea</span></div>
+            <!-- EDITABLE: antena 3 (sin respuesta) -->
+            <div class="equipo-row"><div class="equipo-icon">📡</div><div class="equipo-info"><div class="equipo-name">Rocket M5 #003</div><div class="equipo-detail">Carlos Ruiz · Juárez 7</div></div><span class="badge badge-danger">Sin respuesta</span></div>
+            <!-- EDITABLE: antena 4 -->
+            <div class="equipo-row"><div class="equipo-icon">📡</div><div class="equipo-info"><div class="equipo-name">LiteBeam AC #004</div><div class="equipo-detail">Ana Martínez · Lázaro 22</div></div><span class="badge badge-success">En línea</span></div>
+          </div>
+          <div class="card"><div class="section-title" style="margin-bottom:1rem">Inventario en bodega</div>
+            <!-- EDITABLE: artículo de inventario 1 (nombre, cantidad) -->
+            <div class="equipo-row"><div class="equipo-icon">📶</div><div class="equipo-info"><div class="equipo-name">Router TP-Link Archer</div><div class="equipo-detail">3 unidades disponibles</div></div><span class="badge badge-gray">3 uds</span></div>
+            <!-- EDITABLE: artículo de inventario 2 -->
+            <div class="equipo-row"><div class="equipo-icon">📡</div><div class="equipo-info"><div class="equipo-name">LiteBeam AC Gen2</div><div class="equipo-detail">1 unidad disponible</div></div><span class="badge badge-gray">1 ud</span></div>
+            <!-- EDITABLE: artículo de inventario 3 -->
+            <div class="equipo-row"><div class="equipo-icon">🔌</div><div class="equipo-info"><div class="equipo-name">Switch 8 puertos</div><div class="equipo-detail">2 unidades disponibles</div></div><span class="badge badge-gray">2 uds</span></div>
+            <!-- EDITABLE: artículo de inventario 4 -->
+            <div class="equipo-row"><div class="equipo-icon">🔌</div><div class="equipo-info"><div class="equipo-name">PoE injector</div><div class="equipo-detail">4 unidades disponibles</div></div><span class="badge badge-gray">4 uds</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADMIN: RED -->
+      <!-- EDITABLE: métricas de red y estado de cada antena (IP, cliente, dirección, ping) -->
+      <div class="view" id="view-red">
+        <div class="grid-3 mb-3">
+          <!-- EDITABLE: conteo de antenas en línea y sub-label -->
+          <div class="card metric-card c-green card-glow-top"><div class="card-icon ci-green">📡</div><div class="card-label">Antenas en línea</div><div class="card-value" style="color:var(--green)">3 / 4</div><div class="card-sub">1 sin respuesta</div></div>
+          <!-- EDITABLE: ping promedio -->
+          <div class="card metric-card c-purple card-glow-top"><div class="card-icon ci-purple">⚡</div><div class="card-label">Ping promedio</div><div class="card-value">18 ms</div><div class="card-sub">Última medición</div></div>
+          <div class="card metric-card c-yellow card-glow-top"><div class="card-icon ci-yellow">🕐</div><div class="card-label">Última verificación</div><div class="card-value" style="font-size:18px" id="last-check">—</div><div class="card-sub"><button class="btn-link" onclick="runMonitor()">Verificar ahora</button></div></div>
+        </div>
+        <div class="card mb-3">
+          <div class="card-header"><div class="section-title">Estado de antenas</div><button class="btn btn-sm" onclick="runMonitor()">Actualizar</button></div>
+          <!-- EDITABLE: monitor antena 1 (nombre, IP, dirección, estado, ping) -->
+          <div class="monitor-row"><div class="monitor-icon">📡</div><div class="monitor-info"><div class="monitor-name">LiteBeam #001 — Juan Pérez</div><div class="monitor-ip">192.168.1.101 · Morelos 12</div></div><span class="badge badge-success">En línea</span><div class="monitor-ping ping-good">12 ms</div></div>
+          <!-- EDITABLE: monitor antena 2 -->
+          <div class="monitor-row"><div class="monitor-icon">📡</div><div class="monitor-info"><div class="monitor-name">LiteBeam #002 — María González</div><div class="monitor-ip">192.168.1.102 · Hidalgo 45</div></div><span class="badge badge-success">En línea</span><div class="monitor-ping ping-good">18 ms</div></div>
+          <!-- EDITABLE: monitor antena 3 (sin respuesta) -->
+          <div class="monitor-row"><div class="monitor-icon">📡</div><div class="monitor-info"><div class="monitor-name">Rocket M5 #003 — Carlos Ruiz</div><div class="monitor-ip">192.168.1.103 · Juárez 7</div></div><span class="badge badge-danger">Sin respuesta</span><div class="monitor-ping ping-bad">— ms</div></div>
+          <!-- EDITABLE: monitor antena 4 -->
+          <div class="monitor-row"><div class="monitor-icon">📡</div><div class="monitor-info"><div class="monitor-name">LiteBeam AC #004 — Ana Martínez</div><div class="monitor-ip">192.168.1.104 · Lázaro 22</div></div><span class="badge badge-success">En línea</span><div class="monitor-ping ping-good">9 ms</div></div>
+        </div>
+        <div class="card"><div class="section-title" style="margin-bottom:1rem">Mapa de cobertura</div>
+          <div class="map-placeholder"><div style="font-size:36px">🗺</div><div style="font-size:13px;font-weight:500;color:var(--text-muted)">Mapa de clientes y antenas</div><div style="font-size:11px;color:var(--text-dim)">Conecta Google Maps API para ver ubicaciones</div><button class="btn btn-sm" style="margin-top:8px" onclick="showAlert('Configura GOOGLE_MAPS_API_KEY en el backend.')">Configurar mapa</button></div>
+        </div>
+      </div>
+
+      <!-- ADMIN: REPORTES -->
+      <!-- EDITABLE: cifras del reporte (clientes totales, ingresos anuales, cartera, instalaciones) -->
+      <div class="view" id="view-reportes">
+        <div class="grid-4 mb-3">
+          <!-- EDITABLE: clientes totales y comparativa vs año anterior -->
+          <div class="card metric-card c-purple card-glow-top"><div class="card-icon ci-purple">👥</div><div class="card-label">Clientes totales</div><div class="card-value">47</div><div class="card-sub">+5 vs año anterior</div></div>
+          <!-- EDITABLE: ingresos anuales y período -->
+          <div class="card metric-card c-green card-glow-top"><div class="card-icon ci-green">💰</div><div class="card-label">Ingresos anuales</div><div class="card-value">$78,200</div><div class="card-sub">Ene–jun 2026</div></div>
+          <!-- EDITABLE: cartera vencida -->
+          <div class="card metric-card c-red card-glow-top"><div class="card-icon ci-red">⚠</div><div class="card-label">Cartera vencida</div><div class="card-value" style="color:var(--red)">$840</div><div class="card-sub">3 clientes</div></div>
+          <!-- EDITABLE: instalaciones del mes -->
+          <div class="card metric-card c-yellow card-glow-top"><div class="card-icon ci-yellow">🔧</div><div class="card-label">Instalaciones mes</div><div class="card-value">4</div><div class="card-sub">Jun 2026</div></div>
+        </div>
+        <div class="card mb-2">
+          <div class="section-title" style="margin-bottom:1rem">Distribución por plan</div>
+          <!-- EDITABLE: número de clientes por plan (12, 18, 14, 3) y anchos de barra en animateReportes() del JS -->
+          <div style="display:flex;gap:1rem;flex-wrap:wrap">
+            <div style="flex:1;min-width:100px"><div style="font-size:11px;color:var(--text-muted)">10 Mbps · $200</div><div style="font-size:20px;font-weight:700;margin:4px 0">12</div><div class="progress-bar"><div class="progress-fill" id="pr0" style="width:0%;background:rgba(108,99,255,0.4)"></div></div></div>
+            <div style="flex:1;min-width:100px"><div style="font-size:11px;color:var(--text-muted)">20 Mbps · $240</div><div style="font-size:20px;font-weight:700;margin:4px 0">18</div><div class="progress-bar"><div class="progress-fill" id="pr1" style="width:0%"></div></div></div>
+            <div style="flex:1;min-width:100px"><div style="font-size:11px;color:var(--text-muted)">30 Mbps · $280</div><div style="font-size:20px;font-weight:700;margin:4px 0">14</div><div class="progress-bar"><div class="progress-fill" id="pr2" style="width:0%"></div></div></div>
+            <div style="flex:1;min-width:100px"><div style="font-size:11px;color:var(--text-muted)">50 Mbps · $400</div><div style="font-size:20px;font-weight:700;margin:4px 0">3</div><div class="progress-bar"><div class="progress-fill" id="pr3" style="width:0%;background:var(--green)"></div></div></div>
+          </div>
+        </div>
+        <div class="card"><div class="card-header"><div class="section-title">Exportar reportes</div></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn btn-sm" onclick="showAlert('Exportando clientes CSV...')">Clientes CSV</button>
+            <button class="btn btn-sm" onclick="showAlert('Exportando cobros CSV...')">Cobros CSV</button>
+            <button class="btn btn-sm" onclick="showAlert('Exportando tickets CSV...')">Tickets CSV</button>
+            <button class="btn btn-sm" onclick="showAlert('Generando reporte PDF...')">Reporte PDF</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADMIN: CONFIGURACIÓN -->
+      <!-- EDITABLE: planes/precios en la tabla, y toggles de notificaciones automáticas -->
+      <div class="view" id="view-configuracion">
+        <div class="grid-2 mb-3">
+          <div class="card">
+            <div class="section-title" style="margin-bottom:1rem">Integraciones</div>
+            <div class="system-item"><div><div style="font-weight:500;font-size:13px">WhatsApp Business API</div><div style="font-size:11px;color:var(--text-muted)">Notificaciones automáticas</div></div><button class="btn btn-sm" onclick="showAlert('Configura token de WhatsApp en el backend.')">Configurar</button></div>
+            <div class="system-item"><div><div style="font-weight:500;font-size:13px">Mercado Pago</div><div style="font-size:11px;color:var(--text-muted)">Cobros en línea</div></div><button class="btn btn-sm" onclick="showAlert('Agrega claves de Mercado Pago.')">Configurar</button></div>
+            <div class="system-item"><div><div style="font-weight:500;font-size:13px">Google Maps</div><div style="font-size:11px;color:var(--text-muted)">Mapa de cobertura</div></div><button class="btn btn-sm" onclick="showAlert('Agrega GOOGLE_MAPS_API_KEY.')">Configurar</button></div>
+            <div class="system-item" style="border:none"><div><div style="font-weight:500;font-size:13px">Google Sheets</div><div style="font-size:11px;color:var(--text-muted)">Prospectos y clientes</div></div><button class="btn btn-sm" onclick="showAlert('Configura credenciales de Google.')">Configurar</button></div>
+          </div>
+          <div class="card">
+            <div class="section-title" style="margin-bottom:1rem">Planes y precios</div>
+            <!-- EDITABLE: nombre, velocidad y precio de cada plan -->
+            <div class="table-wrap"><table><thead><tr><th>Plan</th><th>Velocidad</th><th>Precio</th><th></th></tr></thead>
+            <tbody>
+              <!-- EDITABLE: plan Básico -->
+              <tr><td>Básico</td><td>10 Mbps</td><td>$200</td><td><button class="btn btn-sm">Editar</button></td></tr>
+              <!-- EDITABLE: plan Estándar -->
+              <tr><td>Estándar</td><td>20 Mbps</td><td>$240</td><td><button class="btn btn-sm">Editar</button></td></tr>
+              <!-- EDITABLE: plan Plus -->
+              <tr><td>Plus</td><td>30 Mbps</td><td>$280</td><td><button class="btn btn-sm">Editar</button></td></tr>
+              <!-- EDITABLE: plan Pro -->
+              <tr><td>Pro</td><td>50 Mbps</td><td>$400</td><td><button class="btn btn-sm">Editar</button></td></tr>
+            </tbody></table></div>
+            <button class="btn btn-sm" style="margin-top:8px">+ Nuevo plan</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="section-title" style="margin-bottom:1rem">Notificaciones automáticas</div>
+          <div class="toggle-row"><div class="toggle-info"><div class="toggle-label">Recordatorio de pago (3 días antes)</div><div class="toggle-sub">WhatsApp automático al cliente</div></div><label class="toggle"><input type="checkbox" checked><span class="toggle-track"></span></label></div>
+          <div class="toggle-row"><div class="toggle-info"><div class="toggle-label">Alerta de antena caída</div><div class="toggle-sub">WhatsApp al admin cuando una antena no responde</div></div><label class="toggle"><input type="checkbox" checked><span class="toggle-track"></span></label></div>
+          <div class="toggle-row"><div class="toggle-info"><div class="toggle-label">Confirmación de pago al cliente</div><div class="toggle-sub">Recibo automático por WhatsApp</div></div><label class="toggle"><input type="checkbox" checked><span class="toggle-track"></span></label></div>
+          <div class="toggle-row"><div class="toggle-info"><div class="toggle-label">Ticket actualizado</div><div class="toggle-sub">Aviso al cliente cuando cambia de estado</div></div><label class="toggle"><input type="checkbox"><span class="toggle-track"></span></label></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+const menus={
+  user:[
+    {id:'dashboard-user',label:'Inicio',icon:ico('home')},
+    {id:'servicios',label:'Mis servicios',icon:ico('wifi')},
+    {id:'pagos',label:'Estado de pagos',icon:ico('cash')},
+    {id:'velocidad',label:'Prueba de velocidad',icon:ico('zap')},
+    {id:'soporte',label:'Soporte',icon:ico('ticket'),badge:'1'},
+    {id:'perfil',label:'Mi perfil',icon:ico('user')},
+  ],
+  admin:[
+    {section:'Principal'},
+    {id:'dashboard-admin',label:'Dashboard',icon:ico('home')},
+    {id:'clientes',label:'Clientes',icon:ico('users')},
+    {id:'cobros',label:'Cobros',icon:ico('cash')},
+    {id:'agenda',label:'Agenda',icon:ico('calendar')},
+    {section:'Operaciones'},
+    {id:'prospectos',label:'Prospectos',icon:ico('target')},
+    {id:'equipos',label:'Equipos',icon:ico('server')},
+    {id:'red',label:'Monitoreo de red',icon:ico('wifi'),badge:'1'},
+    {section:'Análisis'},
+    {id:'reportes',label:'Reportes',icon:ico('chart')},
+    {id:'configuracion',label:'Configuración',icon:ico('settings')},
+  ]
+};
+
+const titles={'dashboard-user':'Inicio','servicios':'Mis servicios','pagos':'Pagos','velocidad':'Prueba de velocidad','soporte':'Soporte','perfil':'Mi perfil','dashboard-admin':'Dashboard','clientes':'Clientes','cobros':'Cobros','agenda':'Agenda','prospectos':'Prospectos','equipos':'Equipos','red':'Monitoreo de red','reportes':'Reportes','configuracion':'Configuración'};
+let speedHistory=[],testRunning=false;
+
+function doLogin(){
+  const role=document.getElementById('login-role').value;
+  const isAdmin=role==='admin';
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app').style.display='flex';
+  document.getElementById('role-label').textContent=isAdmin?'Administrador':'Portal Cliente';
+  document.getElementById('user-display').textContent=isAdmin?'Daniel (Admin)':'Cliente Demo';
+  document.getElementById('user-email-display').textContent=isAdmin?'danielcaxxest27@gmail.com':'cliente@risch.mx';
+  document.getElementById('user-avatar').textContent=isAdmin?'DA':'CL';
+  buildNav(role);
+  navigate(isAdmin?'dashboard-admin':'dashboard-user');
+  document.getElementById('topbar-date').textContent=new Date().toLocaleDateString('es-MX',{weekday:'short',day:'numeric',month:'short'});
+  document.getElementById('notif-dot').style.display='block';
+}
+function doLogout(){
+  document.getElementById('app').style.display='none';
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('login-form').style.display='block';
+  document.getElementById('recover-form').style.display='none';
+}
+function buildNav(role){
+  const nav=document.getElementById('sidebar-nav');nav.innerHTML='';
+  menus[role].forEach(item=>{
+    if(item.section){const s=document.createElement('div');s.className='nav-section';s.textContent=item.section;nav.appendChild(s);return;}
+    const btn=document.createElement('button');btn.className='nav-item';btn.dataset.view=item.id;
+    btn.innerHTML=`<span class="nav-icon-wrap">${item.icon}</span><span class="nav-label">${item.label}</span>${item.badge?`<span class="nav-badge">${item.badge}</span>`:''}`;
+    btn.onclick=()=>navigate(item.id);nav.appendChild(btn);
+  });
+}
+function navigate(viewId){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const v=document.getElementById('view-'+viewId);if(v)v.classList.add('active');
+  const b=document.querySelector(`.nav-item[data-view="${viewId}"]`);if(b)b.classList.add('active');
+  document.getElementById('topbar-title').textContent=titles[viewId]||viewId;
+  if(viewId==='dashboard-admin')setTimeout(animateDashboard,100);
+  if(viewId==='reportes')setTimeout(animateReportes,100);
+  if(viewId==='red')runMonitor();
+}
+function showRecover(){document.getElementById('login-form').style.display='none';document.getElementById('recover-form').style.display='block';}
+function hideRecover(){document.getElementById('recover-form').style.display='none';document.getElementById('login-form').style.display='block';}
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');}));
+function toggleNotif(){document.getElementById('notif-panel').classList.toggle('open');}
+function closeNotif(){document.getElementById('notif-panel').classList.remove('open');}
+document.addEventListener('click',e=>{const p=document.getElementById('notif-panel');if(p.classList.contains('open')&&!p.contains(e.target)&&!e.target.closest('.icon-btn'))p.classList.remove('open');});
+function selectMetodo(el){document.querySelectorAll('.metodo-card').forEach(c=>c.classList.remove('selected'));el.classList.add('selected');}
+function procesarPago(){closeModal('modal-pago');showAlert('Redirigiendo a Mercado Pago...\n\n(En producción, aquí se abre la pasarela de pago)');}
+function enviarTicket(){const t=document.getElementById('ticket-tipo').value,d=document.getElementById('ticket-desc').value;if(!t||!d.trim()){showAlert('Completa el tipo y la descripción.');return;}showAlert('Solicitud enviada. Te contactaremos pronto por WhatsApp.');document.getElementById('ticket-tipo').value='';document.getElementById('ticket-desc').value='';}
+function showAlert(m){alert(m);}
+function runMonitor(){const now=new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});const el=document.getElementById('last-check');if(el)el.textContent=now;}
+
+// ── CONEXIÓN GOOGLE SHEETS ────────────────────────────
+const API = 'https://script.google.com/macros/s/AKfycbxu2dGMT2ok64E5wpEUauG3PCayzByy1ZvHq1Tnq_hnwnhUUFJ4gLmrFIkyBtN7698d/exec';
+
+async function apiGet(accion) {
+  const res = await fetch(`${API}?accion=${accion}`);
+  return res.json();
+}
+
+async function apiPost(datos) {
+  const res = await fetch(API, {
+    method: 'POST',
+    body: JSON.stringify(datos)
+  });
+  return res.json();
+}
+
+// Badge de estado
+function badgeEstado(estado) {
+  const map = { 'Activo':'badge-success','Adeudo':'badge-warning','Suspendido':'badge-danger','Nuevo':'badge-gray','Cotizado':'badge-accent','En revisión':'badge-warning','Confirmada':'badge-success','Pendiente':'badge-warning','Pagado':'badge-success','Vencido':'badge-danger','En línea':'badge-success','Sin respuesta':'badge-danger','Disponible':'badge-accent' };
+  return `<span class="badge ${map[estado]||'badge-gray'}">${estado}</span>`;
+}
+
+// ── CLIENTES ──────────────────────────────────────────
+async function cargarClientes() {
+  const tbody = document.querySelector('#view-clientes tbody');
+  tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:2rem">Cargando...</td></tr>';
+  try {
+    const clientes = await apiGet('clientes');
+    tbody.innerHTML = clientes.map(c => {
+      const tel = c.telefono.replace(/\s/g,'');
+      const msg = c.estado === 'Adeudo'
+        ? `Hola%20${encodeURIComponent(c.nombre.split(' ')[0])}%2C%20te%20recordamos%20que%20tienes%20un%20saldo%20pendiente%20de%20${encodeURIComponent(c.precio)}%20con%20Risch%20Network.%20%C2%BFCu%C3%A1ndo%20puedes%20ponerte%20al%20corriente%3F%20Gracias.`
+        : c.estado === 'Suspendido'
+        ? `Hola%20${encodeURIComponent(c.nombre.split(' ')[0])}%2C%20tu%20servicio%20est%C3%A1%20suspendido%20por%20adeudo%20con%20Risch%20Network.%20Cont%C3%A1ctanos%20para%20reactivarlo.`
+        : `Hola%20${encodeURIComponent(c.nombre.split(' ')[0])}%2C%20te%20contactamos%20de%20Risch%20Network.%20%C2%BFEn%20qu%C3%A9%20podemos%20ayudarte%3F`;
+      const dias = c.diasVencido > 0 ? `<span style="color:var(--${c.estado==='Suspendido'?'red':'yellow'});font-weight:600">${c.diasVencido} días</span>` : `<span style="color:var(--text-muted)">—</span>`;
+      const prox = c.proximoPago && c.proximoPago !== '—' && c.proximoPago !== 'Vencido'
+        ? new Date(c.proximoPago).toLocaleDateString('es-MX',{day:'numeric',month:'short'}) + ` · ${c.precio}`
+        : `Vencido · ${c.precio}`;
+      return `<tr>
+        <td><div style="font-weight:500">${c.nombre}</div><div style="font-size:11px;color:var(--text-muted)">${c.telefono}</div></td>
+        <td>${c.plan}</td><td>${c.direccion}</td><td>${dias}</td>
+        <td>${badgeEstado(c.estado)}</td><td>${prox}</td>
+        <td><div style="display:flex;gap:6px">
+          <button class="btn btn-sm">Ver</button>
+          <a href="https://wa.me/52${tel}?text=${msg}" target="_blank"><button class="btn btn-sm btn-wa">WA</button></a>
+        </div></td>
+      </tr>`;
+    }).join('');
+  } catch(e) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--red);padding:2rem">Error al conectar con la base de datos</td></tr>';
+  }
+}
+
+// ── COBROS ────────────────────────────────────────────
+async function cargarCobros() {
+  try {
+    const cobros = await apiGet('cobros');
+    const vencidos = cobros.filter(c => c.estado === 'Vencido' || c.estado === 'Pendiente');
+    const pagados  = cobros.filter(c => c.estado === 'Pagado');
+
+    const tbodyVencidos = document.querySelector('#tabla-cartera tbody');
+    if (tbodyVencidos) {
+      tbodyVencidos.innerHTML = vencidos.length ? vencidos.map(c => `<tr>
+        <td><div style="font-weight:500">${c.cliente}</div></td>
+        <td>${c.mes}</td>
+        <td style="color:var(--red);font-weight:600">${c.monto}</td>
+        <td style="color:var(--yellow)">${c.estado}</td>
+        <td>${c.fechaPago !== '—' ? c.fechaPago : 'Sin pago'}</td>
+        <td><div style="display:flex;gap:6px">
+          <button class="btn btn-sm">WA</button>
+          <button class="btn btn-sm btn-success" onclick="openModal('modal-reg-pago')">Registrar</button>
+        </div></td>
+      </tr>`).join('') : '<tr><td colspan="6" style="text-align:center;color:var(--green);padding:1rem">Sin cartera vencida ✓</td></tr>';
+    }
+
+    const tbodyPagados = document.querySelector('#tabla-pagados tbody');
+    if (tbodyPagados) {
+      tbodyPagados.innerHTML = pagados.map(c => `<tr>
+        <td>${c.cliente}</td><td>${c.monto}</td><td>${c.fechaPago}</td><td>${c.metodo}</td><td>${badgeEstado(c.estado)}</td>
+      </tr>`).join('');
+    }
+  } catch(e) { console.error('Error cobros:', e); }
+}
+
+// ── AGENDA ────────────────────────────────────────────
+async function cargarAgenda() {
+  const cont = document.getElementById('agenda-lista');
+  if (!cont) return;
+  try {
+    const agenda = await apiGet('agenda');
+    cont.innerHTML = agenda.map(v => `
+      <div class="agenda-item" style="display:flex;gap:12px;padding:12px;border-radius:var(--r);background:var(--surface-2);margin-bottom:8px;border:1px solid var(--border)">
+        <div style="min-width:50px;text-align:center;background:var(--accent);border-radius:6px;padding:6px 4px">
+          <div style="font-size:11px;color:rgba(255,255,255,0.7)">${new Date(v.fecha).toLocaleDateString('es-MX',{month:'short'}).toUpperCase()}</div>
+          <div style="font-size:18px;font-weight:700;color:#fff">${new Date(v.fecha).getDate()}</div>
+        </div>
+        <div style="flex:1">
+          <div style="font-weight:600;font-size:13px">${v.cliente}</div>
+          <div style="font-size:11px;color:var(--text-muted)">${v.hora} · ${v.tipo} · ${v.direccion}</div>
+        </div>
+        ${badgeEstado(v.estado)}
+      </div>`).join('');
+  } catch(e) { console.error('Error agenda:', e); }
+}
+
+// ── PROSPECTOS ────────────────────────────────────────
+async function cargarProspectos() {
+  const tbody = document.querySelector('#tabla-prospectos tbody');
+  if (!tbody) return;
+  try {
+    const prospectos = await apiGet('prospectos');
+    tbody.innerHTML = prospectos.map(p => `<tr>
+      <td style="font-weight:500">${p.nombre}</td>
+      <td>${p.telefono}</td>
+      <td>${p.servicio}</td>
+      <td>${p.seguimiento}</td>
+      <td>${badgeEstado(p.estado)}</td>
+      <td><div style="display:flex;gap:6px">
+        <button class="btn btn-sm" onclick="showAlert('Generando propuesta PDF...')">PDF</button>
+        <a href="https://wa.me/52${p.telefono.replace(/\s/g,'')}?text=Hola%20${encodeURIComponent(p.nombre.split(' ')[0])}%2C%20te%20contactamos%20de%20Risch%20Network%20sobre%20tu%20inter%C3%A9s%20en%20${encodeURIComponent(p.servicio)}." target="_blank"><button class="btn btn-sm btn-wa">WA</button></a>
+      </div></td>
+    </tr>`).join('');
+  } catch(e) { console.error('Error prospectos:', e); }
+}
+
+// ── DASHBOARD ─────────────────────────────────────────
+async function cargarDashboard() {
+  try {
+    const d = await apiGet('dashboard');
+    animateCount('m-clientes', 0, d.clientes, 700);
+    animateMoney('m-ingresos', 0, d.ingresos, 800);
+    animateMoney('m-cartera', 0, d.cartera, 600);
+    animateCount('m-tickets', 0, d.tickets, 400);
+  } catch(e) {
+    // Si falla, usa valores animados hardcodeados como respaldo
+    animateDashboard();
+  }
+}
+
+// ── GUARDAR NUEVO CLIENTE ─────────────────────────────
+async function guardarNuevoCliente() {
+  const nombre = document.getElementById('nc-nombre')?.value?.trim();
+  const tel    = document.getElementById('nc-tel')?.value?.trim();
+  if (!nombre || !tel) { showAlert('Completa nombre y teléfono.'); return; }
+  const planVal   = document.getElementById('nc-plan')?.value || '20 Mbps|$240';
+  const [plan, precio] = planVal.split('|');
+  const dir    = document.getElementById('nc-dir')?.value?.trim() || '';
+  const corte  = document.getElementById('nc-corte')?.value || '5';
+  const hoy    = new Date();
+  const proximoPago = new Date(hoy.getFullYear(), hoy.getMonth() + 1, parseInt(corte)).toISOString().split('T')[0];
+  const btn = document.querySelector('#modal-nuevo-cliente .btn-accent');
+  btn.textContent = 'Guardando...'; btn.disabled = true;
+  try {
+    await apiPost({ accion:'nuevo_cliente', nombre, telefono:tel, direccion:dir, plan, precio, proximoPago });
+    closeModal('modal-nuevo-cliente');
+    document.getElementById('nc-nombre').value=''; document.getElementById('nc-tel').value='';
+    document.getElementById('nc-dir').value=''; document.getElementById('nc-notas').value='';
+    showAlert(`✅ Cliente ${nombre} registrado correctamente.`);
+    cargarClientes();
+  } catch(e) {
+    showAlert('Error al guardar. Verifica tu conexión.');
+  } finally {
+    btn.textContent = 'Guardar'; btn.disabled = false;
+  }
+}
+
+// ── REGISTRAR PAGO ────────────────────────────────────
+async function guardarPago() {
+  const cliente = document.getElementById('pago-cliente')?.value;
+  const monto   = document.getElementById('pago-monto')?.value?.trim();
+  const metodo  = document.getElementById('pago-metodo')?.value;
+  const mes     = document.getElementById('pago-mes')?.value?.trim();
+  if (!monto || !mes) { showAlert('Completa monto y mes.'); return; }
+  const btn = document.querySelector('#modal-reg-pago .btn-accent');
+  btn.textContent = 'Guardando...'; btn.disabled = true;
+  try {
+    await apiPost({ accion:'registrar_pago', cliente, monto:`$${monto}`, metodo, mes });
+    closeModal('modal-reg-pago');
+    document.getElementById('pago-monto').value=''; document.getElementById('pago-mes').value='';
+    showAlert(`✅ Pago de ${cliente} registrado.`);
+    cargarCobros();
+    cargarClientes();
+  } catch(e) {
+    showAlert('Error al guardar. Verifica tu conexión.');
+  } finally {
+    btn.textContent = 'Registrar'; btn.disabled = false;
+  }
+}
+
+// ── AGENDAR VISITA ────────────────────────────────────
+async function guardarVisita() {
+  const cliente  = document.getElementById('visita-cliente')?.value?.trim();
+  const fecha    = document.getElementById('visita-fecha')?.value;
+  const hora     = document.getElementById('visita-hora')?.value;
+  const tipo     = document.getElementById('visita-tipo')?.value;
+  const dir      = document.getElementById('visita-dir')?.value?.trim() || '';
+  if (!cliente || !fecha || !hora) { showAlert('Completa cliente, fecha y hora.'); return; }
+  const btn = document.querySelector('#modal-nueva-visita .btn-accent');
+  btn.textContent = 'Guardando...'; btn.disabled = true;
+  try {
+    await apiPost({ accion:'nueva_visita', cliente, fecha, hora, tipo, direccion:dir });
+    closeModal('modal-nueva-visita');
+    document.getElementById('visita-cliente').value=''; document.getElementById('visita-dir').value='';
+    document.getElementById('visita-notas').value='';
+    showAlert(`✅ Visita agendada: ${tipo} — ${cliente} el ${fecha} a las ${hora}.`);
+    cargarAgenda();
+  } catch(e) {
+    showAlert('Error al guardar. Verifica tu conexión.');
+  } finally {
+    btn.textContent = 'Agendar'; btn.disabled = false;
+  }
+}
+
+// ── INIT: cargar datos al navegar ─────────────────────
+const _navigateOriginal = navigate;
+window.navigate = function(viewId) {
+  _navigateOriginal(viewId);
+  if (viewId === 'dashboard-admin') cargarDashboard();
+  if (viewId === 'clientes')   cargarClientes();
+  if (viewId === 'cobros')     cargarCobros();
+  if (viewId === 'agenda')     cargarAgenda();
+  if (viewId === 'prospectos') cargarProspectos();
+};
+
+// ANIMATED DASHBOARD NUMBERS
+function animateDashboard(){
+  // EDITABLE: valores animados del dashboard admin (clientes, ingresos, cartera, tickets)
+  animateCount('m-clientes',0,47,700);   // EDITABLE: 47 clientes activos
+  animateMoney('m-ingresos',0,13160,800); // EDITABLE: $13,160 ingresos de junio
+  animateMoney('m-cartera',0,840,600);    // EDITABLE: $840 cartera vencida
+  animateCount('m-tickets',0,3,400);      // EDITABLE: 3 tickets abiertos
+  // EDITABLE: alturas de las 6 barras del gráfico (E, F, M, A, M, J) en porcentaje
+  const heights=['65','70','60','80','75','96'];
+  heights.forEach((h,i)=>{const b=document.getElementById('b'+i);if(b)b.style.height=h+'%';});
+}
+function animateCount(id,from,to,dur){
+  const el=document.getElementById(id);if(!el)return;
+  const start=performance.now();
+  const tick=t=>{const p=Math.min((t-start)/dur,1),val=Math.round(from+(to-from)*easeOut(p));el.textContent=val;if(p<1)requestAnimationFrame(tick);};
+  requestAnimationFrame(tick);
+}
+function animateMoney(id,from,to,dur){
+  const el=document.getElementById(id);if(!el)return;
+  const start=performance.now();
+  const tick=t=>{const p=Math.min((t-start)/dur,1),val=Math.round(from+(to-from)*easeOut(p));el.textContent='$'+val.toLocaleString();if(p<1)requestAnimationFrame(tick);};
+  requestAnimationFrame(tick);
+}
+function animateReportes(){
+  setTimeout(()=>{
+    // EDITABLE: anchos de las barras de distribución por plan (10M, 20M, 30M, 50M)
+    const p=['pr0','pr1','pr2','pr3'],w=['26%','38%','30%','6%'];
+    p.forEach((id,i)=>{const el=document.getElementById(id);if(el)el.style.width=w[i];});
+  },100);
+}
+function easeOut(t){return 1-Math.pow(1-t,3);}
+
+// SPEED TEST
+function runSpeedTest(){
+  if(testRunning)return;testRunning=true;
+  const btn=document.getElementById('speed-btn'),numEl=document.getElementById('speed-num'),phaseEl=document.getElementById('speed-phase'),statusEl=document.getElementById('speed-status'),progress=document.getElementById('speed-progress'),arc=document.getElementById('speed-arc');
+  btn.textContent='Probando...';btn.disabled=true;
+  const setArc=p=>{arc.style.strokeDashoffset=502-(502*(p/40));};
+  const ping=Math.round(8+Math.random()*18);document.getElementById('result-ping').textContent=ping+' ms';document.getElementById('stat-ping').classList.add('lit');
+  statusEl.textContent='Midiendo ping...';progress.style.width='10%';
+  const dlTarget=22+Math.random()*10;let dlCurrent=0;
+  phaseEl.textContent='descarga';statusEl.textContent='Midiendo descarga...';
+  const dlInt=setInterval(()=>{
+    dlCurrent=Math.min(dlCurrent+dlTarget/18+Math.random()*1.5,dlTarget);
+    numEl.textContent=dlCurrent.toFixed(1);setArc(dlCurrent);
+    progress.style.width=(10+(dlCurrent/dlTarget)*40)+'%';
+    if(dlCurrent>=dlTarget){
+      clearInterval(dlInt);const dl=dlCurrent.toFixed(1);document.getElementById('result-dl').textContent=dl+' Mbps';document.getElementById('stat-dl').classList.add('lit');
+      const ulTarget=dlTarget*0.3+Math.random()*2;let ulCurrent=0;
+      phaseEl.textContent='subida';statusEl.textContent='Midiendo subida...';
+      const ulInt=setInterval(()=>{
+        ulCurrent=Math.min(ulCurrent+ulTarget/14+Math.random(),ulTarget);
+        numEl.textContent=ulCurrent.toFixed(1);setArc(ulCurrent);
+        progress.style.width=(50+(ulCurrent/ulTarget)*48)+'%';
+        if(ulCurrent>=ulTarget){
+          clearInterval(ulInt);const ul=ulCurrent.toFixed(1);document.getElementById('result-ul').textContent=ul+' Mbps';document.getElementById('stat-ul').classList.add('lit');
+          progress.style.width='100%';numEl.textContent=dl;setArc(parseFloat(dl));
+          phaseEl.textContent='✓ completado';statusEl.textContent='';btn.textContent='Probar de nuevo';btn.disabled=false;testRunning=false;
+          const qs=document.getElementById('quick-speed');if(qs)qs.textContent=dl;
+          const now=new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
+          speedHistory.unshift({time:now,dl,ul,ping});if(speedHistory.length>5)speedHistory.pop();
+          const wrap=document.getElementById('speed-history-wrap'),tbody=document.getElementById('speed-history-body');
+          if(wrap)wrap.style.display='block';
+          if(tbody)tbody.innerHTML=speedHistory.map(r=>`<tr><td>${r.time}</td><td>${r.dl} Mbps</td><td>${r.ul} Mbps</td><td>${r.ping} ms</td></tr>`).join('');
+        }
+      },110);
+    }
+  },95);
+}
+
+// ICONS
+function ico(n){const d={
+  home:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
+  wifi:'<path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="currentColor"/>',
+  cash:'<rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>',
+  zap:'<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+  ticket:'<path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/>',
+  user:'<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+  users:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+  calendar:'<rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>',
+  target:'<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
+  server:'<rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6" stroke-width="2"/><line x1="6" y1="18" x2="6.01" y2="18" stroke-width="2"/>',
+  chart:'<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>',
+  settings:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>',
+};
+return`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${d[n]||''}</svg>`;}
+</script>
+</body>
+</html>
