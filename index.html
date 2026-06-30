@@ -329,14 +329,8 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
     </div>
 
     <div id="login-form">
-      <!-- EDITABLE: usuario demo (value="admin") -->
-      <div class="form-group"><label>Usuario</label><input type="text" id="login-user" value="admin" placeholder="usuario"></div>
-      <!-- EDITABLE: contraseña demo (value="1234") -->
-      <div class="form-group"><label>Contraseña</label><input type="password" id="login-pass" value="1234" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
-      <!-- EDITABLE: tipos de acceso disponibles -->
-      <div class="form-group"><label>Tipo de acceso</label>
-        <select id="login-role"><option value="admin">Administrador</option><option value="user">Cliente</option></select>
-      </div>
+      <div class="form-group"><label>Usuario</label><input type="text" id="login-user" placeholder="Usuario"></div>
+      <div class="form-group"><label>Contraseña</label><input type="password" id="login-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
       <button class="btn btn-accent btn-full" onclick="doLogin()">Entrar al portal</button>
       <div style="margin-top:12px;text-align:center"><button class="btn-link" onclick="showRecover()">¿Olvidaste tu contraseña?</button></div>
     </div>
@@ -349,8 +343,7 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
       <div style="margin-top:12px;text-align:center"><button class="btn-link" onclick="hideRecover()">Volver</button></div>
     </div>
 
-    <!-- EDITABLE: texto del hint de credenciales demo -->
-    <div class="login-hint"><span>Demo admin: admin / 1234</span><span>Demo cliente: cliente / 1234</span></div>
+    <div class="login-hint"><span>Risch Network · Portal de Operaciones</span></div>
   </div>
 </div>
 
@@ -903,19 +896,43 @@ const menus={
 const titles={'dashboard-user':'Inicio','servicios':'Mis servicios','pagos':'Pagos','velocidad':'Prueba de velocidad','soporte':'Soporte','perfil':'Mi perfil','dashboard-admin':'Dashboard','clientes':'Clientes','cobros':'Cobros','agenda':'Agenda','prospectos':'Prospectos','equipos':'Equipos','red':'Monitoreo de red','reportes':'Reportes','configuracion':'Configuración'};
 let speedHistory=[],testRunning=false;
 
-function doLogin(){
-  const role=document.getElementById('login-role').value;
-  const isAdmin=role==='admin';
-  document.getElementById('login-screen').style.display='none';
-  document.getElementById('app').style.display='flex';
-  document.getElementById('role-label').textContent=isAdmin?'Administrador':'Portal Cliente';
-  document.getElementById('user-display').textContent=isAdmin?'Daniel (Admin)':'Cliente Demo';
-  document.getElementById('user-email-display').textContent=isAdmin?'danielcaxxest27@gmail.com':'cliente@risch.mx';
-  document.getElementById('user-avatar').textContent=isAdmin?'DA':'CL';
-  buildNav(role);
-  navigate(isAdmin?'dashboard-admin':'dashboard-user');
-  document.getElementById('topbar-date').textContent=new Date().toLocaleDateString('es-MX',{weekday:'short',day:'numeric',month:'short'});
-  document.getElementById('notif-dot').style.display='block';
+async function doLogin(){
+  const usuario  = document.getElementById('login-user').value.trim();
+  const password = document.getElementById('login-pass').value.trim();
+  if (!usuario || !password) { showAlert('Ingresa usuario y contraseña.'); return; }
+
+  const btn = document.querySelector('#login-form .btn-accent');
+  btn.textContent = 'Verificando...'; btn.disabled = true;
+
+  try {
+    const res = await fetch(`${API}?accion=login&usuario=${encodeURIComponent(usuario)}&password=${encodeURIComponent(password)}`);
+    const data = await res.json();
+
+    if (!data.ok) {
+      showAlert('Usuario o contraseña incorrectos.');
+      btn.textContent = 'Entrar al portal'; btn.disabled = false;
+      return;
+    }
+
+    const role    = data.rol;
+    const nombre  = data.nombre || usuario;
+    const isAdmin = role === 'admin';
+
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app').style.display='flex';
+    document.getElementById('role-label').textContent = isAdmin ? 'Administrador' : 'Portal Cliente';
+    document.getElementById('user-display').textContent = nombre;
+    document.getElementById('user-email-display').textContent = isAdmin ? 'danielcaxxest27@gmail.com' : '';
+    document.getElementById('user-avatar').textContent = nombre.substring(0,2).toUpperCase();
+    buildNav(role);
+    navigate(isAdmin ? 'dashboard-admin' : 'dashboard-user');
+    document.getElementById('topbar-date').textContent = new Date().toLocaleDateString('es-MX',{weekday:'short',day:'numeric',month:'short'});
+    document.getElementById('notif-dot').style.display='block';
+  } catch(e) {
+    showAlert('Error de conexión. Intenta de nuevo.');
+  } finally {
+    btn.textContent = 'Entrar al portal'; btn.disabled = false;
+  }
 }
 function doLogout(){
   document.getElementById('app').style.display='none';
