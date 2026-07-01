@@ -378,10 +378,7 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
     <div class="form-group"><label>¿Quién pagó?</label><select id="pago-cliente" style="font-size:15px;padding:10px"></select></div>
     <div class="form-group"><label>¿Cuánto pagó?</label>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px" id="montos-rapidos">
-        <button type="button" class="btn btn-sm" onclick="document.getElementById('pago-monto').value='200';resaltarMonto(this)">$200</button>
-        <button type="button" class="btn btn-sm" onclick="document.getElementById('pago-monto').value='240';resaltarMonto(this)">$240</button>
-        <button type="button" class="btn btn-sm" onclick="document.getElementById('pago-monto').value='280';resaltarMonto(this)">$280</button>
-        <button type="button" class="btn btn-sm" onclick="document.getElementById('pago-monto').value='400';resaltarMonto(this)">$400</button>
+        <button type="button" class="btn btn-sm" onclick="document.getElementById('pago-monto').value='450';resaltarMonto(this)">$450</button>
       </div>
       <input id="pago-monto" type="number" placeholder="O escribe otro monto..." style="margin-top:8px;font-size:15px;padding:10px">
     </div>
@@ -410,11 +407,8 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
     <div class="form-group"><label>Teléfono *</label><input id="nc-tel" type="tel" placeholder="443 000 0000" style="font-size:15px;padding:10px" autocomplete="tel"></div>
     <div class="form-group"><label>Dirección</label><input id="nc-dir" type="text" placeholder="Calle y número" style="font-size:15px;padding:10px"></div>
     <div class="form-group"><label>Plan *</label>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px" id="planes-grid">
-        <button type="button" class="btn plan-btn" onclick="selPlan('10 Mbps|$200',this)" style="padding:12px;text-align:left"><div style="font-weight:600">10 Mbps</div><div style="font-size:11px;color:var(--text-muted)">$200/mes</div></button>
-        <button type="button" class="btn plan-btn" onclick="selPlan('20 Mbps|$240',this)" style="padding:12px;text-align:left"><div style="font-weight:600">20 Mbps</div><div style="font-size:11px;color:var(--text-muted)">$240/mes</div></button>
-        <button type="button" class="btn plan-btn" onclick="selPlan('30 Mbps|$280',this)" style="padding:12px;text-align:left"><div style="font-weight:600">30 Mbps</div><div style="font-size:11px;color:var(--text-muted)">$280/mes</div></button>
-        <button type="button" class="btn plan-btn" onclick="selPlan('50 Mbps|$400',this)" style="padding:12px;text-align:left"><div style="font-weight:600">50 Mbps</div><div style="font-size:11px;color:var(--text-muted)">$400/mes</div></button>
+      <div style="display:grid;grid-template-columns:1fr;gap:8px;margin-top:6px" id="planes-grid">
+        <button type="button" class="btn plan-btn" onclick="selPlan('60 Mbps|$450',this)" style="padding:12px;text-align:left"><div style="font-weight:600">60 Mbps</div><div style="font-size:11px;color:var(--text-muted)">$450/mes</div></button>
       </div>
       <input type="hidden" id="nc-plan" value="">
     </div>
@@ -488,11 +482,8 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
     <div class="form-group"><label>Teléfono</label><input id="ec-tel" type="tel" style="font-size:15px;padding:10px"></div>
     <div class="form-group"><label>Dirección</label><input id="ec-dir" type="text" style="font-size:15px;padding:10px"></div>
     <div class="form-group"><label>Plan</label>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px" id="ec-planes-grid">
-        <button type="button" class="btn ec-plan-btn" onclick="selEcPlan('10 Mbps|$200',this)" style="padding:12px;text-align:left"><div style="font-weight:600">10 Mbps</div><div style="font-size:11px;color:var(--text-muted)">$200/mes</div></button>
-        <button type="button" class="btn ec-plan-btn" onclick="selEcPlan('20 Mbps|$240',this)" style="padding:12px;text-align:left"><div style="font-weight:600">20 Mbps</div><div style="font-size:11px;color:var(--text-muted)">$240/mes</div></button>
-        <button type="button" class="btn ec-plan-btn" onclick="selEcPlan('30 Mbps|$280',this)" style="padding:12px;text-align:left"><div style="font-weight:600">30 Mbps</div><div style="font-size:11px;color:var(--text-muted)">$280/mes</div></button>
-        <button type="button" class="btn ec-plan-btn" onclick="selEcPlan('50 Mbps|$400',this)" style="padding:12px;text-align:left"><div style="font-weight:600">50 Mbps</div><div style="font-size:11px;color:var(--text-muted)">$400/mes</div></button>
+      <div style="display:grid;grid-template-columns:1fr;gap:8px;margin-top:6px" id="ec-planes-grid">
+        <button type="button" class="btn ec-plan-btn" onclick="selEcPlan('60 Mbps|$450',this)" style="padding:12px;text-align:left"><div style="font-weight:600">60 Mbps</div><div style="font-size:11px;color:var(--text-muted)">$450/mes</div></button>
       </div>
       <input type="hidden" id="ec-plan" value="">
     </div>
@@ -915,7 +906,7 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
       <!-- ADMIN: PROSPECTOS -->
       <!-- EDITABLE: tabla de prospectos — cada <tr> es un prospecto (nombre, tel, interés, seguimiento, estado) -->
       <div class="view" id="view-prospectos">
-        <div class="action-row"><input class="search-bar" style="max-width:280px" placeholder="Buscar prospecto..."><button class="btn btn-accent btn-sm" onclick="openModal('modal-nuevo-prospecto')">+ Nuevo prospecto</button></div>
+        <div class="action-row"><input class="search-bar" id="buscar-prospecto" style="max-width:280px" placeholder="Buscar prospecto..." oninput="filtrarProspectos(this.value)"><button class="btn btn-accent btn-sm" onclick="openModal('modal-nuevo-prospecto')">+ Nuevo prospecto</button></div>
         <div class="card mb-2"><div class="table-wrap"><table id="tabla-prospectos"><thead><tr><th>Nombre</th><th>Teléfono</th><th>Interés</th><th>Seguimiento</th><th>Estado</th><th></th></tr></thead>
         <tbody><tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:2rem">Cargando...</td></tr></tbody></table></div></div>
         <div class="card">
@@ -998,10 +989,7 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
           <div class="section-title" style="margin-bottom:1rem">Distribución por plan</div>
           <!-- EDITABLE: número de clientes por plan (12, 18, 14, 3) y anchos de barra en animateReportes() del JS -->
           <div style="display:flex;gap:1rem;flex-wrap:wrap">
-            <div style="flex:1;min-width:100px"><div style="font-size:11px;color:var(--text-muted)">10 Mbps · $200</div><div style="font-size:20px;font-weight:700;margin:4px 0">12</div><div class="progress-bar"><div class="progress-fill" id="pr0" style="width:0%;background:rgba(108,99,255,0.4)"></div></div></div>
-            <div style="flex:1;min-width:100px"><div style="font-size:11px;color:var(--text-muted)">20 Mbps · $240</div><div style="font-size:20px;font-weight:700;margin:4px 0">18</div><div class="progress-bar"><div class="progress-fill" id="pr1" style="width:0%"></div></div></div>
-            <div style="flex:1;min-width:100px"><div style="font-size:11px;color:var(--text-muted)">30 Mbps · $280</div><div style="font-size:20px;font-weight:700;margin:4px 0">14</div><div class="progress-bar"><div class="progress-fill" id="pr2" style="width:0%"></div></div></div>
-            <div style="flex:1;min-width:100px"><div style="font-size:11px;color:var(--text-muted)">50 Mbps · $400</div><div style="font-size:20px;font-weight:700;margin:4px 0">3</div><div class="progress-bar"><div class="progress-fill" id="pr3" style="width:0%;background:var(--green)"></div></div></div>
+            <div style="flex:1;min-width:100px"><div style="font-size:11px;color:var(--text-muted)">60 Mbps · $450</div><div style="font-size:20px;font-weight:700;margin:4px 0" id="pr0-num">—</div><div class="progress-bar"><div class="progress-fill" id="pr0" style="width:0%;background:var(--green)"></div></div></div>
           </div>
         </div>
         <div class="card"><div class="card-header"><div class="section-title">Exportar reportes</div></div>
@@ -1028,14 +1016,7 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
             <!-- EDITABLE: nombre, velocidad y precio de cada plan -->
             <div class="table-wrap"><table><thead><tr><th>Plan</th><th>Velocidad</th><th>Precio</th><th></th></tr></thead>
             <tbody>
-              <!-- EDITABLE: plan Básico -->
-              <tr><td>Básico</td><td>10 Mbps</td><td>$200</td><td><button class="btn btn-sm">Editar</button></td></tr>
-              <!-- EDITABLE: plan Estándar -->
-              <tr><td>Estándar</td><td>20 Mbps</td><td>$240</td><td><button class="btn btn-sm">Editar</button></td></tr>
-              <!-- EDITABLE: plan Plus -->
-              <tr><td>Plus</td><td>30 Mbps</td><td>$280</td><td><button class="btn btn-sm">Editar</button></td></tr>
-              <!-- EDITABLE: plan Pro -->
-              <tr><td>Pro</td><td>50 Mbps</td><td>$400</td><td><button class="btn btn-sm">Editar</button></td></tr>
+              <tr><td>Estándar</td><td>60 Mbps</td><td>$450</td><td><button class="btn btn-sm">Editar</button></td></tr>
             </tbody></table></div>
             <button class="btn btn-sm" style="margin-top:8px">+ Nuevo plan</button>
           </div>
@@ -1091,7 +1072,7 @@ async function doLogin(){
   btn.textContent = 'Verificando...'; btn.disabled = true;
 
   try {
-    const res = await fetch(`${API}?accion=login&usuario=${encodeURIComponent(usuario)}&password=${encodeURIComponent(password)}`);
+    const res = await fetch(API, { method:'POST', body: JSON.stringify({ accion:'login', usuario, password }) });
     const data = await res.json();
 
     if (!data.ok) {
@@ -1181,8 +1162,8 @@ function runMonitor(){const now=new Date().toLocaleTimeString('es-MX',{hour:'2-d
 // ── CONEXIÓN GOOGLE SHEETS ────────────────────────────
 const API = 'https://script.google.com/macros/s/AKfycbxu2dGMT2ok64E5wpEUauG3PCayzByy1ZvHq1Tnq_hnwnhUUFJ4gLmrFIkyBtN7698d/exec';
 
-async function apiGet(accion) {
-  const res = await fetch(`${API}?accion=${accion}`);
+async function apiGet(tipo) {
+  const res = await fetch(`${API}?tipo=${tipo}`);
   return res.json();
 }
 
@@ -1342,6 +1323,7 @@ async function cargarProspectos() {
   if (!tbody) return;
   try {
     const prospectos = await apiGet('prospectos');
+    _prospectosCache = prospectos;
     tbody.innerHTML = prospectos.map(p => `<tr>
       <td style="font-weight:500">${p.nombre}</td>
       <td>${p.telefono}</td>
@@ -1359,33 +1341,50 @@ async function cargarProspectos() {
 // ── DASHBOARD ─────────────────────────────────────────
 async function cargarDashboard() {
   try {
-    const [d, clientes, cobros] = await Promise.all([
-      apiGet('dashboard'),
-      apiGet('clientes'),
-      apiGet('cobros')
-    ]);
-    animateCount('m-clientes', 0, d.clientes, 700);
-    animateMoney('m-ingresos', 0, d.ingresos, 800);
-    animateMoney('m-cartera', 0, d.cartera, 600);
-    animateCount('m-tickets', 0, d.tickets, 400);
+    const [clientes, cobros] = await Promise.all([apiGet('clientes'), apiGet('cobros')]);
 
-    const total = clientes.length;
-    const conAdeudo = clientes.filter(c=>c.estado==='Adeudo'||c.estado==='Suspendido').length;
-    document.getElementById('m-clientes-sub').textContent = `${total} registrados`;
-    document.getElementById('m-ingresos-sub').textContent = `${d.clientes} clientes pagaron`;
-    document.getElementById('m-cartera-sub').textContent = `${conAdeudo} clientes`;
-    document.getElementById('m-tickets-sub').textContent = `Adeudo o suspendido`;
+    const activos    = clientes.filter(c => c.estado === 'Activo').length;
+    const conAdeudo  = clientes.filter(c => c.estado === 'Adeudo' || c.estado === 'Suspendido').length;
+    const pagados    = cobros.filter(c => c.estado === 'Pagado');
+    const vencidos   = cobros.filter(c => c.estado === 'Vencido' || c.estado === 'Pendiente');
+    const ingresos   = pagados.reduce((s,c) => s + Number((c.monto||'0').replace(/[$,]/g,'')), 0);
+    const cartera    = vencidos.reduce((s,c) => s + Number((c.monto||'0').replace(/[$,]/g,'')), 0);
 
-    // Actualizar selector de clientes en modal de pago
-    const sel = document.getElementById('pago-cliente');
-    if (sel) {
-      sel.innerHTML = clientes.map(c=>`<option value="${c.nombre}">${c.nombre}</option>`).join('');
+    animateCount('m-clientes', 0, activos, 700);
+    animateMoney('m-ingresos', 0, ingresos, 800);
+    animateMoney('m-cartera',  0, cartera,  600);
+    animateCount('m-tickets',  0, conAdeudo, 400);
+
+    document.getElementById('m-clientes-sub').textContent = `${clientes.length} registrados`;
+    document.getElementById('m-ingresos-sub').textContent = `${pagados.length} pagos registrados`;
+    document.getElementById('m-cartera-sub').textContent  = `${vencidos.length} cobros vencidos`;
+    document.getElementById('m-tickets-sub').textContent  = `Adeudo o suspendido`;
+
+    // Gráfica de barras — últimos 6 meses desde hoy
+    const meses = [];
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(); d.setMonth(d.getMonth() - i);
+      meses.push({ mes: d.getMonth(), anio: d.getFullYear(), label: d.toLocaleDateString('es-MX',{month:'short'}).substring(0,1).toUpperCase() });
     }
-  } catch(e) {
-    animateDashboard();
-    ['m-clientes-sub','m-ingresos-sub','m-cartera-sub','m-tickets-sub'].forEach(id=>{
-      const el=document.getElementById(id);if(el)el.textContent='';
+    const maxIng = Math.max(...meses.map(m => {
+      return cobros.filter(c => {
+        const d = new Date(c.mes); return d.getMonth()===m.mes && d.getFullYear()===m.anio && c.estado==='Pagado';
+      }).reduce((s,c)=>s+Number((c.monto||'0').replace(/[$,]/g,'')),0);
+    }), 1);
+    meses.forEach((m, i) => {
+      const total = cobros.filter(c => {
+        const d = new Date(c.mes); return d.getMonth()===m.mes && d.getFullYear()===m.anio && c.estado==='Pagado';
+      }).reduce((s,c)=>s+Number((c.monto||'0').replace(/[$,]/g,'')),0);
+      const bar = document.getElementById('b'+i); if(bar) bar.style.height = Math.max((total/maxIng)*96,4)+'%';
+      const lbl = bar?.parentElement?.querySelector('.bar-label'); if(lbl) lbl.textContent = m.label;
     });
+
+    // Selector de clientes en modal de pago
+    const sel = document.getElementById('pago-cliente');
+    if (sel) sel.innerHTML = clientes.map(c=>`<option value="${c.nombre}">${c.nombre}</option>`).join('');
+  } catch(e) {
+    console.error('dashboard:', e);
+    animateDashboard();
   }
 }
 
@@ -1425,10 +1424,10 @@ async function guardarNuevoCliente() {
   const btn = document.querySelector('#modal-nuevo-cliente .btn-accent');
   btn.textContent = 'Guardando...'; btn.disabled = true;
   try {
-    await apiPost({ accion:'nuevo_cliente', nombre, telefono:tel, direccion:dir, plan, precio, proximoPago });
+    await apiPost({ accion:'cliente', nombre, telefono:tel, direccion:dir, plan, precio, proximoPago });
     closeModal('modal-nuevo-cliente');
     document.getElementById('nc-nombre').value=''; document.getElementById('nc-tel').value='';
-    document.getElementById('nc-dir').value=''; document.getElementById('nc-notas').value='';
+    document.getElementById('nc-dir').value='';
     showAlert(`✅ Cliente ${nombre} registrado`, 'ok');
     cargarClientes();
   } catch(e) {
@@ -1448,7 +1447,8 @@ async function guardarPago() {
   const btn = document.querySelector('#modal-reg-pago .btn-accent');
   btn.textContent = 'Guardando...'; btn.disabled = true;
   try {
-    await apiPost({ accion:'registrar_pago', cliente, monto:`$${monto}`, metodo, mes });
+    const hoy = new Date().toISOString().split('T')[0];
+    await apiPost({ accion:'cobro', cliente, monto:`$${monto}`, metodo, mes, fechaPago:hoy, estado:'Pagado' });
     closeModal('modal-reg-pago');
     document.getElementById('pago-monto').value=''; document.getElementById('pago-mes').value='';
     showAlert(`✅ Pago de ${cliente} — $${monto} registrado`, 'ok');
@@ -1472,10 +1472,9 @@ async function guardarVisita() {
   const btn = document.querySelector('#modal-nueva-visita .btn-accent');
   btn.textContent = 'Guardando...'; btn.disabled = true;
   try {
-    await apiPost({ accion:'nueva_visita', cliente, fecha, hora, tipo, direccion:dir });
+    await apiPost({ accion:'visita', cliente, fecha, hora, tipo, direccion:dir });
     closeModal('modal-nueva-visita');
     document.getElementById('visita-cliente').value=''; document.getElementById('visita-dir').value='';
-    document.getElementById('visita-notas').value='';
     showAlert(`✅ ${tipo} agendada — ${cliente} el ${fecha}`, 'ok');
     cargarAgenda();
   } catch(e) {
@@ -1683,7 +1682,7 @@ async function guardarProspecto() {
   const btn = document.querySelector('#modal-nuevo-prospecto .btn-accent');
   btn.textContent = 'Guardando...'; btn.disabled = true;
   try {
-    await apiPost({ accion:'nuevo_prospecto', nombre, telefono:tel, servicio, seguimiento:'Pendiente contacto', notas });
+    await apiPost({ accion:'prospecto', nombre, telefono:tel, servicio, seguimiento:'Pendiente contacto', estado:'Nuevo', notas });
     closeModal('modal-nuevo-prospecto');
     document.getElementById('np-nombre').value = '';
     document.getElementById('np-tel').value = '';
@@ -1693,6 +1692,69 @@ async function guardarProspecto() {
   } catch(e) {
     showAlert('Error al guardar. Verifica conexión.', 'error');
   } finally { btn.textContent = '✅ Guardar prospecto'; btn.disabled = false; }
+}
+
+// ── FILTRAR PROSPECTOS ────────────────────────────────
+let _prospectosCache = [];
+function filtrarProspectos(q) {
+  const tbody = document.querySelector('#tabla-prospectos tbody');
+  if (!tbody) return;
+  const term = q.toLowerCase();
+  const filtrados = q ? _prospectosCache.filter(p =>
+    p.nombre.toLowerCase().includes(term) ||
+    p.telefono.includes(term) ||
+    (p.servicio||'').toLowerCase().includes(term)
+  ) : _prospectosCache;
+  if (!filtrados.length) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:1.5rem">Sin resultados para "${q}"</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = filtrados.map(p => `<tr>
+    <td style="font-weight:500">${p.nombre}</td>
+    <td>${p.telefono}</td>
+    <td>${p.servicio}</td>
+    <td>${p.seguimiento}</td>
+    <td>${badgeEstado(p.estado)}</td>
+    <td><div style="display:flex;gap:6px">
+      <a href="https://wa.me/52${p.telefono.replace(/\s/g,'')}?text=Hola%20${encodeURIComponent(p.nombre.split(' ')[0])}%2C%20te%20contactamos%20de%20Risch%20Network." target="_blank"><button class="btn btn-sm btn-wa">WA</button></a>
+    </div></td>
+  </tr>`).join('');
+}
+
+// ── EQUIPOS ───────────────────────────────────────────
+async function cargarEquipos() {
+  try {
+    const equipos = await apiGet('equipos');
+    const antenas  = equipos.filter(e => e.equipo.toLowerCase().includes('antena') || e.equipo.toLowerCase().includes('rocket') || e.equipo.toLowerCase().includes('litebeam') || e.equipo.toLowerCase().includes('nanobeam'));
+    const bodega   = equipos.filter(e => !antenas.includes(e));
+
+    const antDiv = document.querySelector('#view-equipos .grid-2 .card:first-child');
+    if (antDiv) {
+      antDiv.innerHTML = `<div class="section-title" style="margin-bottom:1rem">Antenas instaladas</div>` +
+        (antenas.length ? antenas.map(e => `
+          <div class="equipo-row">
+            <div class="equipo-icon">📡</div>
+            <div class="equipo-info">
+              <div class="equipo-name">${e.equipo} — ${e.modelo}</div>
+              <div class="equipo-detail">${e.ubicacion} · ${e.ip}</div>
+            </div>
+            ${badgeEstado(e.estado)}
+          </div>`).join('') : '<p style="color:var(--text-muted);font-size:13px">Sin antenas registradas</p>');
+    }
+    const bodDiv = document.querySelector('#view-equipos .grid-2 .card:last-child');
+    if (bodDiv) {
+      bodDiv.innerHTML = `<div class="section-title" style="margin-bottom:1rem">Inventario en bodega</div>` +
+        (bodega.length ? bodega.map(e => `
+          <div class="equipo-row">
+            <div class="equipo-icon">📦</div>
+            <div class="equipo-info">
+              <div class="equipo-name">${e.equipo}</div>
+              <div class="equipo-detail">${e.notas||''}${e.ubicacion?' · '+e.ubicacion:''}</div>
+            </div>
+            ${badgeEstado(e.estado)}
+          </div>`).join('') : '<p style="color:var(--text-muted);font-size:13px">Sin inventario</p>');
+    }
+  } catch(e) { console.error('equipos:', e); }
 }
 
 // ── PERFIL CLIENTE ────────────────────────────────────
@@ -1727,6 +1789,7 @@ window.navigate = function(viewId) {
   if (viewId === 'cobros')     cargarCobros();
   if (viewId === 'agenda')     cargarAgenda();
   if (viewId === 'prospectos') cargarProspectos();
+  if (viewId === 'equipos')    cargarEquipos();
   if (viewId === 'perfil' && window._nombreCliente) cargarPerfilCliente(window._nombreCliente);
   if ((viewId === 'dashboard-user' || viewId === 'servicios' || viewId === 'pagos') && window._nombreCliente) cargarDatosCliente(window._nombreCliente);
 };
@@ -1748,11 +1811,14 @@ function animateMoney(id,from,to,dur){
   const tick=t=>{const p=Math.min((t-start)/dur,1),val=Math.round(from+(to-from)*easeOut(p));el.textContent='$'+val.toLocaleString();if(p<1)requestAnimationFrame(tick);};
   requestAnimationFrame(tick);
 }
-function animateReportes(){
-  setTimeout(()=>{
-    // EDITABLE: anchos de las barras de distribución por plan (10M, 20M, 30M, 50M)
-    const p=['pr0','pr1','pr2','pr3'],w=['26%','38%','30%','6%'];
-    p.forEach((id,i)=>{const el=document.getElementById(id);if(el)el.style.width=w[i];});
+async function animateReportes(){
+  setTimeout(async ()=>{
+    const el=document.getElementById('pr0');if(el)el.style.width='100%';
+    try {
+      const clientes = await apiGet('clientes');
+      const num = document.getElementById('pr0-num');
+      if(num) num.textContent = clientes.length;
+    } catch(e){}
   },100);
 }
 function easeOut(t){return 1-Math.pow(1-t,3);}
