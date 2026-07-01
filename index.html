@@ -1097,6 +1097,22 @@ async function apiPost(datos) {
   return res.json();
 }
 
+// Formato de fecha legible
+function fmtFecha(val) {
+  if (!val || val === '—' || val === 'Vencido') return val || '—';
+  const d = new Date(val);
+  if (isNaN(d)) return val;
+  return d.toLocaleDateString('es-MX', { day:'numeric', month:'short', year:'numeric' });
+}
+
+// Formato de mes legible (ej: 2026-06-01T... → Jun 2026)
+function fmtMes(val) {
+  if (!val || val === '—') return '—';
+  const d = new Date(val);
+  if (isNaN(d)) return val;
+  return d.toLocaleDateString('es-MX', { month:'short', year:'numeric' });
+}
+
 // Badge de estado
 function badgeEstado(estado) {
   const map = { 'Activo':'badge-success','Adeudo':'badge-warning','Suspendido':'badge-danger','Nuevo':'badge-gray','Cotizado':'badge-accent','En revisión':'badge-warning','Confirmada':'badge-success','Pendiente':'badge-warning','Pagado':'badge-success','Vencido':'badge-danger','En línea':'badge-success','Sin respuesta':'badge-danger','Disponible':'badge-accent' };
@@ -1157,23 +1173,26 @@ async function cargarCobros() {
 
     const tbodyVencidos = document.querySelector('#tabla-cartera tbody');
     if (tbodyVencidos) {
-      tbodyVencidos.innerHTML = vencidos.length ? vencidos.map(c => `<tr>
-        <td><div style="font-weight:500">${c.cliente}</div></td>
-        <td>${c.mes}</td>
-        <td style="color:var(--red);font-weight:600">${c.monto}</td>
-        <td style="color:var(--yellow)">${c.estado}</td>
-        <td>${c.fechaPago !== '—' ? c.fechaPago : 'Sin pago'}</td>
-        <td><div style="display:flex;gap:6px">
-          <button class="btn btn-sm">WA</button>
-          <button class="btn btn-sm btn-success" onclick="openModal('modal-reg-pago')">Registrar</button>
-        </div></td>
-      </tr>`).join('') : '<tr><td colspan="6" style="text-align:center;color:var(--green);padding:1rem">Sin cartera vencida ✓</td></tr>';
+      tbodyVencidos.innerHTML = vencidos.length ? vencidos.map(c => {
+        const tel = (c.telefono||'').replace(/\s/g,'');
+        const msg = `Hola%2C%20te%20recordamos%20tu%20adeudo%20de%20${encodeURIComponent(c.monto)}%20con%20Risch%20Network.`;
+        return `<tr>
+          <td><div style="font-weight:500">${c.cliente}</div></td>
+          <td>${fmtMes(c.mes)}</td>
+          <td style="color:var(--red);font-weight:600">${c.monto}</td>
+          <td>${badgeEstado(c.estado)}</td>
+          <td>${c.fechaPago && c.fechaPago !== '—' ? fmtFecha(c.fechaPago) : 'Sin pago'}</td>
+          <td><div style="display:flex;gap:6px">
+            <button class="btn btn-sm btn-success" onclick="openModal('modal-reg-pago')">Registrar</button>
+          </div></td>
+        </tr>`;
+      }).join('') : '<tr><td colspan="6" style="text-align:center;color:var(--green);padding:1rem">✓ Sin cartera vencida</td></tr>';
     }
 
     const tbodyPagados = document.querySelector('#tabla-pagados tbody');
     if (tbodyPagados) {
       tbodyPagados.innerHTML = pagados.map(c => `<tr>
-        <td>${c.cliente}</td><td>${c.monto}</td><td>${c.fechaPago}</td><td>${c.metodo}</td><td>${badgeEstado(c.estado)}</td>
+        <td>${c.cliente}</td><td>${c.monto}</td><td>${fmtFecha(c.fechaPago)}</td><td>${c.metodo}</td><td>${badgeEstado(c.estado)}</td>
       </tr>`).join('');
     }
   } catch(e) { console.error('Error cobros:', e); }
