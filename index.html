@@ -1220,10 +1220,10 @@ async function apiGet(tipo) {
 }
 
 async function apiPost(datos) {
-  const res = await fetch(API, {
-    method: 'POST',
-    body: JSON.stringify(datos)
-  });
+  const tipo = datos.accion || datos.tipo || '';
+  const params = new URLSearchParams({ tipo });
+  Object.entries(datos).forEach(([k, v]) => { if (k !== 'accion' && k !== 'tipo') params.append(k, v ?? ''); });
+  const res = await fetch(`${API}?${params.toString()}`);
   return res.json();
 }
 
@@ -1478,7 +1478,7 @@ async function guardarNuevoCliente() {
   const btn = document.querySelector('#modal-nuevo-cliente .btn-accent');
   btn.textContent = 'Guardando...'; btn.disabled = true;
   try {
-    await apiPost({ accion:'cliente', nombre, telefono:tel, direccion:dir, plan, precio, proximoPago });
+    await apiPost({ accion:'cliente', nombre, telefono:tel, direccion:dir, plan, monto:precio, fecha_pago:proximoPago });
     closeModal('modal-nuevo-cliente');
     document.getElementById('nc-nombre').value=''; document.getElementById('nc-tel').value='';
     document.getElementById('nc-dir').value='';
@@ -1830,7 +1830,7 @@ async function confirmarVisita(idx) {
   const v = _agendaCache[idx];
   if (!v) return;
   try {
-    await apiPost({ accion:'editar_visita', clienteOrig:v.cliente, fechaOrig:v.fecha, cliente:v.cliente, fecha:v.fecha, hora:v.hora, tipo:v.tipo, direccion:v.direccion, estado:'Completada' });
+    await apiPost({ accion:'editar_visita', cliente_orig:v.cliente, fecha_orig:v.fecha, cliente:v.cliente, fecha:v.fecha, hora:v.hora, tipo:v.tipo, direccion:v.direccion, estado:'Completada' });
     showAlert(`✅ Visita de ${v.cliente} marcada como completada`, 'ok');
     cargarAgenda();
   } catch(e) { showAlert('Error al actualizar.', 'error'); }
@@ -2063,7 +2063,7 @@ async function guardarEdicionCliente() {
   const btn = document.querySelector('#modal-editar-cliente .btn-accent');
   btn.textContent = 'Guardando...'; btn.disabled = true;
   try {
-    await apiPost({ accion:'editar_cliente', nombreOrig, nombre, telefono, direccion, plan, precio, estado });
+    await apiPost({ accion:'editar_cliente', nombre_original:nombreOrig, nombre, telefono, direccion, plan, monto:precio, estado });
     closeModal('modal-editar-cliente');
     showAlert(`✅ Cliente actualizado`, 'ok');
     cargarClientes();
@@ -2113,7 +2113,7 @@ async function guardarEdicionCobro() {
   const btn = document.querySelector('#modal-editar-cobro .btn-accent');
   btn.textContent = 'Guardando...'; btn.disabled = true;
   try {
-    await apiPost({ accion:'editar_cobro', clienteOrig, mesOrig, mes, monto, metodo, estado, fechaPago });
+    await apiPost({ accion:'editar_cobro', cliente_orig:clienteOrig, mes_orig:mesOrig, mes, monto, metodo, estado, fecha_pago:fechaPago });
     closeModal('modal-editar-cobro');
     showAlert(`✅ Cobro actualizado`, 'ok');
     cargarCobros();
@@ -2125,7 +2125,7 @@ async function eliminarCobro(idx) {
   if (!c) return;
   if (!confirm(`¿Eliminar cobro de ${c.cliente} — ${c.mes}?`)) return;
   try {
-    await apiPost({ accion:'eliminar_cobro', cliente: c.cliente, mes: c.mes });
+    await apiPost({ accion:'eliminar_cobro', cliente: c.cliente, mes: c.mes, fecha_pago: c.fechaPago });
     showAlert(`Cobro eliminado`, 'ok');
     cargarCobros();
   } catch(e) { showAlert('Error al eliminar.', 'error'); }
@@ -2167,7 +2167,7 @@ async function guardarEdicionVisita() {
   const btn = document.querySelector('#modal-editar-visita .btn-accent');
   btn.textContent = 'Guardando...'; btn.disabled = true;
   try {
-    await apiPost({ accion:'editar_visita', clienteOrig, fechaOrig, cliente, fecha, hora, tipo, direccion:dir, estado });
+    await apiPost({ accion:'editar_visita', cliente_orig:clienteOrig, fecha_orig:fechaOrig, cliente, fecha, hora, tipo, direccion:dir, estado });
     closeModal('modal-editar-visita');
     showAlert(`✅ Visita actualizada`, 'ok');
     cargarAgenda();
@@ -2179,7 +2179,7 @@ async function eliminarVisita(idx) {
   if (!v) return;
   if (!confirm(`¿Eliminar visita de ${v.cliente} — ${fmtFecha(v.fecha)}?`)) return;
   try {
-    await apiPost({ accion:'eliminar_visita', cliente: v.cliente, fecha: v.fecha });
+    await apiPost({ accion:'eliminar_visita', cliente: v.cliente, fecha_orig: v.fecha });
     showAlert(`Visita eliminada`, 'ok');
     cargarAgenda();
   } catch(e) { showAlert('Error al eliminar.', 'error'); }
