@@ -925,7 +925,7 @@ async function doLogin(){
     document.getElementById('user-email-display').textContent = isAdmin ? 'danielcaxxest27@gmail.com' : '';
     document.getElementById('user-avatar').textContent = nombre.substring(0,2).toUpperCase();
     buildNav(role);
-    navigate(isAdmin ? 'dashboard-admin' : 'dashboard-user');
+    try { navigate(isAdmin ? 'dashboard-admin' : 'dashboard-user'); } catch(e) { console.error('nav error:', e); }
     document.getElementById('topbar-date').textContent = new Date().toLocaleDateString('es-MX',{weekday:'short',day:'numeric',month:'short'});
     document.getElementById('notif-dot').style.display='block';
   } catch(e) {
