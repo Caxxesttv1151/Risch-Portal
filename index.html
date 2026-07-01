@@ -1358,7 +1358,7 @@ async function cargarAgenda() {
         </div>
         <div style="flex:1">
           <div style="font-weight:600;font-size:13px">${v.cliente}</div>
-          <div style="font-size:11px;color:var(--text-muted)">${v.hora} · ${v.tipo} · ${v.direccion}</div>
+          <div style="font-size:11px;color:var(--text-muted)">${typeof v.hora === 'string' ? v.hora : new Date(v.hora).toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'})} · ${v.tipo} · ${v.direccion}</div>
         </div>
         ${badgeEstado(v.estado)}
         <div style="display:flex;gap:4px;margin-left:8px;flex-shrink:0">
