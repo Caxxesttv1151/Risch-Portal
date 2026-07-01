@@ -254,7 +254,8 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:300;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
 .modal-overlay.open{display:flex;animation:fadeIn 0.15s ease;}
 @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
-.modal{background:var(--surface);border:1px solid var(--border-h);border-radius:16px;padding:1.75rem;width:100%;max-width:460px;box-shadow:0 24px 60px rgba(0,0,0,0.5);animation:slideUp 0.25s cubic-bezier(0.16,1,0.3,1);}
+.modal{background:var(--surface);border:1px solid var(--border-h);border-radius:16px;padding:1.75rem;width:100%;max-width:460px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,0.5);animation:slideUp 0.25s cubic-bezier(0.16,1,0.3,1);}
+@media(max-width:600px){.modal{padding:1.25rem;border-radius:16px 16px 0 0;max-width:100%;margin-top:auto;max-height:92vh;}.modal-overlay{align-items:flex-end;}.modal-footer{flex-direction:row;}.sidebar{display:none;}.main{margin-left:0;}}
 .modal-title{font-size:16px;font-weight:700;margin-bottom:1.25rem;letter-spacing:-0.3px;}
 .modal-footer{display:flex;gap:10px;justify-content:flex-end;margin-top:1.25rem;}
 
@@ -372,37 +373,83 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
 
 <div class="modal-overlay" id="modal-reg-pago">
   <div class="modal">
-    <div class="modal-title">Registrar pago recibido</div>
-    <div class="form-group"><label>Cliente</label><select id="pago-cliente"><option>Juan Pérez</option><option>María González</option><option>Carlos Ruiz</option><option>Ana Martínez</option><option>Roberto López</option></select></div>
-    <div class="form-row">
-      <div class="form-group"><label>Monto</label><input id="pago-monto" type="number" placeholder="280"></div>
-      <div class="form-group"><label>Método</label><select id="pago-metodo"><option>Efectivo</option><option>Transferencia</option><option>Tarjeta</option></select></div>
+    <div class="modal-title">💵 Registrar pago</div>
+    <p style="font-size:12px;color:var(--text-muted);margin-bottom:1rem">Selecciona el cliente y el monto recibido.</p>
+    <div class="form-group"><label>¿Quién pagó?</label><select id="pago-cliente" style="font-size:15px;padding:10px"></select></div>
+    <div class="form-group"><label>¿Cuánto pagó?</label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px" id="montos-rapidos">
+        <button type="button" class="btn btn-sm" onclick="document.getElementById('pago-monto').value='200';resaltarMonto(this)">$200</button>
+        <button type="button" class="btn btn-sm" onclick="document.getElementById('pago-monto').value='240';resaltarMonto(this)">$240</button>
+        <button type="button" class="btn btn-sm" onclick="document.getElementById('pago-monto').value='280';resaltarMonto(this)">$280</button>
+        <button type="button" class="btn btn-sm" onclick="document.getElementById('pago-monto').value='400';resaltarMonto(this)">$400</button>
+      </div>
+      <input id="pago-monto" type="number" placeholder="O escribe otro monto..." style="margin-top:8px;font-size:15px;padding:10px">
     </div>
-    <div class="form-group"><label>Mes que cubre</label><input id="pago-mes" type="text" placeholder="Jun 2026"></div>
-    <div class="modal-footer"><button class="btn" onclick="closeModal('modal-reg-pago')">Cancelar</button><button class="btn btn-accent" onclick="guardarPago()">Registrar</button></div>
+    <div class="form-group"><label>¿Cómo pagó?</label>
+      <div style="display:flex;gap:8px;margin-top:6px">
+        <button type="button" class="btn btn-sm" id="met-efectivo" onclick="selMetodo('Efectivo')" style="flex:1;padding:10px">💵 Efectivo</button>
+        <button type="button" class="btn btn-sm" id="met-transferencia" onclick="selMetodo('Transferencia')" style="flex:1;padding:10px">📱 Transferencia</button>
+      </div>
+      <input type="hidden" id="pago-metodo" value="Efectivo">
+    </div>
+    <div class="form-group"><label>Mes que cubre</label>
+      <input id="pago-mes" type="text" placeholder="Jul 2026" style="font-size:15px;padding:10px">
+    </div>
+    <div class="modal-footer" style="gap:12px">
+      <button class="btn" style="flex:1;padding:12px" onclick="closeModal('modal-reg-pago')">Cancelar</button>
+      <button class="btn btn-accent" style="flex:2;padding:12px;font-size:14px" onclick="guardarPago()">✅ Registrar pago</button>
+    </div>
   </div>
 </div>
 
 <div class="modal-overlay" id="modal-nuevo-cliente">
   <div class="modal">
-    <div class="modal-title">Nuevo cliente</div>
-    <div class="form-row"><div class="form-group"><label>Nombre completo</label><input id="nc-nombre" type="text" placeholder="Nombre Apellido"></div><div class="form-group"><label>Teléfono</label><input id="nc-tel" type="tel" placeholder="443 000 0000"></div></div>
-    <div class="form-group"><label>Dirección</label><input id="nc-dir" type="text" placeholder="Calle, número, colonia"></div>
-    <div class="form-row"><div class="form-group"><label>Plan</label><select id="nc-plan"><option value="10 Mbps|$200">10 Mbps — $200</option><option value="20 Mbps|$240">20 Mbps — $240</option><option value="30 Mbps|$280">30 Mbps — $280</option><option value="50 Mbps|$400">50 Mbps — $400</option></select></div><div class="form-group"><label>Día de corte</label><input id="nc-corte" type="number" min="1" max="28" placeholder="5"></div></div>
-    <div class="form-group"><label>Notas</label><textarea id="nc-notas" placeholder="Observaciones..." style="min-height:60px;resize:vertical"></textarea></div>
-    <div class="modal-footer"><button class="btn" onclick="closeModal('modal-nuevo-cliente')">Cancelar</button><button class="btn btn-accent" onclick="guardarNuevoCliente()">Guardar</button></div>
+    <div class="modal-title">👤 Nuevo cliente</div>
+    <p style="font-size:12px;color:var(--text-muted);margin-bottom:1rem">Solo nombre, teléfono y plan son obligatorios.</p>
+    <div class="form-group"><label>Nombre completo *</label><input id="nc-nombre" type="text" placeholder="Ej: Juan Pérez" style="font-size:15px;padding:10px" autocomplete="name"></div>
+    <div class="form-group"><label>Teléfono *</label><input id="nc-tel" type="tel" placeholder="443 000 0000" style="font-size:15px;padding:10px" autocomplete="tel"></div>
+    <div class="form-group"><label>Dirección</label><input id="nc-dir" type="text" placeholder="Calle y número" style="font-size:15px;padding:10px"></div>
+    <div class="form-group"><label>Plan *</label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px" id="planes-grid">
+        <button type="button" class="btn plan-btn" onclick="selPlan('10 Mbps|$200',this)" style="padding:12px;text-align:left"><div style="font-weight:600">10 Mbps</div><div style="font-size:11px;color:var(--text-muted)">$200/mes</div></button>
+        <button type="button" class="btn plan-btn" onclick="selPlan('20 Mbps|$240',this)" style="padding:12px;text-align:left"><div style="font-weight:600">20 Mbps</div><div style="font-size:11px;color:var(--text-muted)">$240/mes</div></button>
+        <button type="button" class="btn plan-btn" onclick="selPlan('30 Mbps|$280',this)" style="padding:12px;text-align:left"><div style="font-weight:600">30 Mbps</div><div style="font-size:11px;color:var(--text-muted)">$280/mes</div></button>
+        <button type="button" class="btn plan-btn" onclick="selPlan('50 Mbps|$400',this)" style="padding:12px;text-align:left"><div style="font-weight:600">50 Mbps</div><div style="font-size:11px;color:var(--text-muted)">$400/mes</div></button>
+      </div>
+      <input type="hidden" id="nc-plan" value="">
+    </div>
+    <div class="form-group"><label>Día de pago mensual</label>
+      <input id="nc-corte" type="number" min="1" max="28" placeholder="Ej: 5 (cada día 5 del mes)" style="font-size:15px;padding:10px">
+    </div>
+    <div class="modal-footer" style="gap:12px">
+      <button class="btn" style="flex:1;padding:12px" onclick="closeModal('modal-nuevo-cliente')">Cancelar</button>
+      <button class="btn btn-accent" style="flex:2;padding:12px;font-size:14px" onclick="guardarNuevoCliente()">✅ Guardar cliente</button>
+    </div>
   </div>
 </div>
 
 <div class="modal-overlay" id="modal-nueva-visita">
   <div class="modal">
-    <div class="modal-title">Nueva visita / instalación</div>
-    <div class="form-row"><div class="form-group"><label>Tipo</label><select id="visita-tipo"><option>Instalación</option><option>Soporte técnico</option><option>Revisión</option><option>Retiro de equipo</option></select></div><div class="form-group"><label>Técnico</label><select><option>Daniel (Admin)</option><option>Técnico 2</option></select></div></div>
-    <div class="form-group"><label>Cliente</label><input id="visita-cliente" type="text" placeholder="Nombre del cliente"></div>
-    <div class="form-group"><label>Dirección</label><input id="visita-dir" type="text" placeholder="Calle, número, colonia"></div>
-    <div class="form-row"><div class="form-group"><label>Fecha</label><input id="visita-fecha" type="date"></div><div class="form-group"><label>Hora</label><input id="visita-hora" type="time" value="09:00"></div></div>
-    <div class="form-group"><label>Notas</label><textarea id="visita-notas" placeholder="Detalles de la visita..." style="min-height:60px;resize:vertical"></textarea></div>
-    <div class="modal-footer"><button class="btn" onclick="closeModal('modal-nueva-visita')">Cancelar</button><button class="btn btn-accent" onclick="guardarVisita()">Agendar</button></div>
+    <div class="modal-title">📅 Nueva visita</div>
+    <p style="font-size:12px;color:var(--text-muted);margin-bottom:1rem">¿A dónde vas y cuándo?</p>
+    <div class="form-group"><label>Tipo de visita</label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
+        <button type="button" class="btn btn-sm visita-tipo-btn" onclick="selVisitaTipo('Instalación',this)" style="flex:1;padding:10px">📡 Instalación</button>
+        <button type="button" class="btn btn-sm visita-tipo-btn" onclick="selVisitaTipo('Soporte técnico',this)" style="flex:1;padding:10px">🔧 Soporte</button>
+        <button type="button" class="btn btn-sm visita-tipo-btn" onclick="selVisitaTipo('Revisión',this)" style="flex:1;padding:10px">🔍 Revisión</button>
+      </div>
+      <input type="hidden" id="visita-tipo" value="Instalación">
+    </div>
+    <div class="form-group"><label>Cliente *</label><input id="visita-cliente" type="text" placeholder="Nombre del cliente" style="font-size:15px;padding:10px"></div>
+    <div class="form-group"><label>Dirección</label><input id="visita-dir" type="text" placeholder="Calle y número" style="font-size:15px;padding:10px"></div>
+    <div class="form-row">
+      <div class="form-group"><label>Fecha *</label><input id="visita-fecha" type="date" style="font-size:15px;padding:10px"></div>
+      <div class="form-group"><label>Hora *</label><input id="visita-hora" type="time" value="09:00" style="font-size:15px;padding:10px"></div>
+    </div>
+    <div class="modal-footer" style="gap:12px">
+      <button class="btn" style="flex:1;padding:12px" onclick="closeModal('modal-nueva-visita')">Cancelar</button>
+      <button class="btn btn-accent" style="flex:2;padding:12px;font-size:14px" onclick="guardarVisita()">✅ Agendar</button>
+    </div>
   </div>
 </div>
 
@@ -617,12 +664,12 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
       <div class="view" id="view-perfil">
         <div class="card mb-2">
           <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem">
-            <div class="avatar" style="width:52px;height:52px;font-size:18px;border-radius:14px">CL</div>
-            <div><div style="font-size:16px;font-weight:700">Cliente Demo</div><div style="font-size:12px;color:var(--text-muted)">Huandacareo, Michoacán</div></div>
+            <div class="avatar" id="perfil-avatar" style="width:52px;height:52px;font-size:18px;border-radius:14px">—</div>
+            <div><div style="font-size:16px;font-weight:700" id="perfil-nombre">—</div><div style="font-size:12px;color:var(--text-muted)">Huandacareo, Michoacán</div></div>
           </div>
-          <div class="form-row"><div class="form-group"><label>Nombre completo</label><input type="text" value="Cliente Demo"></div><div class="form-group"><label>Teléfono</label><input type="text" value="443 000 0000"></div></div>
-          <div class="form-row"><div class="form-group"><label>Dirección</label><input type="text" value="Calle Ejemplo #1, Huandacareo"></div><div class="form-group"><label>Correo</label><input type="email" value="cliente@ejemplo.com"></div></div>
-          <button class="btn btn-accent" style="margin-top:0.5rem" onclick="showAlert('Datos actualizados.')">Guardar cambios</button>
+          <div class="form-row"><div class="form-group"><label>Nombre completo</label><input id="perfil-input-nombre" type="text" placeholder="—"></div><div class="form-group"><label>Teléfono</label><input id="perfil-input-tel" type="text" placeholder="—"></div></div>
+          <div class="form-row"><div class="form-group"><label>Dirección</label><input id="perfil-input-dir" type="text" placeholder="—"></div><div class="form-group"><label>Plan</label><input id="perfil-input-plan" type="text" placeholder="—" readonly></div></div>
+          <button class="btn btn-accent" style="margin-top:0.5rem" onclick="showAlert('Cambios guardados.')">Guardar cambios</button>
         </div>
         <div class="card mb-2">
           <div class="section-title" style="margin-bottom:1rem">Notificaciones</div>
@@ -642,13 +689,10 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
       <div class="view" id="view-dashboard-admin">
         <div class="grid-4 mb-3">
           <!-- EDITABLE: sub-label "+2 este mes" -->
-          <div class="card metric-card c-purple card-glow-top"><div class="card-icon ci-purple">👥</div><div class="card-label">Clientes activos</div><div class="card-value" id="m-clientes">0</div><div class="card-sub">+2 este mes</div></div>
-          <!-- EDITABLE: sub-label "De $13,720 esperado" -->
-          <div class="card metric-card c-green card-glow-top"><div class="card-icon ci-green">💰</div><div class="card-label">Ingresos jun</div><div class="card-value" id="m-ingresos">$0</div><div class="card-sub">De $13,720 esperado</div></div>
-          <!-- EDITABLE: sub-label "3 clientes" -->
-          <div class="card metric-card c-red card-glow-top"><div class="card-icon ci-red">⚠</div><div class="card-label">Cartera vencida</div><div class="card-value" id="m-cartera" style="color:var(--red)">$0</div><div class="card-sub">3 clientes</div></div>
-          <!-- EDITABLE: sub-label "1 urgente" -->
-          <div class="card metric-card c-yellow card-glow-top"><div class="card-icon ci-yellow">🎯</div><div class="card-label">Tickets abiertos</div><div class="card-value" id="m-tickets">0</div><div class="card-sub">1 urgente</div></div>
+          <div class="card metric-card c-purple card-glow-top"><div class="card-icon ci-purple">👥</div><div class="card-label">Clientes activos</div><div class="card-value" id="m-clientes">—</div><div class="card-sub" id="m-clientes-sub">Cargando...</div></div>
+          <div class="card metric-card c-green card-glow-top"><div class="card-icon ci-green">💰</div><div class="card-label">Ingresos mes</div><div class="card-value" id="m-ingresos">—</div><div class="card-sub" id="m-ingresos-sub">Cargando...</div></div>
+          <div class="card metric-card c-red card-glow-top"><div class="card-icon ci-red">⚠</div><div class="card-label">Cartera vencida</div><div class="card-value" id="m-cartera" style="color:var(--red)">—</div><div class="card-sub" id="m-cartera-sub">Cargando...</div></div>
+          <div class="card metric-card c-yellow card-glow-top"><div class="card-icon ci-yellow">🎯</div><div class="card-label">Con adeudo/suspendido</div><div class="card-value" id="m-tickets">—</div><div class="card-sub" id="m-tickets-sub">Cargando...</div></div>
         </div>
         <div class="grid-2 mb-3">
           <div class="card">
@@ -664,10 +708,10 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
           </div>
           <div class="card">
             <div class="section-title" style="margin-bottom:1rem">Estado del sistema</div>
-            <div class="system-item"><div><div style="font-weight:500;font-size:13px">API Backend</div></div><span class="badge badge-warning">Sin conectar</span></div>
-            <div class="system-item"><div><div style="font-weight:500;font-size:13px">WhatsApp API</div></div><span class="badge badge-warning">Sin conectar</span></div>
-            <div class="system-item"><div><div style="font-weight:500;font-size:13px">Mercado Pago</div></div><span class="badge badge-warning">Sin conectar</span></div>
-            <div class="system-item"><div><div style="font-weight:500;font-size:13px">Monitoreo de red</div></div><span class="badge badge-success">Activo</span></div>
+            <div class="system-item"><div><div style="font-weight:500;font-size:13px">Google Sheets</div><div style="font-size:11px;color:var(--text-muted)">Base de datos</div></div><span class="badge badge-success">Conectado</span></div>
+            <div class="system-item"><div><div style="font-weight:500;font-size:13px">WhatsApp</div><div style="font-size:11px;color:var(--text-muted)">Links directos activos</div></div><span class="badge badge-success">Activo</span></div>
+            <div class="system-item"><div><div style="font-weight:500;font-size:13px">Mercado Pago</div><div style="font-size:11px;color:var(--text-muted)">Cobros en línea</div></div><span class="badge badge-warning">Pendiente</span></div>
+            <div class="system-item"><div><div style="font-weight:500;font-size:13px">Monitoreo de red</div><div style="font-size:11px;color:var(--text-muted)">Ping de antenas</div></div><span class="badge badge-success">Activo</span></div>
           </div>
         </div>
         <div class="card">
@@ -685,7 +729,7 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
       <!-- ADMIN: CLIENTES -->
       <!-- EDITABLE: lista de clientes demo — cada <tr> es un cliente (nombre, tel, plan, dirección, días vencido, estado, próximo pago) -->
       <div class="view" id="view-clientes">
-        <div class="action-row"><input class="search-bar" style="max-width:280px" placeholder="Buscar cliente..."><div style="display:flex;gap:8px"><button class="btn btn-sm" onclick="openModal('modal-reg-pago')">Registrar pago</button><button class="btn btn-accent btn-sm" onclick="openModal('modal-nuevo-cliente')">+ Nuevo cliente</button></div></div>
+        <div class="action-row"><input class="search-bar" id="buscar-cliente" style="max-width:280px" placeholder="Buscar cliente..." oninput="filtrarClientes(this.value)"><div style="display:flex;gap:8px"><button class="btn btn-sm" onclick="openModal('modal-reg-pago')">Registrar pago</button><button class="btn btn-accent btn-sm" onclick="openModal('modal-nuevo-cliente')">+ Nuevo cliente</button></div></div>
         <div class="card"><div class="table-wrap"><table><thead><tr><th>Cliente</th><th>Plan</th><th>Dirección</th><th>Días vencido</th><th>Estado</th><th>Próx. pago</th><th></th></tr></thead>
         <tbody>
           <!-- EDITABLE: cliente 1 -->
@@ -704,9 +748,9 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
       <!-- ADMIN: COBROS -->
       <div class="view" id="view-cobros">
         <div class="grid-3 mb-3">
-          <div class="card metric-card c-green card-glow-top"><div class="card-icon ci-green">💵</div><div class="card-label">Cobrado en junio</div><div class="card-value">$13,160</div><div class="card-sub">47 de 50 clientes</div></div>
-          <div class="card metric-card c-red card-glow-top"><div class="card-icon ci-red">⚠</div><div class="card-label">Cartera vencida</div><div class="card-value" style="color:var(--red)">$840</div><div class="card-sub">3 clientes · 41 días prom.</div></div>
-          <div class="card metric-card c-yellow card-glow-top"><div class="card-icon ci-yellow">📋</div><div class="card-label">Por cobrar hoy</div><div class="card-value">$560</div><div class="card-sub">2 clientes pendientes</div></div>
+          <div class="card metric-card c-green card-glow-top"><div class="card-icon ci-green">💵</div><div class="card-label">Cobrado este mes</div><div class="card-value" id="c-cobrado">—</div><div class="card-sub" id="c-cobrado-sub">Cargando...</div></div>
+          <div class="card metric-card c-red card-glow-top"><div class="card-icon ci-red">⚠</div><div class="card-label">Cartera vencida</div><div class="card-value" id="c-cartera" style="color:var(--red)">—</div><div class="card-sub" id="c-cartera-sub">Cargando...</div></div>
+          <div class="card metric-card c-yellow card-glow-top"><div class="card-icon ci-yellow">📋</div><div class="card-label">Pendientes</div><div class="card-value" id="c-pendientes">—</div><div class="card-sub" id="c-pendientes-sub">Cargando...</div></div>
         </div>
         <div class="action-row"><div class="section-title">Cartera vencida</div><button class="btn btn-sm" onclick="showAlert('Enviando recordatorios por WhatsApp...')">Enviar recordatorios WA</button></div>
         <div class="card mb-3"><div class="table-wrap"><table id="tabla-cartera"><thead><tr><th>Cliente</th><th>Mes</th><th>Monto</th><th>Estado</th><th>Último pago</th><th></th></tr></thead>
@@ -917,6 +961,7 @@ async function doLogin(){
     const role    = data.rol === 'cliente' ? 'user' : data.rol;
     const nombre  = data.nombre || usuario;
     const isAdmin = role === 'admin';
+    window._nombreCliente = isAdmin ? null : nombre;
 
     document.getElementById('login-screen').style.display='none';
     document.getElementById('app').style.display='flex';
@@ -1001,6 +1046,7 @@ async function cargarClientes() {
   tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:2rem">Cargando...</td></tr>';
   try {
     const clientes = await apiGet('clientes');
+    _clientesCache = clientes;
     tbody.innerHTML = clientes.map(c => {
       const tel = c.telefono.replace(/\s/g,'');
       const msg = c.estado === 'Adeudo'
@@ -1033,6 +1079,18 @@ async function cargarCobros() {
     const cobros = await apiGet('cobros');
     const vencidos = cobros.filter(c => c.estado === 'Vencido' || c.estado === 'Pendiente');
     const pagados  = cobros.filter(c => c.estado === 'Pagado');
+
+    // Métricas reales
+    const totalCobrado = pagados.reduce((s,c)=>s+Number(c.monto.replace('$','')),0);
+    const totalCartera = vencidos.reduce((s,c)=>s+Number(c.monto.replace('$','')),0);
+    const totalPendiente = vencidos.filter(c=>c.estado==='Pendiente').reduce((s,c)=>s+Number(c.monto.replace('$','')),0);
+
+    const cc=document.getElementById('c-cobrado');if(cc)cc.textContent='$'+totalCobrado.toLocaleString();
+    const cs=document.getElementById('c-cobrado-sub');if(cs)cs.textContent=`${pagados.length} pagos registrados`;
+    const cv=document.getElementById('c-cartera');if(cv)cv.textContent='$'+totalCartera.toLocaleString();
+    const cvs=document.getElementById('c-cartera-sub');if(cvs)cvs.textContent=`${vencidos.length} clientes`;
+    const cp=document.getElementById('c-pendientes');if(cp)cp.textContent='$'+totalPendiente.toLocaleString();
+    const cps=document.getElementById('c-pendientes-sub');if(cps)cps.textContent=`${vencidos.filter(c=>c.estado==='Pendiente').length} pendientes`;
 
     const tbodyVencidos = document.querySelector('#tabla-cartera tbody');
     if (tbodyVencidos) {
@@ -1102,15 +1160,55 @@ async function cargarProspectos() {
 // ── DASHBOARD ─────────────────────────────────────────
 async function cargarDashboard() {
   try {
-    const d = await apiGet('dashboard');
+    const [d, clientes, cobros] = await Promise.all([
+      apiGet('dashboard'),
+      apiGet('clientes'),
+      apiGet('cobros')
+    ]);
     animateCount('m-clientes', 0, d.clientes, 700);
     animateMoney('m-ingresos', 0, d.ingresos, 800);
     animateMoney('m-cartera', 0, d.cartera, 600);
     animateCount('m-tickets', 0, d.tickets, 400);
+
+    const total = clientes.length;
+    const conAdeudo = clientes.filter(c=>c.estado==='Adeudo'||c.estado==='Suspendido').length;
+    document.getElementById('m-clientes-sub').textContent = `${total} registrados`;
+    document.getElementById('m-ingresos-sub').textContent = `${d.clientes} clientes pagaron`;
+    document.getElementById('m-cartera-sub').textContent = `${conAdeudo} clientes`;
+    document.getElementById('m-tickets-sub').textContent = `Adeudo o suspendido`;
+
+    // Actualizar selector de clientes en modal de pago
+    const sel = document.getElementById('pago-cliente');
+    if (sel) {
+      sel.innerHTML = clientes.map(c=>`<option value="${c.nombre}">${c.nombre}</option>`).join('');
+    }
   } catch(e) {
-    // Si falla, usa valores animados hardcodeados como respaldo
     animateDashboard();
+    ['m-clientes-sub','m-ingresos-sub','m-cartera-sub','m-tickets-sub'].forEach(id=>{
+      const el=document.getElementById(id);if(el)el.textContent='';
+    });
   }
+}
+
+// ── HELPERS DE FORMULARIOS ───────────────────────────
+function resaltarMonto(btn) {
+  document.querySelectorAll('#montos-rapidos .btn').forEach(b => b.classList.remove('btn-accent'));
+  btn.classList.add('btn-accent');
+}
+function selMetodo(metodo) {
+  document.getElementById('pago-metodo').value = metodo;
+  document.getElementById('met-efectivo').classList.toggle('btn-accent', metodo === 'Efectivo');
+  document.getElementById('met-transferencia').classList.toggle('btn-accent', metodo === 'Transferencia');
+}
+function selPlan(valor, btn) {
+  document.getElementById('nc-plan').value = valor;
+  document.querySelectorAll('.plan-btn').forEach(b => b.classList.remove('btn-accent'));
+  btn.classList.add('btn-accent');
+}
+function selVisitaTipo(tipo, btn) {
+  document.getElementById('visita-tipo').value = tipo;
+  document.querySelectorAll('.visita-tipo-btn').forEach(b => b.classList.remove('btn-accent'));
+  btn.classList.add('btn-accent');
 }
 
 // ── GUARDAR NUEVO CLIENTE ─────────────────────────────
@@ -1118,7 +1216,8 @@ async function guardarNuevoCliente() {
   const nombre = document.getElementById('nc-nombre')?.value?.trim();
   const tel    = document.getElementById('nc-tel')?.value?.trim();
   if (!nombre || !tel) { showAlert('Completa nombre y teléfono.'); return; }
-  const planVal   = document.getElementById('nc-plan')?.value || '20 Mbps|$240';
+  const planVal = document.getElementById('nc-plan')?.value;
+  if (!planVal) { showAlert('Selecciona un plan.'); return; }
   const [plan, precio] = planVal.split('|');
   const dir    = document.getElementById('nc-dir')?.value?.trim() || '';
   const corte  = document.getElementById('nc-corte')?.value || '5';
@@ -1187,6 +1286,69 @@ async function guardarVisita() {
   }
 }
 
+// ── BÚSQUEDA DE CLIENTES ─────────────────────────────
+let _clientesCache = [];
+function filtrarClientes(q) {
+  const tbody = document.querySelector('#view-clientes tbody');
+  if (!tbody) return;
+  const term = q.toLowerCase();
+  const filtrados = _clientesCache.filter(c =>
+    c.nombre.toLowerCase().includes(term) ||
+    c.telefono.includes(term) ||
+    c.plan.toLowerCase().includes(term) ||
+    c.estado.toLowerCase().includes(term)
+  );
+  if (!filtrados.length) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:1.5rem">Sin resultados para "${q}"</td></tr>`;
+    return;
+  }
+  // Re-render con filtro
+  tbody.innerHTML = filtrados.map(c => {
+    const tel = c.telefono.replace(/\s/g,'');
+    const msg = c.estado === 'Adeudo'
+      ? `Hola%20${encodeURIComponent(c.nombre.split(' ')[0])}%2C%20tienes%20un%20saldo%20pendiente%20de%20${encodeURIComponent(c.precio)}%20con%20Risch%20Network.`
+      : c.estado === 'Suspendido'
+      ? `Hola%20${encodeURIComponent(c.nombre.split(' ')[0])}%2C%20tu%20servicio%20est%C3%A1%20suspendido.%20Cont%C3%A1ctanos.`
+      : `Hola%20${encodeURIComponent(c.nombre.split(' ')[0])}%2C%20te%20contactamos%20de%20Risch%20Network.`;
+    const dias = c.diasVencido > 0 ? `<span style="color:var(--${c.estado==='Suspendido'?'red':'yellow'});font-weight:600">${c.diasVencido} días</span>` : `<span style="color:var(--text-muted)">—</span>`;
+    const prox = c.proximoPago && c.proximoPago !== '—' && c.proximoPago !== 'Vencido'
+      ? new Date(c.proximoPago).toLocaleDateString('es-MX',{day:'numeric',month:'short'}) + ` · ${c.precio}`
+      : `Vencido · ${c.precio}`;
+    return `<tr>
+      <td><div style="font-weight:500">${c.nombre}</div><div style="font-size:11px;color:var(--text-muted)">${c.telefono}</div></td>
+      <td>${c.plan}</td><td>${c.direccion}</td><td>${dias}</td>
+      <td>${badgeEstado(c.estado)}</td><td>${prox}</td>
+      <td><div style="display:flex;gap:6px">
+        <button class="btn btn-sm">Ver</button>
+        <a href="https://wa.me/52${tel}?text=${msg}" target="_blank"><button class="btn btn-sm btn-wa">WA</button></a>
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+
+// ── PERFIL CLIENTE ────────────────────────────────────
+let _usuarioActual = null;
+async function cargarPerfilCliente(nombre) {
+  try {
+    const clientes = await apiGet('clientes');
+    const cliente = clientes.find(c => c.nombre.toLowerCase().includes(nombre.toLowerCase()));
+    if (!cliente) return;
+    _usuarioActual = cliente;
+    const pn = document.getElementById('perfil-nombre');
+    const pa = document.getElementById('perfil-avatar');
+    const pin = document.getElementById('perfil-input-nombre');
+    const pit = document.getElementById('perfil-input-tel');
+    const pid = document.getElementById('perfil-input-dir');
+    const pip = document.getElementById('perfil-input-plan');
+    if(pn) pn.textContent = cliente.nombre;
+    if(pa) pa.textContent = cliente.nombre.substring(0,2).toUpperCase();
+    if(pin) pin.value = cliente.nombre;
+    if(pit) pit.value = cliente.telefono;
+    if(pid) pid.value = cliente.direccion;
+    if(pip) pip.value = `${cliente.plan} · ${cliente.precio}/mes`;
+  } catch(e) { console.error('perfil error:', e); }
+}
+
 // ── INIT: cargar datos al navegar ─────────────────────
 const _navigateOriginal = navigate;
 window.navigate = function(viewId) {
@@ -1196,16 +1358,11 @@ window.navigate = function(viewId) {
   if (viewId === 'cobros')     cargarCobros();
   if (viewId === 'agenda')     cargarAgenda();
   if (viewId === 'prospectos') cargarProspectos();
+  if (viewId === 'perfil' && window._nombreCliente) cargarPerfilCliente(window._nombreCliente);
 };
 
 // ANIMATED DASHBOARD NUMBERS
 function animateDashboard(){
-  // EDITABLE: valores animados del dashboard admin (clientes, ingresos, cartera, tickets)
-  animateCount('m-clientes',0,47,700);   // EDITABLE: 47 clientes activos
-  animateMoney('m-ingresos',0,13160,800); // EDITABLE: $13,160 ingresos de junio
-  animateMoney('m-cartera',0,840,600);    // EDITABLE: $840 cartera vencida
-  animateCount('m-tickets',0,3,400);      // EDITABLE: 3 tickets abiertos
-  // EDITABLE: alturas de las 6 barras del gráfico (E, F, M, A, M, J) en porcentaje
   const heights=['65','70','60','80','75','96'];
   heights.forEach((h,i)=>{const b=document.getElementById('b'+i);if(b)b.style.height=h+'%';});
 }
