@@ -1097,20 +1097,21 @@ async function apiPost(datos) {
   return res.json();
 }
 
-// Formato de fecha legible
+// Formato de fecha legible — maneja ISO, texto y Date
 function fmtFecha(val) {
-  if (!val || val === '—' || val === 'Vencido') return val || '—';
+  if (!val || val === '—' || val === 'Vencido' || val === 'Sin pago') return val || '—';
   const d = new Date(val);
-  if (isNaN(d)) return val;
-  return d.toLocaleDateString('es-MX', { day:'numeric', month:'short', year:'numeric' });
+  if (isNaN(d.getTime())) return val;
+  return d.toLocaleDateString('es-MX', { day:'numeric', month:'short', year:'numeric', timeZone:'America/Mexico_City' });
 }
 
-// Formato de mes legible (ej: 2026-06-01T... → Jun 2026)
+// Formato de mes (ej: 2026-06-01T06:00:00.000Z → jun. 2026)
 function fmtMes(val) {
   if (!val || val === '—') return '—';
+  // Si ya viene como texto tipo "Jun 2026" lo devuelve igual
+  if (isNaN(new Date(val).getTime())) return val;
   const d = new Date(val);
-  if (isNaN(d)) return val;
-  return d.toLocaleDateString('es-MX', { month:'short', year:'numeric' });
+  return d.toLocaleDateString('es-MX', { month:'short', year:'numeric', timeZone:'America/Mexico_City' });
 }
 
 // Badge de estado
