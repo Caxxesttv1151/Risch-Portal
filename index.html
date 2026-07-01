@@ -914,7 +914,7 @@ async function doLogin(){
       return;
     }
 
-    const role    = data.rol;
+    const role    = data.rol === 'cliente' ? 'user' : data.rol;
     const nombre  = data.nombre || usuario;
     const isAdmin = role === 'admin';
 
