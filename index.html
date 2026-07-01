@@ -1032,22 +1032,34 @@ async function doLogin(){
   const btn = document.querySelector('#login-form .btn-accent');
   btn.textContent = 'Verificando...'; btn.disabled = true;
 
+  // Usuarios locales — no dependen del Apps Script
+  const usuariosLocales = [
+    { usuario: 'RischAdmin', password: 'Zipkah-5dab', rol: 'admin' },
+    { usuario: 'Risch',      password: 'Rcahue1973',  rol: 'cliente' },
+  ];
+  const local = usuariosLocales.find(u => u.usuario === usuario && u.password === password);
+  if (local) {
+    const role = local.rol === 'cliente' ? 'user' : local.rol;
+    localStorage.setItem('risch_session', JSON.stringify({ role, nombre: usuario }));
+    iniciarSesion(role, usuario);
+    btn.textContent = 'Entrar al portal'; btn.disabled = false;
+    return;
+  }
+
+  // Fallback: intentar contra Apps Script
   try {
     const res = await fetch(`${API}?tipo=login&usuario=${encodeURIComponent(usuario)}&password=${encodeURIComponent(password)}`);
     const data = await res.json();
-
     if (!data.ok) {
       showAlert('Usuario o contraseña incorrectos.');
       btn.textContent = 'Entrar al portal'; btn.disabled = false;
       return;
     }
-
     const role  = data.rol === 'cliente' ? 'user' : data.rol;
-    const nombre = data.nombre || usuario;
-    localStorage.setItem('risch_session', JSON.stringify({ role, nombre }));
-    iniciarSesion(role, nombre);
+    localStorage.setItem('risch_session', JSON.stringify({ role, nombre: usuario }));
+    iniciarSesion(role, usuario);
   } catch(e) {
-    showAlert('Error de conexión. Intenta de nuevo.');
+    showAlert('Usuario o contraseña incorrectos.');
   } finally {
     btn.textContent = 'Entrar al portal'; btn.disabled = false;
   }
