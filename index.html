@@ -453,6 +453,32 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
   </div>
 </div>
 
+<!-- TOAST NOTIFICATION -->
+<div id="toast" style="position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--surface);border:1px solid var(--border-h);border-radius:12px;padding:12px 20px;font-size:13px;font-weight:500;box-shadow:0 8px 32px rgba(0,0,0,0.4);z-index:9999;opacity:0;transition:all 0.3s;pointer-events:none;white-space:nowrap;max-width:90vw;text-align:center"></div>
+
+<!-- MODAL NUEVO PROSPECTO -->
+<div class="modal-overlay" id="modal-nuevo-prospecto">
+  <div class="modal">
+    <div class="modal-title">🔍 Nuevo prospecto</div>
+    <p style="font-size:12px;color:var(--text-muted);margin-bottom:1rem">Alguien interesado en el servicio. Solo nombre y teléfono son suficientes.</p>
+    <div class="form-group"><label>Nombre *</label><input id="np-nombre" type="text" placeholder="Nombre completo" style="font-size:15px;padding:10px" autocomplete="name"></div>
+    <div class="form-group"><label>Teléfono *</label><input id="np-tel" type="tel" placeholder="443 000 0000" style="font-size:15px;padding:10px" autocomplete="tel"></div>
+    <div class="form-group"><label>¿Qué servicio le interesa?</label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
+        <button type="button" class="btn btn-sm np-srv" onclick="selServicio('Internet',this)" style="flex:1;padding:10px">📡 Internet</button>
+        <button type="button" class="btn btn-sm np-srv" onclick="selServicio('Cámaras',this)" style="flex:1;padding:10px">📷 Cámaras</button>
+        <button type="button" class="btn btn-sm np-srv" onclick="selServicio('Internet + Cámaras',this)" style="flex:1;padding:10px">📡📷 Ambos</button>
+      </div>
+      <input type="hidden" id="np-servicio" value="Internet">
+    </div>
+    <div class="form-group"><label>Notas (opcional)</label><textarea id="np-notas" placeholder="Zona, referencia, cuándo llamar..." style="font-size:14px;min-height:60px;resize:vertical"></textarea></div>
+    <div class="modal-footer" style="gap:12px">
+      <button class="btn" style="flex:1;padding:12px" onclick="closeModal('modal-nuevo-prospecto')">Cancelar</button>
+      <button class="btn btn-accent" style="flex:2;padding:12px;font-size:14px" onclick="guardarProspecto()">✅ Guardar prospecto</button>
+    </div>
+  </div>
+</div>
+
 <!-- APP -->
 <div id="app">
   <nav class="sidebar">
@@ -470,6 +496,25 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
         </button>
       </div>
     </div>
+  </nav>
+
+  <!-- NAVBAR CELULAR (solo admin) -->
+  <nav id="mobile-nav" style="display:none;position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border-h);padding:8px 0 12px;z-index:100;justify-content:space-around">
+    <button onclick="navigate('dashboard-admin')" style="background:none;border:none;color:var(--text-muted);font-size:10px;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 12px;cursor:pointer">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Inicio
+    </button>
+    <button onclick="navigate('clientes')" style="background:none;border:none;color:var(--text-muted);font-size:10px;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 12px;cursor:pointer">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Clientes
+    </button>
+    <button onclick="openModal('modal-reg-pago')" style="background:var(--accent);border:none;color:#fff;font-size:10px;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 16px;cursor:pointer;border-radius:14px;margin-top:-12px;box-shadow:0 4px 16px var(--accent-glow)">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Pago
+    </button>
+    <button onclick="navigate('cobros')" style="background:none;border:none;color:var(--text-muted);font-size:10px;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 12px;cursor:pointer">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>Cobros
+    </button>
+    <button onclick="navigate('agenda')" style="background:none;border:none;color:var(--text-muted);font-size:10px;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 12px;cursor:pointer">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Agenda
+    </button>
   </nav>
 
   <div class="main">
@@ -494,16 +539,14 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
           <div class="card metric-card c-purple card-glow-top">
             <div class="card-icon ci-purple">📡</div>
             <div class="card-label">Plan activo</div>
-            <!-- EDITABLE: plan del cliente demo -->
-            <div class="card-value" style="font-size:16px;margin-top:2px">Internet 30 Mbps</div>
-            <div class="card-sub" style="margin-top:8px"><span class="badge badge-success">Activo</span></div>
+            <div class="card-value" id="cli-plan" style="font-size:16px;margin-top:2px">—</div>
+            <div class="card-sub" style="margin-top:8px"><span class="badge" id="cli-estado-badge">—</span></div>
           </div>
           <div class="card metric-card c-yellow card-glow-top">
             <div class="card-icon ci-yellow">💰</div>
             <div class="card-label">Próximo pago</div>
-            <!-- EDITABLE: monto y fecha del próximo pago del cliente -->
-            <div class="card-value">$280</div>
-            <div class="card-sub">Vence 5 jul 2026</div>
+            <div class="card-value" id="cli-precio">—</div>
+            <div class="card-sub" id="cli-vence">Cargando...</div>
           </div>
           <div class="card metric-card c-green card-glow-top">
             <div class="card-icon ci-green">🌐</div>
@@ -522,8 +565,8 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
         <div class="grid-2">
           <div class="card card-glow">
             <div class="card-header"><div class="section-title">Pago pendiente</div></div>
-            <div class="alert-banner alert-warning" style="margin-bottom:1rem">⚠ Tu pago de junio vence en 6 días</div>
-            <p style="font-size:13px;color:var(--text-muted);margin-bottom:1rem">Mensualidad junio 2026 — <strong style="color:var(--text)">$280 MXN</strong></p>
+            <div class="alert-banner" id="cli-alerta-pago" style="margin-bottom:1rem">Cargando...</div>
+            <p style="font-size:13px;color:var(--text-muted);margin-bottom:1rem" id="cli-detalle-pago">—</p>
             <button class="btn btn-accent" onclick="openModal('modal-pago')">Pagar en línea</button>
           </div>
           <div class="card">
@@ -714,6 +757,10 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
             <div class="system-item"><div><div style="font-weight:500;font-size:13px">Monitoreo de red</div><div style="font-size:11px;color:var(--text-muted)">Ping de antenas</div></div><span class="badge badge-success">Activo</span></div>
           </div>
         </div>
+        <div class="card" id="panel-alertas" style="display:none">
+          <div class="card-header"><div class="section-title">⚠️ Atención requerida</div></div>
+          <div id="lista-alertas" style="display:flex;flex-direction:column;gap:8px"></div>
+        </div>
         <div class="card">
           <div class="card-header"><div class="section-title">Acciones rápidas</div></div>
           <div style="display:flex;gap:10px;flex-wrap:wrap">
@@ -771,7 +818,7 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
       <!-- ADMIN: PROSPECTOS -->
       <!-- EDITABLE: tabla de prospectos — cada <tr> es un prospecto (nombre, tel, interés, seguimiento, estado) -->
       <div class="view" id="view-prospectos">
-        <div class="action-row"><input class="search-bar" style="max-width:280px" placeholder="Buscar prospecto..."><button class="btn btn-accent btn-sm">+ Nuevo prospecto</button></div>
+        <div class="action-row"><input class="search-bar" style="max-width:280px" placeholder="Buscar prospecto..."><button class="btn btn-accent btn-sm" onclick="openModal('modal-nuevo-prospecto')">+ Nuevo prospecto</button></div>
         <div class="card mb-2"><div class="table-wrap"><table id="tabla-prospectos"><thead><tr><th>Nombre</th><th>Teléfono</th><th>Interés</th><th>Seguimiento</th><th>Estado</th><th></th></tr></thead>
         <tbody><tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:2rem">Cargando...</td></tr></tbody></table></div></div>
         <div class="card">
@@ -862,10 +909,8 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
         </div>
         <div class="card"><div class="card-header"><div class="section-title">Exportar reportes</div></div>
           <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <button class="btn btn-sm" onclick="showAlert('Exportando clientes CSV...')">Clientes CSV</button>
-            <button class="btn btn-sm" onclick="showAlert('Exportando cobros CSV...')">Cobros CSV</button>
-            <button class="btn btn-sm" onclick="showAlert('Exportando tickets CSV...')">Tickets CSV</button>
-            <button class="btn btn-sm" onclick="showAlert('Generando reporte PDF...')">Reporte PDF</button>
+            <button class="btn btn-sm" onclick="exportarCSV('clientes')">📋 Clientes CSV</button>
+            <button class="btn btn-sm" onclick="exportarCSV('cobros')">💰 Cobros CSV</button>
           </div>
         </div>
       </div>
@@ -962,6 +1007,8 @@ async function doLogin(){
     const nombre  = data.nombre || usuario;
     const isAdmin = role === 'admin';
     window._nombreCliente = isAdmin ? null : nombre;
+    const mobileNav = document.getElementById('mobile-nav');
+    if (mobileNav) mobileNav.style.display = isAdmin ? 'flex' : 'none';
 
     document.getElementById('login-screen').style.display='none';
     document.getElementById('app').style.display='flex';
@@ -1009,13 +1056,29 @@ function hideRecover(){document.getElementById('recover-form').style.display='no
 function openModal(id){document.getElementById(id).classList.add('open');}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
 document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');}));
+activarBuscadorGlobal();
 function toggleNotif(){document.getElementById('notif-panel').classList.toggle('open');}
 function closeNotif(){document.getElementById('notif-panel').classList.remove('open');}
 document.addEventListener('click',e=>{const p=document.getElementById('notif-panel');if(p.classList.contains('open')&&!p.contains(e.target)&&!e.target.closest('.icon-btn'))p.classList.remove('open');});
 function selectMetodo(el){document.querySelectorAll('.metodo-card').forEach(c=>c.classList.remove('selected'));el.classList.add('selected');}
 function procesarPago(){closeModal('modal-pago');showAlert('Redirigiendo a Mercado Pago...\n\n(En producción, aquí se abre la pasarela de pago)');}
 function enviarTicket(){const t=document.getElementById('ticket-tipo').value,d=document.getElementById('ticket-desc').value;if(!t||!d.trim()){showAlert('Completa el tipo y la descripción.');return;}showAlert('Solicitud enviada. Te contactaremos pronto por WhatsApp.');document.getElementById('ticket-tipo').value='';document.getElementById('ticket-desc').value='';}
-function showAlert(m){alert(m);}
+// ── TOAST (reemplaza alert) ───────────────────────────
+function showAlert(m, tipo) {
+  const t = document.getElementById('toast');
+  if (!t) { alert(m); return; }
+  t.textContent = m;
+  t.style.background = tipo === 'error' ? 'var(--red-bg)' : tipo === 'ok' ? 'rgba(34,211,160,0.15)' : 'var(--surface)';
+  t.style.borderColor = tipo === 'error' ? 'var(--red)' : tipo === 'ok' ? 'var(--green)' : 'var(--border-h)';
+  t.style.color = tipo === 'error' ? 'var(--red)' : tipo === 'ok' ? 'var(--green)' : 'var(--text)';
+  t.style.opacity = '1';
+  t.style.transform = 'translateX(-50%) translateY(0)';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => {
+    t.style.opacity = '0';
+    t.style.transform = 'translateX(-50%) translateY(20px)';
+  }, 3500);
+}
 function runMonitor(){const now=new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});const el=document.getElementById('last-check');if(el)el.textContent=now;}
 
 // ── CONEXIÓN GOOGLE SHEETS ────────────────────────────
@@ -1230,7 +1293,7 @@ async function guardarNuevoCliente() {
     closeModal('modal-nuevo-cliente');
     document.getElementById('nc-nombre').value=''; document.getElementById('nc-tel').value='';
     document.getElementById('nc-dir').value=''; document.getElementById('nc-notas').value='';
-    showAlert(`✅ Cliente ${nombre} registrado correctamente.`);
+    showAlert(`✅ Cliente ${nombre} registrado`, 'ok');
     cargarClientes();
   } catch(e) {
     showAlert('Error al guardar. Verifica tu conexión.');
@@ -1252,7 +1315,7 @@ async function guardarPago() {
     await apiPost({ accion:'registrar_pago', cliente, monto:`$${monto}`, metodo, mes });
     closeModal('modal-reg-pago');
     document.getElementById('pago-monto').value=''; document.getElementById('pago-mes').value='';
-    showAlert(`✅ Pago de ${cliente} registrado.`);
+    showAlert(`✅ Pago de ${cliente} — $${monto} registrado`, 'ok');
     cargarCobros();
     cargarClientes();
   } catch(e) {
@@ -1277,7 +1340,7 @@ async function guardarVisita() {
     closeModal('modal-nueva-visita');
     document.getElementById('visita-cliente').value=''; document.getElementById('visita-dir').value='';
     document.getElementById('visita-notas').value='';
-    showAlert(`✅ Visita agendada: ${tipo} — ${cliente} el ${fecha} a las ${hora}.`);
+    showAlert(`✅ ${tipo} agendada — ${cliente} el ${fecha}`, 'ok');
     cargarAgenda();
   } catch(e) {
     showAlert('Error al guardar. Verifica tu conexión.');
@@ -1326,6 +1389,174 @@ function filtrarClientes(q) {
   }).join('');
 }
 
+// ── PORTAL CLIENTE CON DATOS REALES ──────────────────
+async function cargarDatosCliente(nombre) {
+  try {
+    const clientes = await apiGet('clientes');
+    const c = clientes.find(cl => cl.nombre.toLowerCase().includes(nombre.toLowerCase()));
+    if (!c) return;
+
+    // Dashboard tarjetas
+    const cp = document.getElementById('cli-plan');
+    if (cp) cp.textContent = `Internet ${c.plan}`;
+    const cb = document.getElementById('cli-estado-badge');
+    if (cb) { cb.textContent = c.estado; cb.className = `badge ${c.estado==='Activo'?'badge-success':c.estado==='Adeudo'?'badge-warning':'badge-danger'}`; }
+    const cv = document.getElementById('cli-precio');
+    if (cv) cv.textContent = c.precio;
+    const cvv = document.getElementById('cli-vence');
+    if (cvv) {
+      if (c.proximoPago && c.proximoPago !== 'Vencido' && c.proximoPago !== '—') {
+        const fecha = new Date(c.proximoPago).toLocaleDateString('es-MX',{day:'numeric',month:'long'});
+        cvv.textContent = `Vence ${fecha}`;
+      } else { cvv.textContent = 'Vencido'; }
+    }
+
+    // Alerta de pago
+    const al = document.getElementById('cli-alerta-pago');
+    const det = document.getElementById('cli-detalle-pago');
+    if (al && det) {
+      if (c.estado === 'Adeudo' || c.estado === 'Suspendido') {
+        al.className = 'alert-banner alert-warning';
+        al.textContent = `⚠ Tienes ${c.diasVencido} días de adeudo`;
+        det.innerHTML = `Mensualidad vencida — <strong style="color:var(--text)">${c.precio} MXN</strong>`;
+      } else {
+        al.className = 'alert-banner alert-success';
+        al.textContent = '✓ Estás al corriente';
+        det.textContent = `Próximo pago: ${c.precio}`;
+      }
+    }
+
+    // Historial de cobros
+    const cobros = await apiGet('cobros');
+    const misCobros = cobros.filter(co => co.cliente === c.nombre);
+    const pagados = misCobros.filter(co => co.estado === 'Pagado');
+
+    const vm = document.getElementById('cli-vence'); // ya existe
+    const tbody = document.querySelector('#view-pagos .table-wrap tbody');
+    if (tbody) {
+      tbody.innerHTML = misCobros.map(co => `<tr>
+        <td>${co.mes}</td><td>${co.monto}</td><td>${co.fechaPago||'—'}</td>
+        <td>${co.metodo||'—'}</td><td>${badgeEstado(co.estado)}</td><td>—</td>
+      </tr>`).join('') || `<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:1rem">Sin historial</td></tr>`;
+    }
+
+    // Métricas de pagos
+    const totalPagado = pagados.reduce((s,co)=>s+Number(co.monto.replace('$','')),0);
+    const pg = document.querySelector('#view-pagos .grid-3');
+    if (pg) {
+      pg.innerHTML = `
+        <div class="card metric-card c-yellow card-glow-top"><div class="card-icon ci-yellow">📅</div><div class="card-label">Próx. vencimiento</div><div class="card-value">${c.proximoPago&&c.proximoPago!=='Vencido'?new Date(c.proximoPago).toLocaleDateString('es-MX',{day:'numeric',month:'short'}):'Vencido'}</div><div class="card-sub">${c.precio}</div></div>
+        <div class="card metric-card c-green card-glow-top"><div class="card-icon ci-green">✅</div><div class="card-label">Pagos este año</div><div class="card-value">${pagados.length}</div><div class="card-sub">${c.estado==='Activo'?'Al corriente':c.estado}</div></div>
+        <div class="card metric-card c-purple card-glow-top"><div class="card-icon ci-purple">💳</div><div class="card-label">Total pagado</div><div class="card-value">$${totalPagado.toLocaleString()}</div><div class="card-sub">Registrado</div></div>`;
+    }
+
+    // Servicios
+    const servDiv = document.querySelector('#view-servicios .card.mb-2.card-glow');
+    if (servDiv) {
+      servDiv.innerHTML = `
+        <div class="section-title" style="margin-bottom:1rem">Plan contratado</div>
+        <div style="display:flex;align-items:center;gap:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border)">
+          <div style="width:48px;height:48px;background:rgba(108,99,255,0.15);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px">📡</div>
+          <div style="flex:1"><div style="font-weight:600;font-size:14px">Internet Inalámbrico — ${c.plan}</div><div style="font-size:12px;color:var(--text-muted);margin-top:2px">Antena instalada · ${c.direccion}</div></div>
+          ${badgeEstado(c.estado)}
+        </div>
+        <div style="padding-top:1rem;display:flex;flex-direction:column;gap:9px">
+          <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-muted)">Velocidad contratada</span><span style="font-weight:500">${c.plan}</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-muted)">Costo mensual</span><span style="font-weight:500">${c.precio} MXN</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-muted)">Dirección</span><span style="font-weight:500">${c.direccion}</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-muted)">Teléfono registrado</span><span style="font-weight:500">${c.telefono}</span></div>
+        </div>`;
+    }
+  } catch(e) { console.error('Error datos cliente:', e); }
+}
+
+// ── ALERTAS EN DASHBOARD ADMIN ────────────────────────
+async function cargarAlertas() {
+  try {
+    const clientes = await apiGet('clientes');
+    const conProblema = clientes.filter(c => c.estado === 'Adeudo' || c.estado === 'Suspendido');
+    const panel = document.getElementById('panel-alertas');
+    const lista = document.getElementById('lista-alertas');
+    if (!panel || !lista) return;
+    if (!conProblema.length) { panel.style.display = 'none'; return; }
+    panel.style.display = 'block';
+    lista.innerHTML = conProblema.map(c => {
+      const color = c.estado === 'Suspendido' ? 'var(--red)' : 'var(--yellow)';
+      const tel = c.telefono.replace(/\s/g,'');
+      const msg = c.estado === 'Suspendido'
+        ? `Hola%20${encodeURIComponent(c.nombre.split(' ')[0])}%2C%20tu%20servicio%20est%C3%A1%20suspendido.%20Cont%C3%A1ctanos.`
+        : `Hola%20${encodeURIComponent(c.nombre.split(' ')[0])}%2C%20tienes%20un%20adeudo%20de%20${encodeURIComponent(c.precio)}%20con%20Risch%20Network.`;
+      return `<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--surface-2);border-radius:8px;border-left:3px solid ${color}">
+        <div>
+          <div style="font-weight:600;font-size:13px">${c.nombre}</div>
+          <div style="font-size:11px;color:var(--text-muted)">${c.estado} · ${c.diasVencido} días · ${c.precio}</div>
+        </div>
+        <a href="https://wa.me/52${tel}?text=${msg}" target="_blank"><button class="btn btn-sm btn-wa">WA</button></a>
+      </div>`;
+    }).join('');
+  } catch(e) { console.error('alertas:', e); }
+}
+
+// ── EXPORTAR CSV ──────────────────────────────────────
+async function exportarCSV(tipo) {
+  try {
+    const datos = await apiGet(tipo);
+    if (!datos.length) { showAlert('Sin datos para exportar.'); return; }
+    const cols = Object.keys(datos[0]);
+    const csv = [cols.join(','), ...datos.map(r => cols.map(c => `"${(r[c]||'').toString().replace(/"/g,'""')}"`).join(','))].join('\n');
+    const blob = new Blob(['﻿'+csv], {type:'text/csv;charset=utf-8'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `risch-${tipo}-${new Date().toISOString().split('T')[0]}.csv`;
+    a.click(); URL.revokeObjectURL(url);
+    showAlert(`✅ ${tipo}.csv descargado`, 'ok');
+  } catch(e) { showAlert('Error al exportar.', 'error'); }
+}
+
+// ── BUSCADOR GLOBAL ───────────────────────────────────
+function activarBuscadorGlobal() {
+  document.addEventListener('keydown', e => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault();
+      const q = prompt('Buscar cliente:');
+      if (q) {
+        navigate('clientes');
+        setTimeout(() => {
+          const input = document.getElementById('buscar-cliente');
+          if (input) { input.value = q; filtrarClientes(q); }
+        }, 500);
+      }
+    }
+  });
+}
+
+// ── NUEVO PROSPECTO ───────────────────────────────────
+function selServicio(srv, btn) {
+  document.getElementById('np-servicio').value = srv;
+  document.querySelectorAll('.np-srv').forEach(b => b.classList.remove('btn-accent'));
+  btn.classList.add('btn-accent');
+}
+async function guardarProspecto() {
+  const nombre = document.getElementById('np-nombre')?.value?.trim();
+  const tel = document.getElementById('np-tel')?.value?.trim();
+  if (!nombre || !tel) { showAlert('Completa nombre y teléfono.', 'error'); return; }
+  const servicio = document.getElementById('np-servicio')?.value || 'Internet';
+  const notas = document.getElementById('np-notas')?.value?.trim() || '';
+  const btn = document.querySelector('#modal-nuevo-prospecto .btn-accent');
+  btn.textContent = 'Guardando...'; btn.disabled = true;
+  try {
+    await apiPost({ accion:'nuevo_prospecto', nombre, telefono:tel, servicio, seguimiento:'Pendiente contacto', notas });
+    closeModal('modal-nuevo-prospecto');
+    document.getElementById('np-nombre').value = '';
+    document.getElementById('np-tel').value = '';
+    document.getElementById('np-notas').value = '';
+    showAlert(`✅ Prospecto ${nombre} guardado`, 'ok');
+    cargarProspectos();
+  } catch(e) {
+    showAlert('Error al guardar. Verifica conexión.', 'error');
+  } finally { btn.textContent = '✅ Guardar prospecto'; btn.disabled = false; }
+}
+
 // ── PERFIL CLIENTE ────────────────────────────────────
 let _usuarioActual = null;
 async function cargarPerfilCliente(nombre) {
@@ -1353,12 +1584,13 @@ async function cargarPerfilCliente(nombre) {
 const _navigateOriginal = navigate;
 window.navigate = function(viewId) {
   _navigateOriginal(viewId);
-  if (viewId === 'dashboard-admin') cargarDashboard();
+  if (viewId === 'dashboard-admin') { cargarDashboard(); cargarAlertas(); }
   if (viewId === 'clientes')   cargarClientes();
   if (viewId === 'cobros')     cargarCobros();
   if (viewId === 'agenda')     cargarAgenda();
   if (viewId === 'prospectos') cargarProspectos();
   if (viewId === 'perfil' && window._nombreCliente) cargarPerfilCliente(window._nombreCliente);
+  if ((viewId === 'dashboard-user' || viewId === 'servicios' || viewId === 'pagos') && window._nombreCliente) cargarDatosCliente(window._nombreCliente);
 };
 
 // ANIMATED DASHBOARD NUMBERS
