@@ -479,6 +479,103 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
   </div>
 </div>
 
+<!-- MODAL EDITAR CLIENTE -->
+<div class="modal-overlay" id="modal-editar-cliente">
+  <div class="modal">
+    <div class="modal-title">✏️ Editar cliente</div>
+    <input type="hidden" id="ec-nombre-orig">
+    <div class="form-group"><label>Nombre completo</label><input id="ec-nombre" type="text" style="font-size:15px;padding:10px"></div>
+    <div class="form-group"><label>Teléfono</label><input id="ec-tel" type="tel" style="font-size:15px;padding:10px"></div>
+    <div class="form-group"><label>Dirección</label><input id="ec-dir" type="text" style="font-size:15px;padding:10px"></div>
+    <div class="form-group"><label>Plan</label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px" id="ec-planes-grid">
+        <button type="button" class="btn ec-plan-btn" onclick="selEcPlan('10 Mbps|$200',this)" style="padding:12px;text-align:left"><div style="font-weight:600">10 Mbps</div><div style="font-size:11px;color:var(--text-muted)">$200/mes</div></button>
+        <button type="button" class="btn ec-plan-btn" onclick="selEcPlan('20 Mbps|$240',this)" style="padding:12px;text-align:left"><div style="font-weight:600">20 Mbps</div><div style="font-size:11px;color:var(--text-muted)">$240/mes</div></button>
+        <button type="button" class="btn ec-plan-btn" onclick="selEcPlan('30 Mbps|$280',this)" style="padding:12px;text-align:left"><div style="font-weight:600">30 Mbps</div><div style="font-size:11px;color:var(--text-muted)">$280/mes</div></button>
+        <button type="button" class="btn ec-plan-btn" onclick="selEcPlan('50 Mbps|$400',this)" style="padding:12px;text-align:left"><div style="font-weight:600">50 Mbps</div><div style="font-size:11px;color:var(--text-muted)">$400/mes</div></button>
+      </div>
+      <input type="hidden" id="ec-plan" value="">
+    </div>
+    <div class="form-group"><label>Estado</label>
+      <select id="ec-estado" style="font-size:15px;padding:10px">
+        <option value="Activo">Activo</option>
+        <option value="Adeudo">Adeudo</option>
+        <option value="Suspendido">Suspendido</option>
+      </select>
+    </div>
+    <div class="modal-footer" style="gap:12px">
+      <button class="btn" style="flex:1;padding:12px" onclick="closeModal('modal-editar-cliente')">Cancelar</button>
+      <button class="btn btn-accent" style="flex:2;padding:12px;font-size:14px" onclick="guardarEdicionCliente()">✅ Guardar cambios</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDITAR COBRO -->
+<div class="modal-overlay" id="modal-editar-cobro">
+  <div class="modal">
+    <div class="modal-title">✏️ Editar cobro</div>
+    <input type="hidden" id="eco-cliente-orig">
+    <input type="hidden" id="eco-mes-orig">
+    <div class="form-group"><label>Cliente</label><input id="eco-cliente" type="text" style="font-size:15px;padding:10px" readonly></div>
+    <div class="form-group"><label>Mes</label><input id="eco-mes" type="text" placeholder="Jun 2026" style="font-size:15px;padding:10px"></div>
+    <div class="form-group"><label>Monto</label><input id="eco-monto" type="text" style="font-size:15px;padding:10px"></div>
+    <div class="form-group"><label>Método de pago</label>
+      <div style="display:flex;gap:8px;margin-top:6px">
+        <button type="button" class="btn btn-sm" id="eco-met-efectivo" onclick="selEcoMetodo('Efectivo')" style="flex:1;padding:10px">💵 Efectivo</button>
+        <button type="button" class="btn btn-sm" id="eco-met-transferencia" onclick="selEcoMetodo('Transferencia')" style="flex:1;padding:10px">📱 Transferencia</button>
+      </div>
+      <input type="hidden" id="eco-metodo" value="Efectivo">
+    </div>
+    <div class="form-group"><label>Fecha de pago</label><input id="eco-fechapago" type="date" style="font-size:15px;padding:10px"></div>
+    <div class="form-group"><label>Estado</label>
+      <select id="eco-estado" style="font-size:15px;padding:10px">
+        <option value="Pagado">Pagado</option>
+        <option value="Pendiente">Pendiente</option>
+        <option value="Vencido">Vencido</option>
+      </select>
+    </div>
+    <div class="modal-footer" style="gap:12px">
+      <button class="btn" style="flex:1;padding:12px" onclick="closeModal('modal-editar-cobro')">Cancelar</button>
+      <button class="btn btn-accent" style="flex:2;padding:12px;font-size:14px" onclick="guardarEdicionCobro()">✅ Guardar cambios</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDITAR VISITA -->
+<div class="modal-overlay" id="modal-editar-visita">
+  <div class="modal">
+    <div class="modal-title">✏️ Editar visita</div>
+    <input type="hidden" id="ev-cliente-orig">
+    <input type="hidden" id="ev-fecha-orig">
+    <div class="form-group"><label>Tipo de visita</label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
+        <button type="button" class="btn btn-sm ev-tipo-btn" onclick="selEvTipo('Instalación',this)" style="flex:1;padding:10px">📡 Instalación</button>
+        <button type="button" class="btn btn-sm ev-tipo-btn" onclick="selEvTipo('Soporte técnico',this)" style="flex:1;padding:10px">🔧 Soporte</button>
+        <button type="button" class="btn btn-sm ev-tipo-btn" onclick="selEvTipo('Revisión',this)" style="flex:1;padding:10px">🔍 Revisión</button>
+      </div>
+      <input type="hidden" id="ev-tipo" value="">
+    </div>
+    <div class="form-group"><label>Cliente</label><input id="ev-cliente" type="text" style="font-size:15px;padding:10px"></div>
+    <div class="form-group"><label>Dirección</label><input id="ev-dir" type="text" style="font-size:15px;padding:10px"></div>
+    <div class="form-row">
+      <div class="form-group"><label>Fecha</label><input id="ev-fecha" type="date" style="font-size:15px;padding:10px"></div>
+      <div class="form-group"><label>Hora</label><input id="ev-hora" type="time" style="font-size:15px;padding:10px"></div>
+    </div>
+    <div class="form-group"><label>Estado</label>
+      <select id="ev-estado" style="font-size:15px;padding:10px">
+        <option value="Pendiente">Pendiente</option>
+        <option value="Confirmada">Confirmada</option>
+        <option value="Completada">Completada</option>
+        <option value="Cancelada">Cancelada</option>
+      </select>
+    </div>
+    <div class="modal-footer" style="gap:12px">
+      <button class="btn" style="flex:1;padding:12px" onclick="closeModal('modal-editar-visita')">Cancelar</button>
+      <button class="btn btn-accent" style="flex:2;padding:12px;font-size:14px" onclick="guardarEdicionVisita()">✅ Guardar cambios</button>
+    </div>
+  </div>
+</div>
+
 <!-- APP -->
 <div id="app">
   <nav class="sidebar">
@@ -803,7 +900,7 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
         <div class="card mb-3"><div class="table-wrap"><table id="tabla-cartera"><thead><tr><th>Cliente</th><th>Mes</th><th>Monto</th><th>Estado</th><th>Último pago</th><th></th></tr></thead>
         <tbody><tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:2rem">Cargando...</td></tr></tbody></table></div></div>
         <div class="card-header" style="margin-bottom:.75rem"><div class="section-title">Pagos registrados</div><button class="btn btn-accent btn-sm" onclick="openModal('modal-reg-pago')">+ Registrar pago</button></div>
-        <div class="card"><div class="table-wrap"><table id="tabla-pagados"><thead><tr><th>Cliente</th><th>Monto</th><th>Fecha</th><th>Método</th><th>Estado</th></tr></thead>
+        <div class="card"><div class="table-wrap"><table id="tabla-pagados"><thead><tr><th>Cliente</th><th>Monto</th><th>Fecha</th><th>Método</th><th>Estado</th><th></th></tr></thead>
         <tbody><tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:2rem">Cargando...</td></tr></tbody></table></div></div>
       </div>
 
@@ -1127,7 +1224,7 @@ async function cargarClientes() {
   try {
     const clientes = await apiGet('clientes');
     _clientesCache = clientes;
-    tbody.innerHTML = clientes.map(c => {
+    tbody.innerHTML = clientes.map((c, idx) => {
       const tel = c.telefono.replace(/\s/g,'');
       const msg = c.estado === 'Adeudo'
         ? `Hola%20${encodeURIComponent(c.nombre.split(' ')[0])}%2C%20te%20recordamos%20que%20tienes%20un%20saldo%20pendiente%20de%20${encodeURIComponent(c.precio)}%20con%20Risch%20Network.%20%C2%BFCu%C3%A1ndo%20puedes%20ponerte%20al%20corriente%3F%20Gracias.`
@@ -1142,8 +1239,9 @@ async function cargarClientes() {
         <td><div style="font-weight:500">${c.nombre}</div><div style="font-size:11px;color:var(--text-muted)">${c.telefono}</div></td>
         <td>${c.plan}</td><td>${c.direccion}</td><td>${dias}</td>
         <td>${badgeEstado(c.estado)}</td><td>${prox}</td>
-        <td><div style="display:flex;gap:6px">
-          <button class="btn btn-sm">Ver</button>
+        <td><div style="display:flex;gap:4px">
+          <button class="btn btn-sm" onclick="editarCliente(${idx})" title="Editar">✏️</button>
+          <button class="btn btn-sm btn-danger" onclick="eliminarCliente(${idx})" title="Eliminar">🗑</button>
           <a href="https://wa.me/52${tel}?text=${msg}" target="_blank"><button class="btn btn-sm btn-wa">WA</button></a>
         </div></td>
       </tr>`;
@@ -1154,9 +1252,11 @@ async function cargarClientes() {
 }
 
 // ── COBROS ────────────────────────────────────────────
+let _cobrosCache = [];
 async function cargarCobros() {
   try {
     const cobros = await apiGet('cobros');
+    _cobrosCache = cobros;
     const vencidos = cobros.filter(c => c.estado === 'Vencido' || c.estado === 'Pendiente');
     const pagados  = cobros.filter(c => c.estado === 'Pagado');
 
@@ -1177,14 +1277,17 @@ async function cargarCobros() {
       tbodyVencidos.innerHTML = vencidos.length ? vencidos.map(c => {
         const tel = (c.telefono||'').replace(/\s/g,'');
         const msg = `Hola%2C%20te%20recordamos%20tu%20adeudo%20de%20${encodeURIComponent(c.monto)}%20con%20Risch%20Network.`;
+        const cidx = _cobrosCache.findIndex(x => x.cliente===c.cliente && x.mes===c.mes);
         return `<tr>
           <td><div style="font-weight:500">${c.cliente}</div></td>
           <td>${fmtMes(c.mes)}</td>
           <td style="color:var(--red);font-weight:600">${c.monto}</td>
           <td>${badgeEstado(c.estado)}</td>
           <td>${c.fechaPago && c.fechaPago !== '—' ? fmtFecha(c.fechaPago) : 'Sin pago'}</td>
-          <td><div style="display:flex;gap:6px">
+          <td><div style="display:flex;gap:4px">
             <button class="btn btn-sm btn-success" onclick="openModal('modal-reg-pago')">Registrar</button>
+            <button class="btn btn-sm" onclick="editarCobro(${cidx})" title="Editar">✏️</button>
+            <button class="btn btn-sm btn-danger" onclick="eliminarCobro(${cidx})" title="Eliminar">🗑</button>
           </div></td>
         </tr>`;
       }).join('') : '<tr><td colspan="6" style="text-align:center;color:var(--green);padding:1rem">✓ Sin cartera vencida</td></tr>';
@@ -1192,22 +1295,31 @@ async function cargarCobros() {
 
     const tbodyPagados = document.querySelector('#tabla-pagados tbody');
     if (tbodyPagados) {
-      tbodyPagados.innerHTML = pagados.map(c => `<tr>
-        <td>${c.cliente}</td><td>${c.monto}</td><td>${fmtFecha(c.fechaPago)}</td><td>${c.metodo}</td><td>${badgeEstado(c.estado)}</td>
-      </tr>`).join('');
+      tbodyPagados.innerHTML = pagados.map(c => {
+        const pidx = _cobrosCache.findIndex(x => x.cliente===c.cliente && x.mes===c.mes);
+        return `<tr>
+          <td>${c.cliente}</td><td>${c.monto}</td><td>${fmtFecha(c.fechaPago)}</td><td>${c.metodo}</td><td>${badgeEstado(c.estado)}</td>
+          <td><div style="display:flex;gap:4px">
+            <button class="btn btn-sm" onclick="editarCobro(${pidx})" title="Editar">✏️</button>
+            <button class="btn btn-sm btn-danger" onclick="eliminarCobro(${pidx})" title="Eliminar">🗑</button>
+          </div></td>
+        </tr>`;
+      }).join('');
     }
   } catch(e) { console.error('Error cobros:', e); }
 }
 
 // ── AGENDA ────────────────────────────────────────────
+let _agendaCache = [];
 async function cargarAgenda() {
   const cont = document.getElementById('agenda-lista');
   if (!cont) return;
   try {
     const agenda = await apiGet('agenda');
-    cont.innerHTML = agenda.map(v => `
-      <div class="agenda-item" style="display:flex;gap:12px;padding:12px;border-radius:var(--r);background:var(--surface-2);margin-bottom:8px;border:1px solid var(--border)">
-        <div style="min-width:50px;text-align:center;background:var(--accent);border-radius:6px;padding:6px 4px">
+    _agendaCache = agenda;
+    cont.innerHTML = agenda.map((v, idx) => `
+      <div class="agenda-item" style="display:flex;gap:12px;padding:12px;border-radius:var(--r);background:var(--surface-2);margin-bottom:8px;border:1px solid var(--border);align-items:center">
+        <div style="min-width:50px;text-align:center;background:var(--accent);border-radius:6px;padding:6px 4px;flex-shrink:0">
           <div style="font-size:11px;color:rgba(255,255,255,0.7)">${new Date(v.fecha).toLocaleDateString('es-MX',{month:'short'}).toUpperCase()}</div>
           <div style="font-size:18px;font-weight:700;color:#fff">${new Date(v.fecha).getDate()}</div>
         </div>
@@ -1216,6 +1328,10 @@ async function cargarAgenda() {
           <div style="font-size:11px;color:var(--text-muted)">${v.hora} · ${v.tipo} · ${v.direccion}</div>
         </div>
         ${badgeEstado(v.estado)}
+        <div style="display:flex;gap:4px;margin-left:8px;flex-shrink:0">
+          <button class="btn btn-sm" onclick="editarVisita(${idx})" title="Editar">✏️</button>
+          <button class="btn btn-sm btn-danger" onclick="eliminarVisita(${idx})" title="Eliminar">🗑</button>
+        </div>
       </div>`).join('');
   } catch(e) { console.error('Error agenda:', e); }
 }
@@ -1387,6 +1503,7 @@ function filtrarClientes(q) {
   }
   // Re-render con filtro
   tbody.innerHTML = filtrados.map(c => {
+    const idx = _clientesCache.findIndex(x => x.nombre === c.nombre);
     const tel = c.telefono.replace(/\s/g,'');
     const msg = c.estado === 'Adeudo'
       ? `Hola%20${encodeURIComponent(c.nombre.split(' ')[0])}%2C%20tienes%20un%20saldo%20pendiente%20de%20${encodeURIComponent(c.precio)}%20con%20Risch%20Network.`
@@ -1401,8 +1518,9 @@ function filtrarClientes(q) {
       <td><div style="font-weight:500">${c.nombre}</div><div style="font-size:11px;color:var(--text-muted)">${c.telefono}</div></td>
       <td>${c.plan}</td><td>${c.direccion}</td><td>${dias}</td>
       <td>${badgeEstado(c.estado)}</td><td>${prox}</td>
-      <td><div style="display:flex;gap:6px">
-        <button class="btn btn-sm">Ver</button>
+      <td><div style="display:flex;gap:4px">
+        <button class="btn btn-sm" onclick="editarCliente(${idx})" title="Editar">✏️</button>
+        <button class="btn btn-sm btn-danger" onclick="eliminarCliente(${idx})" title="Eliminar">🗑</button>
         <a href="https://wa.me/52${tel}?text=${msg}" target="_blank"><button class="btn btn-sm btn-wa">WA</button></a>
       </div></td>
     </tr>`;
@@ -1675,6 +1793,163 @@ function runSpeedTest(){
       },110);
     }
   },95);
+}
+
+// ── EDITAR / ELIMINAR CLIENTES ────────────────────────
+function selEcPlan(valor, btn) {
+  document.getElementById('ec-plan').value = valor;
+  document.querySelectorAll('.ec-plan-btn').forEach(b => b.classList.remove('btn-accent'));
+  btn.classList.add('btn-accent');
+}
+function editarCliente(idx) {
+  const c = _clientesCache[idx];
+  if (!c) return;
+  document.getElementById('ec-nombre-orig').value = c.nombre;
+  document.getElementById('ec-nombre').value = c.nombre;
+  document.getElementById('ec-tel').value = c.telefono;
+  document.getElementById('ec-dir').value = c.direccion;
+  document.getElementById('ec-estado').value = c.estado;
+  // resaltar plan actual
+  const planVal = `${c.plan}|${c.precio}`;
+  document.getElementById('ec-plan').value = planVal;
+  document.querySelectorAll('.ec-plan-btn').forEach(btn => {
+    const bv = btn.getAttribute('onclick').match(/'([^']+)'/)?.[1];
+    btn.classList.toggle('btn-accent', bv === planVal);
+  });
+  openModal('modal-editar-cliente');
+}
+async function guardarEdicionCliente() {
+  const nombreOrig = document.getElementById('ec-nombre-orig').value;
+  const nombre = document.getElementById('ec-nombre').value.trim();
+  const telefono = document.getElementById('ec-tel').value.trim();
+  const direccion = document.getElementById('ec-dir').value.trim();
+  const estado = document.getElementById('ec-estado').value;
+  const planVal = document.getElementById('ec-plan').value;
+  if (!nombre || !telefono) { showAlert('Nombre y teléfono son obligatorios.', 'error'); return; }
+  const [plan, precio] = planVal ? planVal.split('|') : ['', ''];
+  const btn = document.querySelector('#modal-editar-cliente .btn-accent');
+  btn.textContent = 'Guardando...'; btn.disabled = true;
+  try {
+    await apiPost({ accion:'editar_cliente', nombreOrig, nombre, telefono, direccion, plan, precio, estado });
+    closeModal('modal-editar-cliente');
+    showAlert(`✅ Cliente actualizado`, 'ok');
+    cargarClientes();
+  } catch(e) { showAlert('Error al guardar.', 'error'); }
+  finally { btn.textContent = '✅ Guardar cambios'; btn.disabled = false; }
+}
+async function eliminarCliente(idx) {
+  const c = _clientesCache[idx];
+  if (!c) return;
+  if (!confirm(`¿Eliminar a ${c.nombre}? Esta acción no se puede deshacer.`)) return;
+  try {
+    await apiPost({ accion:'eliminar_cliente', nombre: c.nombre });
+    showAlert(`${c.nombre} eliminado`, 'ok');
+    cargarClientes();
+  } catch(e) { showAlert('Error al eliminar.', 'error'); }
+}
+
+// ── EDITAR / ELIMINAR COBROS ──────────────────────────
+function selEcoMetodo(metodo) {
+  document.getElementById('eco-metodo').value = metodo;
+  document.getElementById('eco-met-efectivo').classList.toggle('btn-accent', metodo === 'Efectivo');
+  document.getElementById('eco-met-transferencia').classList.toggle('btn-accent', metodo === 'Transferencia');
+}
+function editarCobro(idx) {
+  const c = _cobrosCache[idx];
+  if (!c) return;
+  document.getElementById('eco-cliente-orig').value = c.cliente;
+  document.getElementById('eco-mes-orig').value = c.mes;
+  document.getElementById('eco-cliente').value = c.cliente;
+  document.getElementById('eco-mes').value = c.mes;
+  document.getElementById('eco-monto').value = c.monto;
+  document.getElementById('eco-estado').value = c.estado;
+  const fp = c.fechaPago && c.fechaPago !== '—' ? c.fechaPago.split('T')[0] : '';
+  document.getElementById('eco-fechapago').value = fp;
+  selEcoMetodo(c.metodo || 'Efectivo');
+  openModal('modal-editar-cobro');
+}
+async function guardarEdicionCobro() {
+  const clienteOrig = document.getElementById('eco-cliente-orig').value;
+  const mesOrig = document.getElementById('eco-mes-orig').value;
+  const mes = document.getElementById('eco-mes').value.trim();
+  const monto = document.getElementById('eco-monto').value.trim();
+  const metodo = document.getElementById('eco-metodo').value;
+  const estado = document.getElementById('eco-estado').value;
+  const fechaPago = document.getElementById('eco-fechapago').value;
+  if (!mes || !monto) { showAlert('Mes y monto son obligatorios.', 'error'); return; }
+  const btn = document.querySelector('#modal-editar-cobro .btn-accent');
+  btn.textContent = 'Guardando...'; btn.disabled = true;
+  try {
+    await apiPost({ accion:'editar_cobro', clienteOrig, mesOrig, mes, monto, metodo, estado, fechaPago });
+    closeModal('modal-editar-cobro');
+    showAlert(`✅ Cobro actualizado`, 'ok');
+    cargarCobros();
+  } catch(e) { showAlert('Error al guardar.', 'error'); }
+  finally { btn.textContent = '✅ Guardar cambios'; btn.disabled = false; }
+}
+async function eliminarCobro(idx) {
+  const c = _cobrosCache[idx];
+  if (!c) return;
+  if (!confirm(`¿Eliminar cobro de ${c.cliente} — ${c.mes}?`)) return;
+  try {
+    await apiPost({ accion:'eliminar_cobro', cliente: c.cliente, mes: c.mes });
+    showAlert(`Cobro eliminado`, 'ok');
+    cargarCobros();
+  } catch(e) { showAlert('Error al eliminar.', 'error'); }
+}
+
+// ── EDITAR / ELIMINAR VISITAS ─────────────────────────
+function selEvTipo(tipo, btn) {
+  document.getElementById('ev-tipo').value = tipo;
+  document.querySelectorAll('.ev-tipo-btn').forEach(b => b.classList.remove('btn-accent'));
+  btn.classList.add('btn-accent');
+}
+function editarVisita(idx) {
+  const v = _agendaCache[idx];
+  if (!v) return;
+  document.getElementById('ev-cliente-orig').value = v.cliente;
+  document.getElementById('ev-fecha-orig').value = v.fecha;
+  document.getElementById('ev-cliente').value = v.cliente;
+  document.getElementById('ev-dir').value = v.direccion || '';
+  document.getElementById('ev-fecha').value = v.fecha ? v.fecha.split('T')[0] : '';
+  document.getElementById('ev-hora').value = v.hora || '09:00';
+  document.getElementById('ev-estado').value = v.estado || 'Pendiente';
+  document.getElementById('ev-tipo').value = v.tipo || 'Instalación';
+  document.querySelectorAll('.ev-tipo-btn').forEach(btn => {
+    const label = btn.textContent.trim();
+    btn.classList.toggle('btn-accent', label.includes(v.tipo));
+  });
+  openModal('modal-editar-visita');
+}
+async function guardarEdicionVisita() {
+  const clienteOrig = document.getElementById('ev-cliente-orig').value;
+  const fechaOrig = document.getElementById('ev-fecha-orig').value;
+  const cliente = document.getElementById('ev-cliente').value.trim();
+  const dir = document.getElementById('ev-dir').value.trim();
+  const fecha = document.getElementById('ev-fecha').value;
+  const hora = document.getElementById('ev-hora').value;
+  const tipo = document.getElementById('ev-tipo').value;
+  const estado = document.getElementById('ev-estado').value;
+  if (!cliente || !fecha) { showAlert('Cliente y fecha son obligatorios.', 'error'); return; }
+  const btn = document.querySelector('#modal-editar-visita .btn-accent');
+  btn.textContent = 'Guardando...'; btn.disabled = true;
+  try {
+    await apiPost({ accion:'editar_visita', clienteOrig, fechaOrig, cliente, fecha, hora, tipo, direccion:dir, estado });
+    closeModal('modal-editar-visita');
+    showAlert(`✅ Visita actualizada`, 'ok');
+    cargarAgenda();
+  } catch(e) { showAlert('Error al guardar.', 'error'); }
+  finally { btn.textContent = '✅ Guardar cambios'; btn.disabled = false; }
+}
+async function eliminarVisita(idx) {
+  const v = _agendaCache[idx];
+  if (!v) return;
+  if (!confirm(`¿Eliminar visita de ${v.cliente} — ${fmtFecha(v.fecha)}?`)) return;
+  try {
+    await apiPost({ accion:'eliminar_visita', cliente: v.cliente, fecha: v.fecha });
+    showAlert(`Visita eliminada`, 'ok');
+    cargarAgenda();
+  } catch(e) { showAlert('Error al eliminar.', 'error'); }
 }
 
 // ICONS
