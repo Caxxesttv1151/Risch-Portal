@@ -1033,7 +1033,7 @@ async function doLogin(){
   btn.textContent = 'Verificando...'; btn.disabled = true;
 
   try {
-    const res = await fetch(API, { method:'POST', body: JSON.stringify({ accion:'login', usuario, password }) });
+    const res = await fetch(`${API}?tipo=login&usuario=${encodeURIComponent(usuario)}&password=${encodeURIComponent(password)}`);
     const data = await res.json();
 
     if (!data.ok) {
