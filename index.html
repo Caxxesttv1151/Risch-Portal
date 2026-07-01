@@ -352,9 +352,7 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
 <!-- EDITABLE: notificaciones del panel desplegable (título y subtítulo de cada una) -->
 <div class="notif-panel" id="notif-panel">
   <div class="notif-panel-header">Notificaciones<button class="btn-link" onclick="closeNotif()">Cerrar</button></div>
-  <div class="notif-item unread"><div class="notif-item-title">Pago próximo a vencer</div><div class="notif-item-sub">Juan Pérez · vence en 3 días · $280</div></div>
-  <div class="notif-item unread"><div class="notif-item-title">Antena sin respuesta</div><div class="notif-item-sub">Rocket M5 #003 · Carlos Ruiz</div></div>
-  <div class="notif-item"><div class="notif-item-title">Ticket #001 actualizado</div><div class="notif-item-sub">En revisión · hace 2 h</div></div>
+  <div id="notif-lista"><div class="notif-item"><div class="notif-item-sub" style="padding:4px 0;text-align:center">Cargando...</div></div></div>
 </div>
 
 <!-- MODALS -->
@@ -866,18 +864,7 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
       <div class="view" id="view-clientes">
         <div class="action-row"><input class="search-bar" id="buscar-cliente" style="max-width:280px" placeholder="Buscar cliente..." oninput="filtrarClientes(this.value)"><div style="display:flex;gap:8px"><button class="btn btn-sm" onclick="openModal('modal-reg-pago')">Registrar pago</button><button class="btn btn-accent btn-sm" onclick="openModal('modal-nuevo-cliente')">+ Nuevo cliente</button></div></div>
         <div class="card"><div class="table-wrap"><table><thead><tr><th>Cliente</th><th>Plan</th><th>Dirección</th><th>Días vencido</th><th>Estado</th><th>Próx. pago</th><th></th></tr></thead>
-        <tbody>
-          <!-- EDITABLE: cliente 1 -->
-          <tr><td><div style="font-weight:500">Juan Pérez</div><div style="font-size:11px;color:var(--text-muted)">443 111 1111</div></td><td>30 Mbps</td><td>Morelos 12</td><td style="color:var(--text-muted)">—</td><td><span class="badge badge-success">Activo</span></td><td>5 jul · $280</td><td><div style="display:flex;gap:6px"><button class="btn btn-sm">Ver</button><a href="https://wa.me/524432065503?text=Hola%2C%20esta%20es%20una%20prueba%20del%20portal%20Risch%20Network." target="_blank"><button class="btn btn-sm btn-wa">WA</button></a></div></td></tr>
-          <!-- EDITABLE: cliente 2 -->
-          <tr><td><div style="font-weight:500">María González</div><div style="font-size:11px;color:var(--text-muted)">443 222 2222</div></td><td>10 Mbps</td><td>Hidalgo 45</td><td style="color:var(--text-muted)">—</td><td><span class="badge badge-success">Activo</span></td><td>3 jul · $200</td><td><div style="display:flex;gap:6px"><button class="btn btn-sm">Ver</button><a href="https://wa.me/524432222222?text=Hola%20Mar%C3%ADa%2C%20te%20contactamos%20de%20Risch%20Network.%20%C2%BFEn%20qu%C3%A9%20podemos%20ayudarte%3F" target="_blank"><button class="btn btn-sm btn-wa">WA</button></a></div></td></tr>
-          <!-- EDITABLE: cliente 3 (con adeudo) -->
-          <tr><td><div style="font-weight:500">Carlos Ruiz</div><div style="font-size:11px;color:var(--text-muted)">443 333 3333</div></td><td>20 Mbps</td><td>Juárez 7</td><td style="color:var(--yellow);font-weight:600">24 días</td><td><span class="badge badge-warning">Adeudo</span></td><td>Vencido · $240</td><td><div style="display:flex;gap:6px"><button class="btn btn-sm">Ver</button><a href="https://wa.me/524433333333?text=Hola%20Carlos%2C%20te%20recordamos%20que%20tienes%20un%20saldo%20pendiente%20de%20%24240%20con%20Risch%20Network.%20%C2%BFCu%C3%A1ndo%20puedes%20ponerte%20al%20corriente%3F%20Gracias." target="_blank"><button class="btn btn-sm btn-wa">WA</button></a></div></td></tr>
-          <!-- EDITABLE: cliente 4 -->
-          <tr><td><div style="font-weight:500">Ana Martínez</div><div style="font-size:11px;color:var(--text-muted)">443 444 4444</div></td><td>50 Mbps</td><td>Lázaro 22</td><td style="color:var(--text-muted)">—</td><td><span class="badge badge-success">Activo</span></td><td>8 jul · $400</td><td><div style="display:flex;gap:6px"><button class="btn btn-sm">Ver</button><a href="https://wa.me/524444444444?text=Hola%20Ana%2C%20te%20contactamos%20de%20Risch%20Network.%20%C2%BFEn%20qu%C3%A9%20podemos%20ayudarte%3F" target="_blank"><button class="btn btn-sm btn-wa">WA</button></a></div></td></tr>
-          <!-- EDITABLE: cliente 5 (suspendido) -->
-          <tr><td><div style="font-weight:500">Roberto López</div><div style="font-size:11px;color:var(--text-muted)">443 555 5555</div></td><td>30 Mbps</td><td>Centro 15</td><td style="color:var(--red);font-weight:600">58 días</td><td><span class="badge badge-danger">Suspendido</span></td><td>Vencido · $560</td><td><div style="display:flex;gap:6px"><button class="btn btn-sm">Ver</button><a href="https://wa.me/524435555555?text=Hola%20Roberto%2C%20te%20informamos%20que%20tu%20servicio%20con%20Risch%20Network%20est%C3%A1%20suspendido%20por%20un%20adeudo%20de%20%24560.%20Para%20reactivarlo%2C%20ponte%20en%20contacto%20con%20nosotros.%20Gracias." target="_blank"><button class="btn btn-sm btn-wa">WA</button></a></div></td></tr>
-        </tbody></table></div></div>
+        <tbody><tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:2rem">Cargando...</td></tr></tbody></table></div></div>
       </div>
 
       <!-- ADMIN: COBROS -->
@@ -921,28 +908,10 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
       <!-- ADMIN: EQUIPOS -->
       <!-- EDITABLE: antenas instaladas e inventario en bodega -->
       <div class="view" id="view-equipos">
-        <div class="action-row"><input class="search-bar" style="max-width:280px" placeholder="Buscar equipo..."><button class="btn btn-accent btn-sm">+ Registrar equipo</button></div>
+        <div class="action-row"><input class="search-bar" id="buscar-equipo" style="max-width:280px" placeholder="Buscar equipo..." oninput="filtrarEquipos(this.value)"><button class="btn btn-accent btn-sm" onclick="showAlert('Registra el equipo directamente en Google Sheets.')">+ Registrar equipo</button></div>
         <div class="grid-2">
-          <div class="card"><div class="section-title" style="margin-bottom:1rem">Antenas instaladas</div>
-            <!-- EDITABLE: antena 1 (modelo, cliente, dirección, estado) -->
-            <div class="equipo-row"><div class="equipo-icon">📡</div><div class="equipo-info"><div class="equipo-name">Ubiquiti LiteBeam #001</div><div class="equipo-detail">Juan Pérez · Morelos 12</div></div><span class="badge badge-success">En línea</span></div>
-            <!-- EDITABLE: antena 2 -->
-            <div class="equipo-row"><div class="equipo-icon">📡</div><div class="equipo-info"><div class="equipo-name">Ubiquiti LiteBeam #002</div><div class="equipo-detail">María González · Hidalgo 45</div></div><span class="badge badge-success">En línea</span></div>
-            <!-- EDITABLE: antena 3 (sin respuesta) -->
-            <div class="equipo-row"><div class="equipo-icon">📡</div><div class="equipo-info"><div class="equipo-name">Rocket M5 #003</div><div class="equipo-detail">Carlos Ruiz · Juárez 7</div></div><span class="badge badge-danger">Sin respuesta</span></div>
-            <!-- EDITABLE: antena 4 -->
-            <div class="equipo-row"><div class="equipo-icon">📡</div><div class="equipo-info"><div class="equipo-name">LiteBeam AC #004</div><div class="equipo-detail">Ana Martínez · Lázaro 22</div></div><span class="badge badge-success">En línea</span></div>
-          </div>
-          <div class="card"><div class="section-title" style="margin-bottom:1rem">Inventario en bodega</div>
-            <!-- EDITABLE: artículo de inventario 1 (nombre, cantidad) -->
-            <div class="equipo-row"><div class="equipo-icon">📶</div><div class="equipo-info"><div class="equipo-name">Router TP-Link Archer</div><div class="equipo-detail">3 unidades disponibles</div></div><span class="badge badge-gray">3 uds</span></div>
-            <!-- EDITABLE: artículo de inventario 2 -->
-            <div class="equipo-row"><div class="equipo-icon">📡</div><div class="equipo-info"><div class="equipo-name">LiteBeam AC Gen2</div><div class="equipo-detail">1 unidad disponible</div></div><span class="badge badge-gray">1 ud</span></div>
-            <!-- EDITABLE: artículo de inventario 3 -->
-            <div class="equipo-row"><div class="equipo-icon">🔌</div><div class="equipo-info"><div class="equipo-name">Switch 8 puertos</div><div class="equipo-detail">2 unidades disponibles</div></div><span class="badge badge-gray">2 uds</span></div>
-            <!-- EDITABLE: artículo de inventario 4 -->
-            <div class="equipo-row"><div class="equipo-icon">🔌</div><div class="equipo-info"><div class="equipo-name">PoE injector</div><div class="equipo-detail">4 unidades disponibles</div></div><span class="badge badge-gray">4 uds</span></div>
-          </div>
+          <div class="card"><div class="section-title" style="margin-bottom:1rem">Antenas instaladas</div><p style="color:var(--text-muted);font-size:13px">Cargando...</p></div>
+          <div class="card"><div class="section-title" style="margin-bottom:1rem">Inventario en bodega</div><p style="color:var(--text-muted);font-size:13px">Cargando...</p></div>
         </div>
       </div>
 
@@ -951,21 +920,13 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
       <div class="view" id="view-red">
         <div class="grid-3 mb-3">
           <!-- EDITABLE: conteo de antenas en línea y sub-label -->
-          <div class="card metric-card c-green card-glow-top"><div class="card-icon ci-green">📡</div><div class="card-label">Antenas en línea</div><div class="card-value" style="color:var(--green)">3 / 4</div><div class="card-sub">1 sin respuesta</div></div>
-          <!-- EDITABLE: ping promedio -->
-          <div class="card metric-card c-purple card-glow-top"><div class="card-icon ci-purple">⚡</div><div class="card-label">Ping promedio</div><div class="card-value">18 ms</div><div class="card-sub">Última medición</div></div>
+          <div class="card metric-card c-green card-glow-top"><div class="card-icon ci-green">📡</div><div class="card-label">Antenas en línea</div><div class="card-value" id="red-online" style="color:var(--green)">—</div><div class="card-sub" id="red-online-sub">Cargando...</div></div>
+          <div class="card metric-card c-purple card-glow-top"><div class="card-icon ci-purple">⚡</div><div class="card-label">Ping promedio</div><div class="card-value" id="red-ping">— ms</div><div class="card-sub">Última medición</div></div>
           <div class="card metric-card c-yellow card-glow-top"><div class="card-icon ci-yellow">🕐</div><div class="card-label">Última verificación</div><div class="card-value" style="font-size:18px" id="last-check">—</div><div class="card-sub"><button class="btn-link" onclick="runMonitor()">Verificar ahora</button></div></div>
         </div>
         <div class="card mb-3">
           <div class="card-header"><div class="section-title">Estado de antenas</div><button class="btn btn-sm" onclick="runMonitor()">Actualizar</button></div>
-          <!-- EDITABLE: monitor antena 1 (nombre, IP, dirección, estado, ping) -->
-          <div class="monitor-row"><div class="monitor-icon">📡</div><div class="monitor-info"><div class="monitor-name">LiteBeam #001 — Juan Pérez</div><div class="monitor-ip">192.168.1.101 · Morelos 12</div></div><span class="badge badge-success">En línea</span><div class="monitor-ping ping-good">12 ms</div></div>
-          <!-- EDITABLE: monitor antena 2 -->
-          <div class="monitor-row"><div class="monitor-icon">📡</div><div class="monitor-info"><div class="monitor-name">LiteBeam #002 — María González</div><div class="monitor-ip">192.168.1.102 · Hidalgo 45</div></div><span class="badge badge-success">En línea</span><div class="monitor-ping ping-good">18 ms</div></div>
-          <!-- EDITABLE: monitor antena 3 (sin respuesta) -->
-          <div class="monitor-row"><div class="monitor-icon">📡</div><div class="monitor-info"><div class="monitor-name">Rocket M5 #003 — Carlos Ruiz</div><div class="monitor-ip">192.168.1.103 · Juárez 7</div></div><span class="badge badge-danger">Sin respuesta</span><div class="monitor-ping ping-bad">— ms</div></div>
-          <!-- EDITABLE: monitor antena 4 -->
-          <div class="monitor-row"><div class="monitor-icon">📡</div><div class="monitor-info"><div class="monitor-name">LiteBeam AC #004 — Ana Martínez</div><div class="monitor-ip">192.168.1.104 · Lázaro 22</div></div><span class="badge badge-success">En línea</span><div class="monitor-ping ping-good">9 ms</div></div>
+          <div id="monitor-lista" style="color:var(--text-muted);font-size:13px;padding:1rem 0">Cargando antenas...</div>
         </div>
         <div class="card"><div class="section-title" style="margin-bottom:1rem">Mapa de cobertura</div>
           <div class="map-placeholder"><div style="font-size:36px">🗺</div><div style="font-size:13px;font-weight:500;color:var(--text-muted)">Mapa de clientes y antenas</div><div style="font-size:11px;color:var(--text-dim)">Conecta Google Maps API para ver ubicaciones</div><button class="btn btn-sm" style="margin-top:8px" onclick="showAlert('Configura GOOGLE_MAPS_API_KEY en el backend.')">Configurar mapa</button></div>
@@ -1081,35 +1042,50 @@ async function doLogin(){
       return;
     }
 
-    const role    = data.rol === 'cliente' ? 'user' : data.rol;
-    const nombre  = data.nombre || usuario;
-    const isAdmin = role === 'admin';
-    window._nombreCliente = isAdmin ? null : nombre;
-    const mobileNav = document.getElementById('mobile-nav');
-    if (mobileNav) mobileNav.style.display = isAdmin ? 'flex' : 'none';
-
-    document.getElementById('login-screen').style.display='none';
-    document.getElementById('app').style.display='flex';
-    document.getElementById('role-label').textContent = isAdmin ? 'Administrador' : 'Portal Cliente';
-    document.getElementById('user-display').textContent = nombre;
-    document.getElementById('user-email-display').textContent = isAdmin ? 'danielcaxxest27@gmail.com' : '';
-    document.getElementById('user-avatar').textContent = nombre.substring(0,2).toUpperCase();
-    buildNav(role);
-    try { navigate(isAdmin ? 'dashboard-admin' : 'dashboard-user'); } catch(e) { console.error('nav error:', e); }
-    document.getElementById('topbar-date').textContent = new Date().toLocaleDateString('es-MX',{weekday:'short',day:'numeric',month:'short'});
-    document.getElementById('notif-dot').style.display='block';
+    const role  = data.rol === 'cliente' ? 'user' : data.rol;
+    const nombre = data.nombre || usuario;
+    localStorage.setItem('risch_session', JSON.stringify({ role, nombre }));
+    iniciarSesion(role, nombre);
   } catch(e) {
     showAlert('Error de conexión. Intenta de nuevo.');
   } finally {
     btn.textContent = 'Entrar al portal'; btn.disabled = false;
   }
 }
+
+function iniciarSesion(role, nombre) {
+  const isAdmin = role === 'admin';
+  window._nombreCliente = isAdmin ? null : nombre;
+  window._rolActual = role;
+  const mobileNav = document.getElementById('mobile-nav');
+  if (mobileNav) mobileNav.style.display = isAdmin ? 'flex' : 'none';
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+  document.getElementById('role-label').textContent = isAdmin ? 'Administrador' : 'Portal Cliente';
+  document.getElementById('user-display').textContent = nombre;
+  document.getElementById('user-email-display').textContent = isAdmin ? 'danielcaxxest27@gmail.com' : '';
+  document.getElementById('user-avatar').textContent = nombre.substring(0,2).toUpperCase();
+  buildNav(role);
+  try { navigate(isAdmin ? 'dashboard-admin' : 'dashboard-user'); } catch(e) {}
+  document.getElementById('topbar-date').textContent = new Date().toLocaleDateString('es-MX',{weekday:'short',day:'numeric',month:'short'});
+  document.getElementById('notif-dot').style.display = 'block';
+}
+
 function doLogout(){
+  localStorage.removeItem('risch_session');
   document.getElementById('app').style.display='none';
   document.getElementById('login-screen').style.display='flex';
   document.getElementById('login-form').style.display='block';
   document.getElementById('recover-form').style.display='none';
 }
+
+// Restaurar sesión al cargar la página
+window.addEventListener('load', () => {
+  try {
+    const s = localStorage.getItem('risch_session');
+    if (s) { const { role, nombre } = JSON.parse(s); iniciarSesion(role, nombre); }
+  } catch(e) { localStorage.removeItem('risch_session'); }
+});
 function buildNav(role){
   const nav=document.getElementById('sidebar-nav');nav.innerHTML='';
   menus[role].forEach(item=>{
@@ -1126,7 +1102,7 @@ function navigate(viewId){
   const b=document.querySelector(`.nav-item[data-view="${viewId}"]`);if(b)b.classList.add('active');
   document.getElementById('topbar-title').textContent=titles[viewId]||viewId;
   if(viewId==='dashboard-admin')setTimeout(animateDashboard,100);
-  if(viewId==='reportes')setTimeout(animateReportes,100);
+  if(viewId==='reportes'){setTimeout(animateReportes,100);cargarReportes();}
   if(viewId==='red')runMonitor();
 }
 function showRecover(){document.getElementById('login-form').style.display='none';document.getElementById('recover-form').style.display='block';}
@@ -1157,7 +1133,71 @@ function showAlert(m, tipo) {
     t.style.transform = 'translateX(-50%) translateY(20px)';
   }, 3500);
 }
-function runMonitor(){const now=new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});const el=document.getElementById('last-check');if(el)el.textContent=now;}
+async function runMonitor(){
+  const now = new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
+  const el = document.getElementById('last-check'); if(el) el.textContent = now;
+  try {
+    const equipos = await apiGet('equipos');
+    const antenas = equipos.filter(e => ['antena','rocket','litebeam','nanobeam'].some(k=>e.equipo.toLowerCase().includes(k)));
+    const online  = antenas.filter(e => e.estado === 'En línea');
+    const offline = antenas.filter(e => e.estado === 'Sin respuesta');
+
+    const elOnline = document.getElementById('red-online');
+    const elSub    = document.getElementById('red-online-sub');
+    if(elOnline) elOnline.textContent = `${online.length} / ${antenas.length}`;
+    if(elSub)    elSub.textContent    = offline.length ? `${offline.length} sin respuesta` : 'Todas en línea';
+
+    // Ping simulado por antena (en una red real vendría del backend)
+    const pings = antenas.map(e => e.estado === 'En línea' ? Math.round(8 + Math.random()*20) : null);
+    const validPings = pings.filter(p=>p!==null);
+    const avgPing = validPings.length ? Math.round(validPings.reduce((a,b)=>a+b,0)/validPings.length) : 0;
+    const elPing = document.getElementById('red-ping'); if(elPing) elPing.textContent = avgPing ? `${avgPing} ms` : '— ms';
+
+    const lista = document.getElementById('monitor-lista');
+    if(lista) lista.innerHTML = antenas.length ? antenas.map((e,i) => {
+      const ping = pings[i]; const enLinea = e.estado === 'En línea';
+      return `<div class="monitor-row">
+        <div class="monitor-icon">📡</div>
+        <div class="monitor-info">
+          <div class="monitor-name">${e.equipo} — ${e.ubicacion}</div>
+          <div class="monitor-ip">${e.ip||'—'} · ${e.modelo||''}</div>
+        </div>
+        ${badgeEstado(e.estado)}
+        <div class="monitor-ping ${enLinea?'ping-good':'ping-bad'}">${ping ? ping+' ms' : '— ms'}</div>
+      </div>`;
+    }).join('') : '<p style="color:var(--text-muted);font-size:13px;padding:1rem 0">Sin antenas registradas en Sheets.</p>';
+
+    actualizarBadges(-1, offline.length);
+    generarNotificaciones();
+  } catch(e) { console.error('monitor:', e); }
+}
+
+async function generarNotificaciones() {
+  const lista = document.getElementById('notif-lista');
+  if (!lista) return;
+  try {
+    const [clientes, equipos] = await Promise.all([apiGet('clientes'), apiGet('equipos')]);
+    const notifs = [];
+    // Clientes con adeudo o suspendidos
+    clientes.filter(c=>c.estado==='Adeudo'||c.estado==='Suspendido').forEach(c=>{
+      notifs.push({ unread:true, titulo: c.estado==='Suspendido'?'Servicio suspendido':'Adeudo pendiente', sub:`${c.nombre} · ${c.diasVencido} días · ${c.precio}` });
+    });
+    // Antenas sin respuesta
+    equipos.filter(e=>e.estado==='Sin respuesta').forEach(e=>{
+      notifs.push({ unread:true, titulo:'Antena sin respuesta', sub:`${e.equipo} — ${e.ubicacion}` });
+    });
+    // Próximos pagos (3 días)
+    const hoy = new Date(); const en3 = new Date(); en3.setDate(hoy.getDate()+3);
+    clientes.filter(c=>c.proximoPago&&c.proximoPago!=='Vencido').forEach(c=>{
+      const d = new Date(c.proximoPago);
+      if (d >= hoy && d <= en3) notifs.push({ unread:false, titulo:'Pago próximo a vencer', sub:`${c.nombre} · vence ${d.toLocaleDateString('es-MX',{day:'numeric',month:'short'})} · ${c.precio}` });
+    });
+    if (!notifs.length) notifs.push({ unread:false, titulo:'Sin alertas pendientes', sub:'Todo en orden ✓' });
+    lista.innerHTML = notifs.map(n=>`<div class="notif-item ${n.unread?'unread':''}"><div class="notif-item-title">${n.titulo}</div><div class="notif-item-sub">${n.sub}</div></div>`).join('');
+    const dot = document.getElementById('notif-dot');
+    if(dot) dot.style.display = notifs.some(n=>n.unread) ? 'block' : 'none';
+  } catch(e) {}
+}
 
 // ── CONEXIÓN GOOGLE SHEETS ────────────────────────────
 const API = 'https://script.google.com/macros/s/AKfycbxu2dGMT2ok64E5wpEUauG3PCayzByy1ZvHq1Tnq_hnwnhUUFJ4gLmrFIkyBtN7698d/exec';
@@ -1266,7 +1306,7 @@ async function cargarCobros() {
           <td>${badgeEstado(c.estado)}</td>
           <td>${c.fechaPago && c.fechaPago !== '—' ? fmtFecha(c.fechaPago) : 'Sin pago'}</td>
           <td><div style="display:flex;gap:4px">
-            <button class="btn btn-sm btn-success" onclick="openModal('modal-reg-pago')">Registrar</button>
+            <button class="btn btn-sm btn-success" onclick="abrirPagoVencido('${c.cliente}','${c.monto}')">Registrar</button>
             <button class="btn btn-sm" onclick="editarCobro(${cidx})" title="Editar">✏️</button>
             <button class="btn btn-sm btn-danger" onclick="eliminarCobro(${cidx})" title="Eliminar">🗑</button>
           </div></td>
@@ -1310,6 +1350,7 @@ async function cargarAgenda() {
         </div>
         ${badgeEstado(v.estado)}
         <div style="display:flex;gap:4px;margin-left:8px;flex-shrink:0">
+          ${v.estado !== 'Completada' ? `<button class="btn btn-sm btn-success" onclick="confirmarVisita(${idx})" title="Completada">✓</button>` : ''}
           <button class="btn btn-sm" onclick="editarVisita(${idx})" title="Editar">✏️</button>
           <button class="btn btn-sm btn-danger" onclick="eliminarVisita(${idx})" title="Eliminar">🗑</button>
         </div>
@@ -1359,6 +1400,7 @@ async function cargarDashboard() {
     document.getElementById('m-ingresos-sub').textContent = `${pagados.length} pagos registrados`;
     document.getElementById('m-cartera-sub').textContent  = `${vencidos.length} cobros vencidos`;
     document.getElementById('m-tickets-sub').textContent  = `Adeudo o suspendido`;
+    actualizarBadges(vencidos.length, -1);
 
     // Gráfica de barras — últimos 6 meses desde hoy
     const meses = [];
@@ -1562,6 +1604,27 @@ async function cargarDatosCliente(nombre) {
         det.textContent = `Próximo pago: ${c.precio}`;
       }
     }
+    // Actualizar modal de pago con monto real
+    const modalPagoDesc = document.querySelector('#modal-pago p strong');
+    if (modalPagoDesc) modalPagoDesc.textContent = `${c.precio} MXN`;
+    const modalPagoDesc2 = document.querySelector('#modal-pago p');
+    if (modalPagoDesc2) {
+      const mes = new Date().toLocaleDateString('es-MX',{month:'long',year:'numeric'});
+      modalPagoDesc2.innerHTML = `Mensualidad ${mes} — <strong style="color:var(--text)">${c.precio} MXN</strong>`;
+    }
+    const pagarBtn = document.querySelector('#modal-pago .btn-accent');
+    if (pagarBtn) pagarBtn.textContent = `Pagar ${c.precio}`;
+    // Actualizar vista de pagos — pago pendiente real
+    const pagoCard = document.querySelector('#view-pagos .card.mb-2.card-glow');
+    if (pagoCard) {
+      const vence = c.proximoPago && c.proximoPago !== 'Vencido'
+        ? new Date(c.proximoPago).toLocaleDateString('es-MX',{day:'numeric',month:'long',year:'numeric'})
+        : 'Vencido';
+      pagoCard.innerHTML = `
+        <div class="card-header"><div class="section-title">${c.estado==='Activo'?'Próximo pago':'Pago pendiente'}</div></div>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:1rem">Mensualidad <strong style="color:var(--text)">${c.precio} MXN</strong> — vence ${vence}</p>
+        <button class="btn btn-accent" onclick="openModal('modal-pago')">Pagar en línea</button>`;
+    }
 
     // Historial de cobros
     const cobros = await apiGet('cobros');
@@ -1694,6 +1757,95 @@ async function guardarProspecto() {
   } finally { btn.textContent = '✅ Guardar prospecto'; btn.disabled = false; }
 }
 
+// ── PRE-LLENAR PAGO DESDE CARTERA VENCIDA ────────────
+function abrirPagoVencido(cliente, monto) {
+  openModal('modal-reg-pago');
+  const sel = document.getElementById('pago-cliente');
+  if (sel) { Array.from(sel.options).forEach(o => o.selected = o.value === cliente); }
+  const montoNum = monto.replace(/[$,]/g,'');
+  const montoInput = document.getElementById('pago-monto');
+  if (montoInput) montoInput.value = montoNum;
+  document.querySelectorAll('#montos-rapidos .btn').forEach(b => {
+    b.classList.toggle('btn-accent', b.textContent.trim() === `$${montoNum}`);
+  });
+  const hoy = new Date();
+  const mesInput = document.getElementById('pago-mes');
+  if (mesInput) mesInput.value = hoy.toLocaleDateString('es-MX',{month:'short',year:'numeric'});
+  selMetodo('Efectivo');
+}
+
+// ── BADGE DINÁMICO SIDEBAR ────────────────────────────
+function actualizarBadges(vencidos, sinRespuesta) {
+  document.querySelectorAll('.nav-item').forEach(btn => {
+    const view = btn.dataset.view;
+    const badge = btn.querySelector('.nav-badge');
+    if (view === 'cobros' && vencidos >= 0) {
+      if (vencidos > 0) { if (badge) badge.textContent = vencidos; else btn.insertAdjacentHTML('beforeend',`<span class="nav-badge">${vencidos}</span>`); }
+      else if (vencidos === 0 && badge) badge.remove();
+    }
+    if (view === 'red' && sinRespuesta >= 0) {
+      if (sinRespuesta > 0) { if (badge) badge.textContent = sinRespuesta; else btn.insertAdjacentHTML('beforeend',`<span class="nav-badge">${sinRespuesta}</span>`); }
+      else if (sinRespuesta === 0 && badge) badge.remove();
+    }
+  });
+}
+
+// ── REPORTES CON DATOS REALES ─────────────────────────
+async function cargarReportes() {
+  try {
+    const [clientes, cobros, agenda] = await Promise.all([apiGet('clientes'), apiGet('cobros'), apiGet('agenda')]);
+    const anioCobros = cobros.filter(c => { const d = new Date(c.mes); return d.getFullYear() === new Date().getFullYear(); });
+    const ingresosAnuales = anioCobros.filter(c=>c.estado==='Pagado').reduce((s,c)=>s+Number((c.monto||'0').replace(/[$,]/g,'')),0);
+    const carteraTotal    = cobros.filter(c=>c.estado==='Vencido'||c.estado==='Pendiente').reduce((s,c)=>s+Number((c.monto||'0').replace(/[$,]/g,'')),0);
+    const clientesVencidos = cobros.filter(c=>c.estado==='Vencido'||c.estado==='Pendiente').map(c=>c.cliente).filter((v,i,a)=>a.indexOf(v)===i).length;
+    const mesActual = new Date().getMonth();
+    const instMes   = agenda.filter(a => { const d = new Date(a.fecha); return d.getMonth()===mesActual && (a.tipo||'').includes('nstalación'); }).length;
+
+    const grid = document.querySelector('#view-reportes .grid-4');
+    if (grid) grid.innerHTML = `
+      <div class="card metric-card c-purple card-glow-top"><div class="card-icon ci-purple">👥</div><div class="card-label">Clientes totales</div><div class="card-value">${clientes.length}</div><div class="card-sub">${clientes.filter(c=>c.estado==='Activo').length} activos</div></div>
+      <div class="card metric-card c-green card-glow-top"><div class="card-icon ci-green">💰</div><div class="card-label">Ingresos ${new Date().getFullYear()}</div><div class="card-value">$${ingresosAnuales.toLocaleString()}</div><div class="card-sub">Pagos confirmados</div></div>
+      <div class="card metric-card c-red card-glow-top"><div class="card-icon ci-red">⚠</div><div class="card-label">Cartera vencida</div><div class="card-value" style="color:var(--red)">$${carteraTotal.toLocaleString()}</div><div class="card-sub">${clientesVencidos} clientes</div></div>
+      <div class="card metric-card c-yellow card-glow-top"><div class="card-icon ci-yellow">🔧</div><div class="card-label">Instalaciones mes</div><div class="card-value">${instMes}</div><div class="card-sub">${new Date().toLocaleDateString('es-MX',{month:'long',year:'numeric'})}</div></div>`;
+
+    const num = document.getElementById('pr0-num'); if(num) num.textContent = clientes.length;
+    const bar = document.getElementById('pr0'); if(bar) bar.style.width = '100%';
+  } catch(e) { console.error('reportes:', e); }
+}
+
+// ── CONFIRMAR VISITA RÁPIDA ───────────────────────────
+async function confirmarVisita(idx) {
+  const v = _agendaCache[idx];
+  if (!v) return;
+  try {
+    await apiPost({ accion:'editar_visita', clienteOrig:v.cliente, fechaOrig:v.fecha, cliente:v.cliente, fecha:v.fecha, hora:v.hora, tipo:v.tipo, direccion:v.direccion, estado:'Completada' });
+    showAlert(`✅ Visita de ${v.cliente} marcada como completada`, 'ok');
+    cargarAgenda();
+  } catch(e) { showAlert('Error al actualizar.', 'error'); }
+}
+
+// ── BUSCADOR EQUIPOS ──────────────────────────────────
+let _equiposCache = [];
+function filtrarEquipos(q) {
+  const term = q.toLowerCase();
+  const antDiv = document.querySelector('#view-equipos .grid-2 .card:first-child');
+  const bodDiv = document.querySelector('#view-equipos .grid-2 .card:last-child');
+  const filtrados = q ? _equiposCache.filter(e =>
+    e.equipo.toLowerCase().includes(term) || e.modelo.toLowerCase().includes(term) ||
+    e.ubicacion.toLowerCase().includes(term) || e.estado.toLowerCase().includes(term)
+  ) : _equiposCache;
+  const antenas = filtrados.filter(e => ['antena','rocket','litebeam','nanobeam'].some(k=>e.equipo.toLowerCase().includes(k)));
+  const bodega  = filtrados.filter(e => !antenas.includes(e));
+  const renderItems = (items, icon) => items.map(e => `
+    <div class="equipo-row">
+      <div class="equipo-icon">${icon}</div>
+      <div class="equipo-info"><div class="equipo-name">${e.equipo} — ${e.modelo}</div><div class="equipo-detail">${e.ubicacion} · ${e.ip||e.notas||''}</div></div>
+      ${badgeEstado(e.estado)}
+    </div>`).join('') || `<p style="color:var(--text-muted);font-size:13px">Sin resultados</p>`;
+  if (antDiv) antDiv.innerHTML = `<div class="section-title" style="margin-bottom:1rem">Antenas instaladas</div>` + renderItems(antenas,'📡');
+  if (bodDiv) bodDiv.innerHTML = `<div class="section-title" style="margin-bottom:1rem">Inventario en bodega</div>` + renderItems(bodega,'📦');
+}
+
 // ── FILTRAR PROSPECTOS ────────────────────────────────
 let _prospectosCache = [];
 function filtrarProspectos(q) {
@@ -1725,8 +1877,11 @@ function filtrarProspectos(q) {
 async function cargarEquipos() {
   try {
     const equipos = await apiGet('equipos');
+    _equiposCache = equipos;
     const antenas  = equipos.filter(e => e.equipo.toLowerCase().includes('antena') || e.equipo.toLowerCase().includes('rocket') || e.equipo.toLowerCase().includes('litebeam') || e.equipo.toLowerCase().includes('nanobeam'));
     const bodega   = equipos.filter(e => !antenas.includes(e));
+    const sinResp  = equipos.filter(e => e.estado === 'Sin respuesta').length;
+    actualizarBadges(-1, sinResp);
 
     const antDiv = document.querySelector('#view-equipos .grid-2 .card:first-child');
     if (antDiv) {
@@ -1784,7 +1939,7 @@ async function cargarPerfilCliente(nombre) {
 const _navigateOriginal = navigate;
 window.navigate = function(viewId) {
   _navigateOriginal(viewId);
-  if (viewId === 'dashboard-admin') { cargarDashboard(); cargarAlertas(); }
+  if (viewId === 'dashboard-admin') { cargarDashboard(); cargarAlertas(); generarNotificaciones(); }
   if (viewId === 'clientes')   cargarClientes();
   if (viewId === 'cobros')     cargarCobros();
   if (viewId === 'agenda')     cargarAgenda();
