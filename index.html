@@ -413,6 +413,11 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
     <div class="form-group"><label>Día de pago mensual</label>
       <input id="nc-corte" type="number" min="1" max="28" placeholder="Ej: 5 (cada día 5 del mes)" style="font-size:15px;padding:10px">
     </div>
+    <div style="border-top:1px solid var(--border);margin:1rem 0;padding-top:1rem">
+      <div style="font-size:11px;font-weight:600;color:var(--text-muted);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:10px">Acceso al portal (opcional)</div>
+      <div class="form-group"><label>Usuario</label><input id="nc-usuario" type="text" placeholder="Ej: juanperez" style="font-size:15px;padding:10px" autocomplete="off"></div>
+      <div class="form-group"><label>Contraseña</label><input id="nc-password" type="password" placeholder="Mínimo 6 caracteres" style="font-size:15px;padding:10px" autocomplete="new-password"></div>
+    </div>
     <div class="modal-footer" style="gap:12px">
       <button class="btn" style="flex:1;padding:12px" onclick="closeModal('modal-nuevo-cliente')">Cancelar</button>
       <button class="btn btn-accent" style="flex:2;padding:12px;font-size:14px" onclick="guardarNuevoCliente()">✅ Guardar cliente</button>
@@ -467,6 +472,131 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
     <div class="modal-footer" style="gap:12px">
       <button class="btn" style="flex:1;padding:12px" onclick="closeModal('modal-nuevo-prospecto')">Cancelar</button>
       <button class="btn btn-accent" style="flex:2;padding:12px;font-size:14px" onclick="guardarProspecto()">✅ Guardar prospecto</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL NUEVO PLAN -->
+<div class="modal-overlay" id="modal-nuevo-plan">
+  <div class="modal">
+    <div class="modal-title">📶 Nuevo plan</div>
+    <div class="form-group"><label>Nombre del plan *</label><input id="npl-nombre" type="text" placeholder="Ej: Fundador" style="font-size:15px;padding:10px"></div>
+    <div class="form-row">
+      <div class="form-group"><label>Velocidad *</label><input id="npl-velocidad" type="text" placeholder="Ej: 60 Mbps" style="font-size:15px;padding:10px"></div>
+      <div class="form-group"><label>Precio/mes *</label><input id="npl-precio" type="number" placeholder="450" style="font-size:15px;padding:10px"></div>
+    </div>
+    <div class="modal-footer" style="gap:12px">
+      <button class="btn" style="flex:1;padding:12px" onclick="closeModal('modal-nuevo-plan')">Cancelar</button>
+      <button class="btn btn-accent" style="flex:2;padding:12px" onclick="guardarNuevoPlan()">✅ Guardar plan</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL NUEVO USUARIO DESDE CONFIG -->
+<div class="modal-overlay" id="modal-nuevo-usuario-cfg">
+  <div class="modal">
+    <div class="modal-title">🔐 Nuevo acceso</div>
+    <div class="form-group"><label>Usuario *</label><input id="nuc-usuario" type="text" placeholder="Ej: tecnico1" style="font-size:15px;padding:10px" autocomplete="off"></div>
+    <div class="form-group"><label>Contraseña *</label><input id="nuc-password" type="password" placeholder="Mínimo 6 caracteres" style="font-size:15px;padding:10px"></div>
+    <div class="form-group"><label>Rol</label>
+      <select id="nuc-rol" style="font-size:15px;padding:10px">
+        <option value="cliente">Cliente</option>
+        <option value="admin">Administrador</option>
+      </select>
+    </div>
+    <div class="modal-footer" style="gap:12px">
+      <button class="btn" style="flex:1;padding:12px" onclick="closeModal('modal-nuevo-usuario-cfg')">Cancelar</button>
+      <button class="btn btn-accent" style="flex:2;padding:12px" onclick="guardarNuevoUsuarioCfg()">✅ Crear acceso</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL NUEVO EQUIPO -->
+<div class="modal-overlay" id="modal-nuevo-equipo">
+  <div class="modal">
+    <div class="modal-title">📦 Registrar equipo</div>
+    <div class="form-row">
+      <div class="form-group"><label>Nombre del equipo *</label><input id="neq-equipo" type="text" placeholder="Ej: Antena #002" style="font-size:15px;padding:10px"></div>
+      <div class="form-group"><label>Modelo</label><input id="neq-modelo" type="text" placeholder="Ej: LiteBeam M5" style="font-size:15px;padding:10px"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>IP</label><input id="neq-ip" type="text" placeholder="192.168.1.x" style="font-size:15px;padding:10px"></div>
+      <div class="form-group"><label>Estado</label>
+        <select id="neq-estado" style="font-size:15px;padding:10px">
+          <option>En línea</option>
+          <option>Sin respuesta</option>
+          <option>En bodega</option>
+          <option>Dañado</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group"><label>Cliente / Ubicación</label><input id="neq-ubicacion" type="text" placeholder="Ej: Juan Pérez — Morelos 12" style="font-size:15px;padding:10px"></div>
+    <div class="form-group"><label>Notas</label><input id="neq-notas" type="text" placeholder="Ping, observaciones..." style="font-size:15px;padding:10px"></div>
+    <div class="modal-footer" style="gap:12px">
+      <button class="btn" style="flex:1;padding:12px" onclick="closeModal('modal-nuevo-equipo')">Cancelar</button>
+      <button class="btn btn-accent" style="flex:2;padding:12px" onclick="guardarNuevoEquipo()">✅ Guardar equipo</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDITAR EQUIPO -->
+<div class="modal-overlay" id="modal-editar-equipo">
+  <div class="modal">
+    <div class="modal-title">✏️ Editar equipo</div>
+    <input type="hidden" id="eeq-equipo-orig">
+    <div class="form-row">
+      <div class="form-group"><label>Nombre del equipo *</label><input id="eeq-equipo" type="text" style="font-size:15px;padding:10px"></div>
+      <div class="form-group"><label>Modelo</label><input id="eeq-modelo" type="text" style="font-size:15px;padding:10px"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>IP</label><input id="eeq-ip" type="text" style="font-size:15px;padding:10px"></div>
+      <div class="form-group"><label>Estado</label>
+        <select id="eeq-estado" style="font-size:15px;padding:10px">
+          <option>En línea</option>
+          <option>Sin respuesta</option>
+          <option>En bodega</option>
+          <option>Dañado</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group"><label>Cliente / Ubicación</label><input id="eeq-ubicacion" type="text" style="font-size:15px;padding:10px"></div>
+    <div class="form-group"><label>Notas</label><input id="eeq-notas" type="text" style="font-size:15px;padding:10px"></div>
+    <div class="modal-footer" style="gap:12px">
+      <button class="btn" style="flex:1;padding:12px" onclick="closeModal('modal-editar-equipo')">Cancelar</button>
+      <button class="btn btn-accent" style="flex:2;padding:12px" onclick="guardarEdicionEquipo()">✅ Guardar cambios</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDITAR PROSPECTO -->
+<div class="modal-overlay" id="modal-editar-prospecto">
+  <div class="modal">
+    <div class="modal-title">✏️ Editar prospecto</div>
+    <input type="hidden" id="ep-nombre-orig">
+    <div class="form-group"><label>Nombre</label><input id="ep-nombre" type="text" style="font-size:15px;padding:10px"></div>
+    <div class="form-group"><label>Teléfono</label><input id="ep-tel" type="tel" style="font-size:15px;padding:10px"></div>
+    <div class="form-group"><label>Servicio interesado</label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
+        <button type="button" class="btn btn-sm ep-srv" onclick="selEpSrv('Internet',this)" style="flex:1;padding:10px">📡 Internet</button>
+        <button type="button" class="btn btn-sm ep-srv" onclick="selEpSrv('Cámaras',this)" style="flex:1;padding:10px">📷 Cámaras</button>
+        <button type="button" class="btn btn-sm ep-srv" onclick="selEpSrv('Internet + Cámaras',this)" style="flex:1;padding:10px">📡📷 Ambos</button>
+      </div>
+      <input type="hidden" id="ep-servicio" value="Internet">
+    </div>
+    <div class="form-group"><label>Estado</label>
+      <select id="ep-estado" style="font-size:15px;padding:10px">
+        <option>Nuevo</option>
+        <option>Contactado</option>
+        <option>Cotizado</option>
+        <option>Interesado</option>
+        <option>Sin interés</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Seguimiento</label><input id="ep-seguimiento" type="text" placeholder="Ej: Llamar viernes" style="font-size:15px;padding:10px"></div>
+    <div class="form-group"><label>Notas</label><textarea id="ep-notas" style="font-size:14px;min-height:60px;resize:vertical"></textarea></div>
+    <div class="modal-footer" style="gap:12px">
+      <button class="btn" style="flex:1;padding:12px" onclick="closeModal('modal-editar-prospecto')">Cancelar</button>
+      <button class="btn btn-accent" style="flex:2;padding:12px" onclick="guardarEdicionProspecto()">✅ Guardar cambios</button>
     </div>
   </div>
 </div>
@@ -613,6 +743,10 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
           <span class="notif-dot" id="notif-dot" style="display:none"></span>
         </button>
         <span style="font-size:11px;color:var(--text-muted)" id="topbar-date"></span>
+        <button onclick="doLogout()" title="Cerrar sesión" style="background:none;border:1px solid var(--border-h);border-radius:8px;color:var(--text-muted);padding:5px 10px;cursor:pointer;font-size:11px;font-weight:600;display:flex;align-items:center;gap:5px;transition:all 0.15s" onmouseover="this.style.color='var(--red-text)';this.style.borderColor='var(--red)'" onmouseout="this.style.color='var(--text-muted)';this.style.borderColor='var(--border-h)'">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Salir
+        </button>
       </div>
     </div>
 
@@ -865,6 +999,10 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
         <div class="action-row"><input class="search-bar" id="buscar-cliente" style="max-width:280px" placeholder="Buscar cliente..." oninput="filtrarClientes(this.value)"><div style="display:flex;gap:8px"><button class="btn btn-sm" onclick="openModal('modal-reg-pago')">Registrar pago</button><button class="btn btn-accent btn-sm" onclick="openModal('modal-nuevo-cliente')">+ Nuevo cliente</button></div></div>
         <div class="card"><div class="table-wrap"><table><thead><tr><th>Cliente</th><th>Plan</th><th>Dirección</th><th>Días vencido</th><th>Estado</th><th>Próx. pago</th><th></th></tr></thead>
         <tbody><tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:2rem">Cargando...</td></tr></tbody></table></div></div>
+
+        <div class="card-header" style="margin:1.5rem 0 .75rem"><div class="section-title">🔐 Accesos al portal</div><button class="btn btn-sm" onclick="cargarUsuarios()">↺ Actualizar</button></div>
+        <div class="card"><div class="table-wrap"><table><thead><tr><th>Usuario</th><th>Rol</th><th>Acceso</th><th></th></tr></thead>
+        <tbody id="tbody-usuarios"><tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:2rem">Cargando...</td></tr></tbody></table></div></div>
       </div>
 
       <!-- ADMIN: COBROS -->
@@ -891,28 +1029,28 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
       </div>
 
       <!-- ADMIN: PROSPECTOS -->
-      <!-- EDITABLE: tabla de prospectos — cada <tr> es un prospecto (nombre, tel, interés, seguimiento, estado) -->
       <div class="view" id="view-prospectos">
-        <div class="action-row"><input class="search-bar" id="buscar-prospecto" style="max-width:280px" placeholder="Buscar prospecto..." oninput="filtrarProspectos(this.value)"><button class="btn btn-accent btn-sm" onclick="openModal('modal-nuevo-prospecto')">+ Nuevo prospecto</button></div>
-        <div class="card mb-2"><div class="table-wrap"><table id="tabla-prospectos"><thead><tr><th>Nombre</th><th>Teléfono</th><th>Interés</th><th>Seguimiento</th><th>Estado</th><th></th></tr></thead>
-        <tbody><tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:2rem">Cargando...</td></tr></tbody></table></div></div>
-        <div class="card">
-          <div class="section-title" style="margin-bottom:1rem">Generar propuesta PDF</div>
-          <div class="propuesta-step"><div class="step-num">1</div><div><div class="step-title">Selecciona el prospecto</div><div class="step-desc">Elige de la lista o captura nuevos datos</div></div></div>
-          <div class="propuesta-step"><div class="step-num">2</div><div><div class="step-title">Elige servicios y precios</div><div class="step-desc">Genera desde <code style="font-size:11px;background:var(--surface-2);padding:1px 5px;border-radius:4px">generar_propuesta.py</code></div></div></div>
-          <div class="propuesta-step"><div class="step-num">3</div><div><div class="step-title">Descarga y envía por WhatsApp</div><div class="step-desc">PDF guardado en <code style="font-size:11px;background:var(--surface-2);padding:1px 5px;border-radius:4px">propuestas/</code></div></div></div>
-          <button class="btn btn-accent" style="margin-top:.75rem" onclick="showAlert('Conecta el backend para generar propuestas automáticamente.')">Generar propuesta</button>
+        <div class="grid-3 mb-3">
+          <div class="card metric-card c-blue card-glow-top"><div class="card-icon ci-blue">🔍</div><div class="card-label">Total prospectos</div><div class="card-value" id="p-total">—</div><div class="card-sub" id="p-total-sub">Cargando...</div></div>
+          <div class="card metric-card c-yellow card-glow-top"><div class="card-icon ci-yellow">📞</div><div class="card-label">Pendientes contactar</div><div class="card-value" id="p-pendientes">—</div><div class="card-sub" id="p-pendientes-sub">Nuevos sin contacto</div></div>
+          <div class="card metric-card c-green card-glow-top"><div class="card-icon ci-green">✅</div><div class="card-label">Cotizados</div><div class="card-value" id="p-cotizados">—</div><div class="card-sub" id="p-cotizados-sub">Con propuesta enviada</div></div>
         </div>
+        <div class="action-row"><input class="search-bar" id="buscar-prospecto" style="max-width:280px" placeholder="Buscar prospecto..." oninput="filtrarProspectos(this.value)"><button class="btn btn-accent btn-sm" onclick="openModal('modal-nuevo-prospecto')">+ Nuevo prospecto</button></div>
+        <div class="card"><div class="table-wrap"><table id="tabla-prospectos"><thead><tr><th>Nombre</th><th>Teléfono</th><th>Interés</th><th>Seguimiento</th><th>Estado</th><th></th></tr></thead>
+        <tbody><tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:2rem">Cargando...</td></tr></tbody></table></div></div>
       </div>
 
       <!-- ADMIN: EQUIPOS -->
       <!-- EDITABLE: antenas instaladas e inventario en bodega -->
       <div class="view" id="view-equipos">
-        <div class="action-row"><input class="search-bar" id="buscar-equipo" style="max-width:280px" placeholder="Buscar equipo..." oninput="filtrarEquipos(this.value)"><button class="btn btn-accent btn-sm" onclick="showAlert('Registra el equipo directamente en Google Sheets.')">+ Registrar equipo</button></div>
-        <div class="grid-2">
-          <div class="card"><div class="section-title" style="margin-bottom:1rem">Antenas instaladas</div><p style="color:var(--text-muted);font-size:13px">Cargando...</p></div>
-          <div class="card"><div class="section-title" style="margin-bottom:1rem">Inventario en bodega</div><p style="color:var(--text-muted);font-size:13px">Cargando...</p></div>
+        <div class="grid-3 mb-3">
+          <div class="card metric-card c-blue card-glow-top"><div class="card-icon ci-blue">📡</div><div class="card-label">Total equipos</div><div class="card-value" id="eq-total">—</div><div class="card-sub" id="eq-total-sub">Registrados</div></div>
+          <div class="card metric-card c-green card-glow-top"><div class="card-icon ci-green">✅</div><div class="card-label">En línea</div><div class="card-value" id="eq-online">—</div><div class="card-sub" id="eq-online-sub">Funcionando</div></div>
+          <div class="card metric-card c-red card-glow-top"><div class="card-icon ci-red">⚠</div><div class="card-label">Sin respuesta</div><div class="card-value" id="eq-offline" style="color:var(--red)">—</div><div class="card-sub" id="eq-offline-sub">Revisar</div></div>
         </div>
+        <div class="action-row"><input class="search-bar" id="buscar-equipo" style="max-width:280px" placeholder="Buscar equipo, modelo, IP..." oninput="filtrarEquipos(this.value)"><button class="btn btn-accent btn-sm" onclick="openModal('modal-nuevo-equipo')">+ Registrar equipo</button></div>
+        <div class="card"><div class="table-wrap"><table id="tabla-equipos"><thead><tr><th>Equipo</th><th>Modelo</th><th>IP</th><th>Cliente / Ubicación</th><th>Estado</th><th>Notas</th><th></th></tr></thead>
+        <tbody><tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:2rem">Cargando...</td></tr></tbody></table></div></div>
       </div>
 
       <!-- ADMIN: RED -->
@@ -964,31 +1102,68 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
       <!-- ADMIN: CONFIGURACIÓN -->
       <!-- EDITABLE: planes/precios en la tabla, y toggles de notificaciones automáticas -->
       <div class="view" id="view-configuracion">
-        <div class="grid-2 mb-3">
-          <div class="card">
-            <div class="section-title" style="margin-bottom:1rem">Integraciones</div>
-            <div class="system-item"><div><div style="font-weight:500;font-size:13px">WhatsApp Business API</div><div style="font-size:11px;color:var(--text-muted)">Notificaciones automáticas</div></div><button class="btn btn-sm" onclick="showAlert('Configura token de WhatsApp en el backend.')">Configurar</button></div>
-            <div class="system-item"><div><div style="font-weight:500;font-size:13px">Mercado Pago</div><div style="font-size:11px;color:var(--text-muted)">Cobros en línea</div></div><button class="btn btn-sm" onclick="showAlert('Agrega claves de Mercado Pago.')">Configurar</button></div>
-            <div class="system-item"><div><div style="font-weight:500;font-size:13px">Google Maps</div><div style="font-size:11px;color:var(--text-muted)">Mapa de cobertura</div></div><button class="btn btn-sm" onclick="showAlert('Agrega GOOGLE_MAPS_API_KEY.')">Configurar</button></div>
-            <div class="system-item" style="border:none"><div><div style="font-weight:500;font-size:13px">Google Sheets</div><div style="font-size:11px;color:var(--text-muted)">Prospectos y clientes</div></div><button class="btn btn-sm" onclick="showAlert('Configura credenciales de Google.')">Configurar</button></div>
+
+        <!-- NEGOCIO -->
+        <div class="card mb-3">
+          <div class="section-title" style="margin-bottom:1rem">🏢 Datos del negocio</div>
+          <div class="form-row">
+            <div class="form-group"><label>Nombre del negocio</label><input id="cfg-nombre" type="text" value="Risch Network" style="font-size:14px;padding:10px"></div>
+            <div class="form-group"><label>Ciudad</label><input id="cfg-ciudad" type="text" value="Huandacareo, Michoacán" style="font-size:14px;padding:10px"></div>
           </div>
-          <div class="card">
-            <div class="section-title" style="margin-bottom:1rem">Planes y precios</div>
-            <!-- EDITABLE: nombre, velocidad y precio de cada plan -->
-            <div class="table-wrap"><table><thead><tr><th>Plan</th><th>Velocidad</th><th>Precio</th><th></th></tr></thead>
-            <tbody>
-              <tr><td>Estándar</td><td>60 Mbps</td><td>$450</td><td><button class="btn btn-sm">Editar</button></td></tr>
-            </tbody></table></div>
-            <button class="btn btn-sm" style="margin-top:8px">+ Nuevo plan</button>
+          <div class="form-row">
+            <div class="form-group"><label>WhatsApp de contacto</label><input id="cfg-whatsapp" type="tel" value="+52 443 206 5503" style="font-size:14px;padding:10px"></div>
+            <div class="form-group"><label>Horario de atención</label><input id="cfg-horario" type="text" value="Lun-Vie 9:00am - 8:00pm" style="font-size:14px;padding:10px"></div>
+          </div>
+          <button class="btn btn-accent btn-sm" onclick="guardarDatosNegocio()">Guardar cambios</button>
+        </div>
+
+        <!-- PLANES -->
+        <div class="card mb-3">
+          <div class="card-header" style="margin-bottom:1rem">
+            <div class="section-title">📶 Planes de internet</div>
+            <button class="btn btn-accent btn-sm" onclick="openModal('modal-nuevo-plan')">+ Nuevo plan</button>
+          </div>
+          <div class="table-wrap"><table id="tabla-planes">
+            <thead><tr><th>Plan</th><th>Velocidad</th><th>Precio/mes</th><th></th></tr></thead>
+            <tbody id="tbody-planes"><tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:1.5rem">Cargando...</td></tr></tbody>
+          </table></div>
+        </div>
+
+        <!-- USUARIOS / ACCESOS -->
+        <div class="card mb-3">
+          <div class="card-header" style="margin-bottom:1rem">
+            <div class="section-title">🔐 Gestión de accesos</div>
+            <button class="btn btn-accent btn-sm" onclick="openModal('modal-nuevo-usuario-cfg')">+ Agregar usuario</button>
+          </div>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Usuario</th><th>Rol</th><th></th></tr></thead>
+            <tbody id="tbody-cfg-usuarios"><tr><td colspan="3" style="text-align:center;color:var(--text-muted);padding:1.5rem">Cargando...</td></tr></tbody>
+          </table></div>
+        </div>
+
+        <!-- EXPORTAR DATOS -->
+        <div class="card mb-3">
+          <div class="section-title" style="margin-bottom:1rem">📤 Exportar datos</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn btn-sm" onclick="exportarCSV('clientes')">⬇ Clientes CSV</button>
+            <button class="btn btn-sm" onclick="exportarCSV('cobros')">⬇ Cobros CSV</button>
+            <button class="btn btn-sm" onclick="exportarCSV('prospectos')">⬇ Prospectos CSV</button>
+            <button class="btn btn-sm" onclick="exportarCSV('equipos')">⬇ Equipos CSV</button>
           </div>
         </div>
+
+        <!-- SESIÓN -->
         <div class="card">
-          <div class="section-title" style="margin-bottom:1rem">Notificaciones automáticas</div>
-          <div class="toggle-row"><div class="toggle-info"><div class="toggle-label">Recordatorio de pago (3 días antes)</div><div class="toggle-sub">WhatsApp automático al cliente</div></div><label class="toggle"><input type="checkbox" checked><span class="toggle-track"></span></label></div>
-          <div class="toggle-row"><div class="toggle-info"><div class="toggle-label">Alerta de antena caída</div><div class="toggle-sub">WhatsApp al admin cuando una antena no responde</div></div><label class="toggle"><input type="checkbox" checked><span class="toggle-track"></span></label></div>
-          <div class="toggle-row"><div class="toggle-info"><div class="toggle-label">Confirmación de pago al cliente</div><div class="toggle-sub">Recibo automático por WhatsApp</div></div><label class="toggle"><input type="checkbox" checked><span class="toggle-track"></span></label></div>
-          <div class="toggle-row"><div class="toggle-info"><div class="toggle-label">Ticket actualizado</div><div class="toggle-sub">Aviso al cliente cuando cambia de estado</div></div><label class="toggle"><input type="checkbox"><span class="toggle-track"></span></label></div>
+          <div class="section-title" style="margin-bottom:1rem">⚙️ Sesión</div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <div style="font-size:13px;font-weight:500" id="cfg-usuario-actual">—</div>
+              <div style="font-size:11px;color:var(--text-muted)">Sesión activa · Admin</div>
+            </div>
+            <button class="btn btn-sm btn-danger" onclick="doLogout()">Cerrar sesión</button>
+          </div>
         </div>
+
       </div>
 
     </div>
@@ -1081,6 +1256,7 @@ function iniciarSesion(role, nombre) {
   try { navigate(isAdmin ? 'dashboard-admin' : 'dashboard-user'); } catch(e) {}
   document.getElementById('topbar-date').textContent = new Date().toLocaleDateString('es-MX',{weekday:'short',day:'numeric',month:'short'});
   document.getElementById('notif-dot').style.display = 'block';
+  if (isAdmin) cargarPlanesEnSelector();
 }
 
 function doLogout(){
@@ -1377,18 +1553,43 @@ async function cargarProspectos() {
   try {
     const prospectos = await apiGet('prospectos');
     _prospectosCache = prospectos;
-    tbody.innerHTML = prospectos.map(p => `<tr>
-      <td style="font-weight:500">${p.nombre}</td>
+    // métricas
+    const total = prospectos.length;
+    const pendientes = prospectos.filter(p => p.estado === 'Nuevo' || p.estado === 'Contactado').length;
+    const cotizados  = prospectos.filter(p => p.estado === 'Cotizado' || p.estado === 'Interesado').length;
+    const elTotal = document.getElementById('p-total'); if(elTotal) elTotal.textContent = total;
+    const elTSub  = document.getElementById('p-total-sub'); if(elTSub) elTSub.textContent = `${prospectos.filter(p=>p.estado==='Sin interés').length} sin interés`;
+    const elPend  = document.getElementById('p-pendientes'); if(elPend) elPend.textContent = pendientes;
+    const elCot   = document.getElementById('p-cotizados'); if(elCot) elCot.textContent = cotizados;
+    renderProspectos(prospectos, tbody);
+  } catch(e) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--red);padding:2rem">Error al conectar con la base de datos</td></tr>`;
+  }
+}
+
+function renderProspectos(lista, tbody) {
+  if (!lista.length) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:2rem">Sin prospectos registrados</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = lista.map((p, idx) => {
+    const realIdx = _prospectosCache.findIndex(x => x.nombre === p.nombre && x.telefono === p.telefono);
+    const tel = (p.telefono || '').replace(/\s/g,'');
+    const msg = `Hola%20${encodeURIComponent((p.nombre||'').split(' ')[0])}%2C%20te%20contactamos%20de%20Risch%20Network%20sobre%20tu%20inter%C3%A9s%20en%20${encodeURIComponent(p.servicio||'nuestros%20servicios')}.`;
+    return `<tr>
+      <td><div style="font-weight:500">${p.nombre}</div><div style="font-size:11px;color:var(--text-muted)">${p.notas||''}</div></td>
       <td>${p.telefono}</td>
-      <td>${p.servicio}</td>
-      <td>${p.seguimiento}</td>
+      <td>${p.servicio||'—'}</td>
+      <td style="font-size:12px;color:var(--text-muted)">${p.seguimiento||'—'}</td>
       <td>${badgeEstado(p.estado)}</td>
-      <td><div style="display:flex;gap:6px">
-        <button class="btn btn-sm" onclick="showAlert('Generando propuesta PDF...')">PDF</button>
-        <a href="https://wa.me/52${p.telefono.replace(/\s/g,'')}?text=Hola%20${encodeURIComponent(p.nombre.split(' ')[0])}%2C%20te%20contactamos%20de%20Risch%20Network%20sobre%20tu%20inter%C3%A9s%20en%20${encodeURIComponent(p.servicio)}." target="_blank"><button class="btn btn-sm btn-wa">WA</button></a>
+      <td><div style="display:flex;gap:4px">
+        <button class="btn btn-sm" onclick="editarProspecto(${realIdx})" title="Editar">✏️</button>
+        <button class="btn btn-sm btn-success" onclick="convertirACliente(${realIdx})" title="Convertir a cliente">👤+</button>
+        <a href="https://wa.me/52${tel}?text=${msg}" target="_blank"><button class="btn btn-sm btn-wa">WA</button></a>
+        <button class="btn btn-sm btn-danger" onclick="eliminarProspecto(${realIdx})" title="Eliminar">🗑</button>
       </div></td>
-    </tr>`).join('');
-  } catch(e) { console.error('Error prospectos:', e); }
+    </tr>`;
+  }).join('');
 }
 
 // ── DASHBOARD ─────────────────────────────────────────
@@ -1465,24 +1666,31 @@ function selVisitaTipo(tipo, btn) {
 
 // ── GUARDAR NUEVO CLIENTE ─────────────────────────────
 async function guardarNuevoCliente() {
-  const nombre = document.getElementById('nc-nombre')?.value?.trim();
-  const tel    = document.getElementById('nc-tel')?.value?.trim();
+  const nombre   = document.getElementById('nc-nombre')?.value?.trim();
+  const tel      = document.getElementById('nc-tel')?.value?.trim();
   if (!nombre || !tel) { showAlert('Completa nombre y teléfono.'); return; }
-  const planVal = document.getElementById('nc-plan')?.value;
+  const planVal  = document.getElementById('nc-plan')?.value;
   if (!planVal) { showAlert('Selecciona un plan.'); return; }
   const [plan, precio] = planVal.split('|');
-  const dir    = document.getElementById('nc-dir')?.value?.trim() || '';
-  const corte  = document.getElementById('nc-corte')?.value || '5';
-  const hoy    = new Date();
+  const dir      = document.getElementById('nc-dir')?.value?.trim() || '';
+  const corte    = document.getElementById('nc-corte')?.value || '5';
+  const usuario  = document.getElementById('nc-usuario')?.value?.trim();
+  const password = document.getElementById('nc-password')?.value?.trim();
+  if (usuario && password && password.length < 6) { showAlert('La contraseña debe tener al menos 6 caracteres.'); return; }
+  const hoy = new Date();
   const proximoPago = new Date(hoy.getFullYear(), hoy.getMonth() + 1, parseInt(corte)).toISOString().split('T')[0];
   const btn = document.querySelector('#modal-nuevo-cliente .btn-accent');
   btn.textContent = 'Guardando...'; btn.disabled = true;
   try {
     await apiPost({ accion:'cliente', nombre, telefono:tel, direccion:dir, plan, monto:precio, fecha_pago:proximoPago });
+    if (usuario && password) {
+      await apiPost({ accion:'registro_usuario', usuario, password, rol:'cliente' });
+    }
     closeModal('modal-nuevo-cliente');
-    document.getElementById('nc-nombre').value=''; document.getElementById('nc-tel').value='';
-    document.getElementById('nc-dir').value='';
-    showAlert(`✅ Cliente ${nombre} registrado`, 'ok');
+    ['nc-nombre','nc-tel','nc-dir','nc-usuario','nc-password'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+    document.getElementById('nc-plan').value = '';
+    document.querySelectorAll('.plan-btn').forEach(b => b.classList.remove('btn-accent'));
+    showAlert(`✅ Cliente ${nombre} registrado${usuario ? ' con acceso al portal' : ''}`, 'ok');
     cargarClientes();
   } catch(e) {
     showAlert('Error al guardar. Verifica tu conexión.');
@@ -1836,26 +2044,88 @@ async function confirmarVisita(idx) {
   } catch(e) { showAlert('Error al actualizar.', 'error'); }
 }
 
-// ── BUSCADOR EQUIPOS ──────────────────────────────────
+// ── EQUIPOS ───────────────────────────────────────────
 let _equiposCache = [];
 function filtrarEquipos(q) {
+  const tbody = document.querySelector('#tabla-equipos tbody');
+  if (!tbody) return;
   const term = q.toLowerCase();
-  const antDiv = document.querySelector('#view-equipos .grid-2 .card:first-child');
-  const bodDiv = document.querySelector('#view-equipos .grid-2 .card:last-child');
   const filtrados = q ? _equiposCache.filter(e =>
-    e.equipo.toLowerCase().includes(term) || e.modelo.toLowerCase().includes(term) ||
-    e.ubicacion.toLowerCase().includes(term) || e.estado.toLowerCase().includes(term)
+    (e.equipo||'').toLowerCase().includes(term) ||
+    (e.modelo||'').toLowerCase().includes(term) ||
+    (e.ip||'').includes(term) ||
+    (e.ubicacion||'').toLowerCase().includes(term) ||
+    (e.estado||'').toLowerCase().includes(term)
   ) : _equiposCache;
-  const antenas = filtrados.filter(e => ['antena','rocket','litebeam','nanobeam'].some(k=>e.equipo.toLowerCase().includes(k)));
-  const bodega  = filtrados.filter(e => !antenas.includes(e));
-  const renderItems = (items, icon) => items.map(e => `
-    <div class="equipo-row">
-      <div class="equipo-icon">${icon}</div>
-      <div class="equipo-info"><div class="equipo-name">${e.equipo} — ${e.modelo}</div><div class="equipo-detail">${e.ubicacion} · ${e.ip||e.notas||''}</div></div>
-      ${badgeEstado(e.estado)}
-    </div>`).join('') || `<p style="color:var(--text-muted);font-size:13px">Sin resultados</p>`;
-  if (antDiv) antDiv.innerHTML = `<div class="section-title" style="margin-bottom:1rem">Antenas instaladas</div>` + renderItems(antenas,'📡');
-  if (bodDiv) bodDiv.innerHTML = `<div class="section-title" style="margin-bottom:1rem">Inventario en bodega</div>` + renderItems(bodega,'📦');
+  if (!filtrados.length) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:1.5rem">Sin resultados para "${q}"</td></tr>`;
+    return;
+  }
+  renderEquipos(filtrados, tbody);
+}
+
+async function guardarNuevoEquipo() {
+  const equipo   = document.getElementById('neq-equipo')?.value?.trim();
+  if (!equipo) { showAlert('El nombre del equipo es obligatorio.', 'error'); return; }
+  const modelo   = document.getElementById('neq-modelo')?.value?.trim() || '';
+  const ip       = document.getElementById('neq-ip')?.value?.trim() || '';
+  const estado   = document.getElementById('neq-estado')?.value || 'En bodega';
+  const ubicacion= document.getElementById('neq-ubicacion')?.value?.trim() || '';
+  const notas    = document.getElementById('neq-notas')?.value?.trim() || '';
+  const btn = document.querySelector('#modal-nuevo-equipo .btn-accent');
+  btn.textContent = 'Guardando...'; btn.disabled = true;
+  try {
+    await apiPost({ accion:'equipo', equipo, modelo, ip, ubicacion, estado, notas });
+    closeModal('modal-nuevo-equipo');
+    ['neq-equipo','neq-modelo','neq-ip','neq-ubicacion','neq-notas'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+    showAlert(`✅ ${equipo} registrado`, 'ok');
+    cargarEquipos();
+  } catch(e) { showAlert('Error al guardar.', 'error'); }
+  finally { btn.textContent = '✅ Guardar equipo'; btn.disabled = false; }
+}
+
+function editarEquipo(idx) {
+  const e = _equiposCache[idx];
+  if (!e) return;
+  document.getElementById('eeq-equipo-orig').value = e.equipo;
+  document.getElementById('eeq-equipo').value      = e.equipo;
+  document.getElementById('eeq-modelo').value      = e.modelo || '';
+  document.getElementById('eeq-ip').value          = e.ip || '';
+  document.getElementById('eeq-estado').value      = e.estado || 'En línea';
+  document.getElementById('eeq-ubicacion').value   = e.ubicacion || '';
+  document.getElementById('eeq-notas').value       = e.notas || '';
+  openModal('modal-editar-equipo');
+}
+
+async function guardarEdicionEquipo() {
+  const equipoOrig = document.getElementById('eeq-equipo-orig').value;
+  const equipo     = document.getElementById('eeq-equipo').value.trim();
+  if (!equipo) { showAlert('El nombre es obligatorio.', 'error'); return; }
+  const modelo   = document.getElementById('eeq-modelo').value.trim();
+  const ip       = document.getElementById('eeq-ip').value.trim();
+  const estado   = document.getElementById('eeq-estado').value;
+  const ubicacion= document.getElementById('eeq-ubicacion').value.trim();
+  const notas    = document.getElementById('eeq-notas').value.trim();
+  const btn = document.querySelector('#modal-editar-equipo .btn-accent');
+  btn.textContent = 'Guardando...'; btn.disabled = true;
+  try {
+    await apiPost({ accion:'editar_equipo', equipo_original:equipoOrig, equipo, modelo, ip, ubicacion, estado, notas });
+    closeModal('modal-editar-equipo');
+    showAlert('✅ Equipo actualizado', 'ok');
+    cargarEquipos();
+  } catch(e) { showAlert('Error al guardar.', 'error'); }
+  finally { btn.textContent = '✅ Guardar cambios'; btn.disabled = false; }
+}
+
+async function eliminarEquipo(idx) {
+  const e = _equiposCache[idx];
+  if (!e) return;
+  if (!confirm(`¿Eliminar "${e.equipo}" del inventario? Esta acción no se puede deshacer.`)) return;
+  try {
+    await apiPost({ accion:'eliminar_equipo', equipo: e.equipo });
+    showAlert(`${e.equipo} eliminado`, 'ok');
+    cargarEquipos();
+  } catch(e) { showAlert('Error al eliminar.', 'error'); }
 }
 
 // ── FILTRAR PROSPECTOS ────────────────────────────────
@@ -1865,63 +2135,123 @@ function filtrarProspectos(q) {
   if (!tbody) return;
   const term = q.toLowerCase();
   const filtrados = q ? _prospectosCache.filter(p =>
-    p.nombre.toLowerCase().includes(term) ||
-    p.telefono.includes(term) ||
-    (p.servicio||'').toLowerCase().includes(term)
+    (p.nombre||'').toLowerCase().includes(term) ||
+    (p.telefono||'').includes(term) ||
+    (p.servicio||'').toLowerCase().includes(term) ||
+    (p.estado||'').toLowerCase().includes(term)
   ) : _prospectosCache;
   if (!filtrados.length) {
     tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:1.5rem">Sin resultados para "${q}"</td></tr>`;
     return;
   }
-  tbody.innerHTML = filtrados.map(p => `<tr>
-    <td style="font-weight:500">${p.nombre}</td>
-    <td>${p.telefono}</td>
-    <td>${p.servicio}</td>
-    <td>${p.seguimiento}</td>
-    <td>${badgeEstado(p.estado)}</td>
-    <td><div style="display:flex;gap:6px">
-      <a href="https://wa.me/52${p.telefono.replace(/\s/g,'')}?text=Hola%20${encodeURIComponent(p.nombre.split(' ')[0])}%2C%20te%20contactamos%20de%20Risch%20Network." target="_blank"><button class="btn btn-sm btn-wa">WA</button></a>
-    </div></td>
-  </tr>`).join('');
+  renderProspectos(filtrados, tbody);
+}
+
+function selEpSrv(srv, btn) {
+  document.getElementById('ep-servicio').value = srv;
+  document.querySelectorAll('.ep-srv').forEach(b => b.classList.remove('btn-accent'));
+  btn.classList.add('btn-accent');
+}
+
+function editarProspecto(idx) {
+  const p = _prospectosCache[idx];
+  if (!p) return;
+  document.getElementById('ep-nombre-orig').value  = p.nombre;
+  document.getElementById('ep-nombre').value        = p.nombre;
+  document.getElementById('ep-tel').value           = p.telefono;
+  document.getElementById('ep-servicio').value      = p.servicio || 'Internet';
+  document.getElementById('ep-estado').value        = p.estado || 'Nuevo';
+  document.getElementById('ep-seguimiento').value   = p.seguimiento || '';
+  document.getElementById('ep-notas').value         = p.notas || '';
+  document.querySelectorAll('.ep-srv').forEach(b => {
+    b.classList.toggle('btn-accent', b.textContent.trim().includes(p.servicio || 'Internet'));
+  });
+  openModal('modal-editar-prospecto');
+}
+
+async function guardarEdicionProspecto() {
+  const nombreOrig  = document.getElementById('ep-nombre-orig').value;
+  const nombre      = document.getElementById('ep-nombre').value.trim();
+  const telefono    = document.getElementById('ep-tel').value.trim();
+  const servicio    = document.getElementById('ep-servicio').value;
+  const estado      = document.getElementById('ep-estado').value;
+  const seguimiento = document.getElementById('ep-seguimiento').value.trim();
+  const notas       = document.getElementById('ep-notas').value.trim();
+  if (!nombre || !telefono) { showAlert('Nombre y teléfono son obligatorios.', 'error'); return; }
+  const btn = document.querySelector('#modal-editar-prospecto .btn-accent');
+  btn.textContent = 'Guardando...'; btn.disabled = true;
+  try {
+    await apiPost({ accion:'editar_prospecto', nombre_original:nombreOrig, nombre, telefono, servicio, estado, seguimiento, notas });
+    closeModal('modal-editar-prospecto');
+    showAlert('✅ Prospecto actualizado', 'ok');
+    cargarProspectos();
+  } catch(e) { showAlert('Error al guardar.', 'error'); }
+  finally { btn.textContent = '✅ Guardar cambios'; btn.disabled = false; }
+}
+
+async function eliminarProspecto(idx) {
+  const p = _prospectosCache[idx];
+  if (!p) return;
+  if (!confirm(`¿Eliminar a ${p.nombre} de prospectos?`)) return;
+  try {
+    await apiPost({ accion:'eliminar_prospecto', nombre: p.nombre });
+    showAlert(`${p.nombre} eliminado`, 'ok');
+    cargarProspectos();
+  } catch(e) { showAlert('Error al eliminar.', 'error'); }
+}
+
+function convertirACliente(idx) {
+  const p = _prospectosCache[idx];
+  if (!p) return;
+  // Pre-llenar modal de nuevo cliente con datos del prospecto
+  document.getElementById('nc-nombre').value = p.nombre;
+  document.getElementById('nc-tel').value    = p.telefono;
+  closeModal('modal-editar-prospecto');
+  openModal('modal-nuevo-cliente');
+  showAlert(`Datos de ${p.nombre.split(' ')[0]} cargados. Completa el plan y guarda.`, 'ok');
 }
 
 // ── EQUIPOS ───────────────────────────────────────────
 async function cargarEquipos() {
+  const tbody = document.querySelector('#tabla-equipos tbody');
+  if (!tbody) return;
   try {
     const equipos = await apiGet('equipos');
     _equiposCache = equipos;
-    const antenas  = equipos.filter(e => e.equipo.toLowerCase().includes('antena') || e.equipo.toLowerCase().includes('rocket') || e.equipo.toLowerCase().includes('litebeam') || e.equipo.toLowerCase().includes('nanobeam'));
-    const bodega   = equipos.filter(e => !antenas.includes(e));
-    const sinResp  = equipos.filter(e => e.estado === 'Sin respuesta').length;
-    actualizarBadges(-1, sinResp);
+    const online  = equipos.filter(e => e.estado === 'En línea').length;
+    const offline = equipos.filter(e => e.estado === 'Sin respuesta').length;
+    const elT = document.getElementById('eq-total');   if(elT) elT.textContent = equipos.length;
+    const elO = document.getElementById('eq-online');  if(elO) elO.textContent = online;
+    const elF = document.getElementById('eq-offline'); if(elF) elF.textContent = offline;
+    const elOS= document.getElementById('eq-online-sub');  if(elOS) elOS.textContent = `${equipos.filter(e=>e.estado==='En bodega').length} en bodega`;
+    const elFS= document.getElementById('eq-offline-sub'); if(elFS) elFS.textContent = offline ? `${offline} sin señal` : 'Todo OK';
+    actualizarBadges(-1, offline);
+    renderEquipos(equipos, tbody);
+  } catch(e) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--red);padding:2rem">Error al conectar con la base de datos</td></tr>`;
+  }
+}
 
-    const antDiv = document.querySelector('#view-equipos .grid-2 .card:first-child');
-    if (antDiv) {
-      antDiv.innerHTML = `<div class="section-title" style="margin-bottom:1rem">Antenas instaladas</div>` +
-        (antenas.length ? antenas.map(e => `
-          <div class="equipo-row">
-            <div class="equipo-icon">📡</div>
-            <div class="equipo-info">
-              <div class="equipo-name">${e.equipo} — ${e.modelo}</div>
-              <div class="equipo-detail">${e.ubicacion} · ${e.ip}</div>
-            </div>
-            ${badgeEstado(e.estado)}
-          </div>`).join('') : '<p style="color:var(--text-muted);font-size:13px">Sin antenas registradas</p>');
-    }
-    const bodDiv = document.querySelector('#view-equipos .grid-2 .card:last-child');
-    if (bodDiv) {
-      bodDiv.innerHTML = `<div class="section-title" style="margin-bottom:1rem">Inventario en bodega</div>` +
-        (bodega.length ? bodega.map(e => `
-          <div class="equipo-row">
-            <div class="equipo-icon">📦</div>
-            <div class="equipo-info">
-              <div class="equipo-name">${e.equipo}</div>
-              <div class="equipo-detail">${e.notas||''}${e.ubicacion?' · '+e.ubicacion:''}</div>
-            </div>
-            ${badgeEstado(e.estado)}
-          </div>`).join('') : '<p style="color:var(--text-muted);font-size:13px">Sin inventario</p>');
-    }
-  } catch(e) { console.error('equipos:', e); }
+function renderEquipos(lista, tbody) {
+  if (!lista.length) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:2rem">Sin equipos registrados</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = lista.map((e, idx) => {
+    const icon = e.estado === 'En línea' ? '📡' : e.estado === 'Sin respuesta' ? '🔴' : e.estado === 'En bodega' ? '📦' : '🔧';
+    return `<tr>
+      <td><div style="display:flex;align-items:center;gap:8px"><span style="font-size:16px">${icon}</span><div style="font-weight:500">${e.equipo}</div></div></td>
+      <td>${e.modelo||'—'}</td>
+      <td style="font-family:monospace;font-size:12px">${e.ip||'—'}</td>
+      <td style="font-size:12px">${e.ubicacion||'—'}</td>
+      <td>${badgeEstado(e.estado)}</td>
+      <td style="font-size:11px;color:var(--text-muted)">${e.notas||'—'}</td>
+      <td><div style="display:flex;gap:4px">
+        <button class="btn btn-sm" onclick="editarEquipo(${idx})" title="Editar">✏️</button>
+        <button class="btn btn-sm btn-danger" onclick="eliminarEquipo(${idx})" title="Eliminar">🗑</button>
+      </div></td>
+    </tr>`;
+  }).join('');
 }
 
 // ── PERFIL CLIENTE ────────────────────────────────────
@@ -1952,7 +2282,8 @@ const _navigateOriginal = navigate;
 window.navigate = function(viewId) {
   _navigateOriginal(viewId);
   if (viewId === 'dashboard-admin') { cargarDashboard(); cargarAlertas(); generarNotificaciones(); }
-  if (viewId === 'clientes')   cargarClientes();
+  if (viewId === 'clientes')   { cargarClientes(); cargarUsuarios(); }
+  if (viewId === 'configuracion') cargarConfiguracion();
   if (viewId === 'cobros')     cargarCobros();
   if (viewId === 'agenda')     cargarAgenda();
   if (viewId === 'prospectos') cargarProspectos();
@@ -2081,6 +2412,43 @@ async function eliminarCliente(idx) {
   } catch(e) { showAlert('Error al eliminar.', 'error'); }
 }
 
+// ── GESTIÓN DE USUARIOS ───────────────────────────────
+let _usuariosCache = [];
+async function cargarUsuarios() {
+  const tbody = document.getElementById('tbody-usuarios');
+  if (!tbody) return;
+  try {
+    const data = await apiGet('usuarios');
+    _usuariosCache = data;
+    if (!data.length) {
+      tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:2rem">Sin usuarios registrados</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = data.map((u, idx) => `<tr>
+      <td><div style="font-weight:500">${u.usuario}</div></td>
+      <td><span class="badge ${u.rol==='admin'?'badge-blue':'badge-gray'}">${u.rol}</span></td>
+      <td><span class="badge badge-success">Activo</span></td>
+      <td><div style="display:flex;gap:4px">
+        ${u.rol !== 'admin' ? `<button class="btn btn-sm btn-danger" onclick="eliminarUsuario(${idx})" title="Revocar acceso">🗑</button>` : '<span style="font-size:11px;color:var(--text-muted)">—</span>'}
+      </div></td>
+    </tr>`).join('');
+  } catch(e) {
+    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:var(--red);padding:2rem">Error al cargar usuarios</td></tr>`;
+  }
+}
+
+async function eliminarUsuario(idx) {
+  const u = _usuariosCache[idx];
+  if (!u) return;
+  if (u.rol === 'admin') { showAlert('No se puede eliminar un administrador.', 'error'); return; }
+  if (!confirm(`¿Revocar acceso al portal de "${u.usuario}"?`)) return;
+  try {
+    await apiPost({ accion:'eliminar_usuario', usuario: u.usuario });
+    showAlert(`Acceso de ${u.usuario} revocado`, 'ok');
+    cargarUsuarios();
+  } catch(e) { showAlert('Error al eliminar usuario.', 'error'); }
+}
+
 // ── EDITAR / ELIMINAR COBROS ──────────────────────────
 function selEcoMetodo(metodo) {
   document.getElementById('eco-metodo').value = metodo;
@@ -2183,6 +2551,139 @@ async function eliminarVisita(idx) {
     showAlert(`Visita eliminada`, 'ok');
     cargarAgenda();
   } catch(e) { showAlert('Error al eliminar.', 'error'); }
+}
+
+// ── CONFIGURACIÓN ────────────────────────────────────
+async function cargarConfiguracion() {
+  // usuario actual
+  const elU = document.getElementById('cfg-usuario-actual');
+  if (elU && window._rolActual) elU.textContent = localStorage.getItem('risch_session') ? JSON.parse(localStorage.getItem('risch_session')).nombre : '—';
+
+  // planes
+  await cargarPlanesCfg();
+
+  // usuarios
+  await cargarUsuariosCfg();
+}
+
+// ── PLANES ────────────────────────────────────────────
+let _planesCache = [];
+async function cargarPlanesCfg() {
+  const tbody = document.getElementById('tbody-planes');
+  if (!tbody) return;
+  try {
+    const data = await apiGet('planes');
+    _planesCache = data;
+    if (!data.length) {
+      tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:1rem">Sin planes registrados</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = data.map((p, idx) => `<tr>
+      <td style="font-weight:500">${p.nombre}</td>
+      <td>${p.velocidad}</td>
+      <td style="color:var(--accent);font-weight:600">$${p.precio}/mes</td>
+      <td><button class="btn btn-sm btn-danger" onclick="eliminarPlan(${idx})">🗑</button></td>
+    </tr>`).join('');
+  } catch(e) {
+    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:var(--red);padding:1rem">Error al cargar planes</td></tr>`;
+  }
+}
+
+async function guardarNuevoPlan() {
+  const nombre   = document.getElementById('npl-nombre')?.value?.trim();
+  const velocidad= document.getElementById('npl-velocidad')?.value?.trim();
+  const precio   = document.getElementById('npl-precio')?.value?.trim();
+  if (!nombre || !velocidad || !precio) { showAlert('Completa todos los campos.', 'error'); return; }
+  const btn = document.querySelector('#modal-nuevo-plan .btn-accent');
+  btn.textContent = 'Guardando...'; btn.disabled = true;
+  try {
+    await apiPost({ accion:'plan', nombre, velocidad, precio });
+    closeModal('modal-nuevo-plan');
+    ['npl-nombre','npl-velocidad','npl-precio'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+    showAlert(`✅ Plan ${nombre} agregado`, 'ok');
+    cargarPlanesCfg();
+    // actualizar selector de planes en modal nuevo cliente
+    cargarPlanesEnSelector();
+  } catch(e) { showAlert('Error al guardar.', 'error'); }
+  finally { btn.textContent = '✅ Guardar plan'; btn.disabled = false; }
+}
+
+async function eliminarPlan(idx) {
+  const p = _planesCache[idx];
+  if (!p) return;
+  if (!confirm(`¿Eliminar el plan "${p.nombre}"?`)) return;
+  try {
+    await apiPost({ accion:'eliminar_plan', nombre: p.nombre });
+    showAlert(`Plan ${p.nombre} eliminado`, 'ok');
+    cargarPlanesCfg();
+    cargarPlanesEnSelector();
+  } catch(e) { showAlert('Error al eliminar.', 'error'); }
+}
+
+async function cargarPlanesEnSelector() {
+  try {
+    const planes = await apiGet('planes');
+    const grid = document.getElementById('planes-grid');
+    if (!grid) return;
+    grid.innerHTML = planes.map(p =>
+      `<button type="button" class="btn plan-btn" onclick="selPlan('${p.velocidad}|$${p.precio}',this)" style="padding:12px;text-align:left"><div style="font-weight:600">${p.velocidad} — ${p.nombre}</div><div style="font-size:11px;color:var(--text-muted)">$${p.precio}/mes</div></button>`
+    ).join('');
+  } catch(e) {}
+}
+
+// ── USUARIOS CONFIG ───────────────────────────────────
+async function cargarUsuariosCfg() {
+  const tbody = document.getElementById('tbody-cfg-usuarios');
+  if (!tbody) return;
+  try {
+    const data = await apiGet('usuarios');
+    if (!data.length) {
+      tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;color:var(--text-muted);padding:1rem">Sin usuarios</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = data.map((u, idx) => `<tr>
+      <td style="font-weight:500">${u.usuario}</td>
+      <td><span class="badge ${u.rol==='admin'?'badge-blue':'badge-gray'}">${u.rol}</span></td>
+      <td>${u.rol !== 'admin' ? `<button class="btn btn-sm btn-danger" onclick="eliminarUsuarioCfg(${idx})">Revocar</button>` : '<span style="font-size:11px;color:var(--text-muted)">—</span>'}</td>
+    </tr>`).join('');
+    // sync con la tabla de clientes
+    _usuariosCache = data;
+  } catch(e) {}
+}
+
+async function guardarNuevoUsuarioCfg() {
+  const usuario  = document.getElementById('nuc-usuario')?.value?.trim();
+  const password = document.getElementById('nuc-password')?.value?.trim();
+  const rol      = document.getElementById('nuc-rol')?.value || 'cliente';
+  if (!usuario || !password) { showAlert('Completa usuario y contraseña.', 'error'); return; }
+  if (password.length < 6)  { showAlert('Contraseña mínimo 6 caracteres.', 'error'); return; }
+  const btn = document.querySelector('#modal-nuevo-usuario-cfg .btn-accent');
+  btn.textContent = 'Guardando...'; btn.disabled = true;
+  try {
+    const res = await apiPost({ accion:'registro_usuario', usuario, password, rol });
+    if (res.error) { showAlert(res.error, 'error'); return; }
+    closeModal('modal-nuevo-usuario-cfg');
+    document.getElementById('nuc-usuario').value = '';
+    document.getElementById('nuc-password').value = '';
+    showAlert(`✅ Acceso creado para ${usuario}`, 'ok');
+    cargarUsuariosCfg();
+  } catch(e) { showAlert('Error al crear acceso.', 'error'); }
+  finally { btn.textContent = '✅ Crear acceso'; btn.disabled = false; }
+}
+
+async function eliminarUsuarioCfg(idx) {
+  const u = _usuariosCache[idx];
+  if (!u || u.rol === 'admin') return;
+  if (!confirm(`¿Revocar acceso de "${u.usuario}"?`)) return;
+  try {
+    await apiPost({ accion:'eliminar_usuario', usuario: u.usuario });
+    showAlert(`Acceso de ${u.usuario} revocado`, 'ok');
+    cargarUsuariosCfg();
+  } catch(e) { showAlert('Error.', 'error'); }
+}
+
+function guardarDatosNegocio() {
+  showAlert('✅ Datos guardados localmente', 'ok');
 }
 
 // ICONS
