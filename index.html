@@ -313,6 +313,32 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
 
 /* ── NUMBER COUNTER ANIMATION ── */
 .count-anim{display:inline-block;transition:transform 0.15s;}
+
+/* ── BADGE BLUE ── */
+.badge-blue{background:rgba(96,165,250,0.12);color:#93c5fd;border:1px solid rgba(96,165,250,0.25);}
+
+/* ── FILTROS ESTADO ── */
+.btn-filtro{border-radius:20px;font-size:11px;font-weight:600;}
+.btn-filtro.active{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;border-color:transparent;box-shadow:0 2px 8px var(--accent-glow);}
+
+/* ── INLINE ESTADO SELECT ── */
+.estado-select-inline{appearance:none;-webkit-appearance:none;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;outline:none;letter-spacing:0.02em;}
+
+/* ── BUSCADOR GLOBAL MODAL ── */
+#modal-buscar-global{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);z-index:9998;display:none;align-items:flex-start;justify-content:center;padding-top:80px;}
+.buscar-modal-inner{background:var(--surface);border:1px solid var(--border-h);border-radius:16px;padding:1rem;width:100%;max-width:520px;box-shadow:0 24px 60px rgba(0,0,0,0.5);}
+#buscar-global-input{width:100%;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;font-size:14px;color:var(--text);font-family:'Inter',sans-serif;outline:none;}
+#buscar-global-input:focus{border-color:var(--accent);}
+.buscar-result-item{padding:10px 12px;border-radius:8px;cursor:pointer;display:flex;gap:10px;align-items:center;transition:background 0.1s;}
+.buscar-result-item:hover{background:var(--surface-2);}
+
+/* ── CARD COMPARATIVA ── */
+.comp-stat{flex:1;min-width:120px;background:var(--surface-2);border-radius:var(--r);padding:1rem;border:1px solid var(--border);}
+.comp-stat-label{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;font-weight:600;}
+.comp-stat-value{font-size:22px;font-weight:700;margin-top:4px;}
+
+/* ── BARRA GRÁFICA CON VALOR ── */
+.bar-amount{font-size:9px;color:var(--text-dim);text-align:center;margin-top:2px;min-height:12px;}
 </style>
 </head>
 <body>
@@ -337,10 +363,9 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
     </div>
 
     <div id="recover-form">
-      <p style="font-size:13px;color:var(--text-muted);margin-bottom:1rem">Te enviamos un código de acceso por WhatsApp.</p>
-      <!-- EDITABLE: placeholder de teléfono para recuperación -->
-      <div class="form-group"><label>Teléfono</label><input type="tel" placeholder="443 000 0000"></div>
-      <button class="btn btn-accent btn-full" onclick="showAlert('Código enviado por WhatsApp.')">Enviar código</button>
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:1rem">Te conectamos por WhatsApp con Risch Network para restablecer tu acceso.</p>
+      <div class="form-group"><label>Usuario</label><input type="text" id="recover-user" placeholder="Tu usuario del portal"></div>
+      <button class="btn btn-accent btn-full" onclick="solicitarRecuperacion()">Contactar por WhatsApp</button>
       <div style="margin-top:12px;text-align:center"><button class="btn-link" onclick="hideRecover()">Volver</button></div>
     </div>
 
@@ -452,6 +477,15 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
 
 <!-- TOAST NOTIFICATION -->
 <div id="toast" style="position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--surface);border:1px solid var(--border-h);border-radius:12px;padding:12px 20px;font-size:13px;font-weight:500;box-shadow:0 8px 32px rgba(0,0,0,0.4);z-index:9999;opacity:0;transition:all 0.3s;pointer-events:none;white-space:nowrap;max-width:90vw;text-align:center"></div>
+
+<!-- MODAL BÚSQUEDA GLOBAL -->
+<div id="modal-buscar-global" onclick="if(event.target===this)cerrarBuscarGlobal()">
+  <div class="buscar-modal-inner">
+    <input id="buscar-global-input" placeholder="⌕  Buscar cliente, cobro, prospecto..." oninput="buscarGlobal(this.value)" autocomplete="off">
+    <div id="buscar-global-resultados" style="margin-top:8px;max-height:320px;overflow-y:auto"></div>
+    <div style="margin-top:8px;font-size:11px;color:var(--text-dim);display:flex;gap:12px"><span>Ctrl+K · abrir</span><span>Esc · cerrar</span></div>
+  </div>
+</div>
 
 <!-- MODAL NUEVO PROSPECTO -->
 <div class="modal-overlay" id="modal-nuevo-prospecto">
@@ -714,30 +748,15 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
     </div>
   </nav>
 
-  <!-- NAVBAR CELULAR (solo admin) -->
-  <nav id="mobile-nav" style="display:none;position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border-h);padding:8px 0 12px;z-index:100;justify-content:space-around">
-    <button onclick="navigate('dashboard-admin')" style="background:none;border:none;color:var(--text-muted);font-size:10px;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 12px;cursor:pointer">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Inicio
-    </button>
-    <button onclick="navigate('clientes')" style="background:none;border:none;color:var(--text-muted);font-size:10px;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 12px;cursor:pointer">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Clientes
-    </button>
-    <button onclick="openModal('modal-reg-pago')" style="background:var(--accent);border:none;color:#fff;font-size:10px;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 16px;cursor:pointer;border-radius:14px;margin-top:-12px;box-shadow:0 4px 16px var(--accent-glow)">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Pago
-    </button>
-    <button onclick="navigate('cobros')" style="background:none;border:none;color:var(--text-muted);font-size:10px;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 12px;cursor:pointer">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>Cobros
-    </button>
-    <button onclick="navigate('agenda')" style="background:none;border:none;color:var(--text-muted);font-size:10px;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 12px;cursor:pointer">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Agenda
-    </button>
-  </nav>
 
   <div class="main">
     <div class="topbar">
       <div class="topbar-title" id="topbar-title">Dashboard</div>
       <div class="topbar-actions">
         <div class="status-pill"><div class="status-dot"></div><span id="status-text">Red operativa</span></div>
+        <button class="icon-btn" onclick="abrirBuscarGlobal()" title="Buscar (Ctrl+K)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </button>
         <button class="icon-btn" onclick="toggleNotif()">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
           <span class="notif-dot" id="notif-dot" style="display:none"></span>
@@ -791,11 +810,11 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
           </div>
           <div class="card">
             <div class="card-header"><div class="section-title">Estado del servicio</div></div>
-            <div class="alert-banner alert-success">✓ Antena en línea · Señal estable</div>
-            <div style="margin-top:1rem;display:flex;flex-direction:column;gap:8px">
-              <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--text-muted)">Señal recibida</span><span style="color:var(--green);font-weight:600">Excelente (-65 dBm)</span></div>
-              <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--text-muted)">Latencia</span><span style="font-weight:500">14 ms</span></div>
-              <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--text-muted)">Tiempo activo</span><span style="font-weight:500">12 días</span></div>
+            <div class="alert-banner" id="cli-estado-servicio-banner" style="margin-bottom:1rem">Cargando...</div>
+            <div style="display:flex;flex-direction:column;gap:8px" id="cli-estado-servicio-detalles">
+              <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--text-muted)">Estado de cuenta</span><span id="cli-srv-cuenta" style="font-weight:600">—</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--text-muted)">Días restantes</span><span id="cli-srv-dias" style="font-weight:500">—</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--text-muted)">Próximo pago</span><span id="cli-srv-prox" style="font-weight:500">—</span></div>
             </div>
           </div>
         </div>
@@ -862,7 +881,16 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
       <div class="view" id="view-velocidad">
         <div class="card card-glow">
           <div class="speedtest-wrap">
-            <div style="text-align:center"><div style="font-size:15px;font-weight:600;letter-spacing:-0.3px">Prueba de velocidad</div><div style="font-size:12px;color:var(--text-muted);margin-top:4px">Mide la velocidad real que recibe tu antena</div></div>
+            <div style="text-align:center">
+              <div style="font-size:15px;font-weight:600;letter-spacing:-0.3px">Prueba de velocidad</div>
+              <div style="font-size:12px;color:var(--text-muted);margin-top:4px">Mide la velocidad real de tu servicio Risch Network</div>
+            </div>
+            <div style="width:100%;max-width:380px;background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.25);border-radius:10px;padding:10px 14px;display:flex;gap:10px;align-items:flex-start">
+              <span style="font-size:16px;flex-shrink:0">📡</span>
+              <div style="font-size:12px;color:var(--yellow-text);line-height:1.5">
+                <strong>Importante:</strong> Para medir tu servicio de Risch, asegúrate de que tu dispositivo esté conectado al <strong>WiFi de tu antena</strong>, no a datos móviles (4G/5G).
+              </div>
+            </div>
             <div class="speed-ring">
               <svg viewBox="0 0 180 180" width="180" height="180">
                 <defs><linearGradient id="speedGrad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#6c63ff"/><stop offset="100%" stop-color="#a78bfa"/></linearGradient></defs>
@@ -910,16 +938,15 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
             <div style="padding-top:1rem;text-align:center;color:var(--text-muted);font-size:12px">Sin más tickets recientes.</div>
           </div>
         </div>
-        <!-- EDITABLE: datos de contacto directo (WhatsApp, horario, ubicación) -->
         <div class="card"><div class="section-title" style="margin-bottom:1rem">Contacto directo</div>
-          <div style="display:flex;gap:12px;flex-wrap:wrap">
-            <!-- EDITABLE: número de WhatsApp -->
-            <div style="flex:1;min-width:140px;background:var(--surface-2);border-radius:var(--r);padding:1rem;border:1px solid var(--border)"><div style="font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em">WhatsApp</div><div style="font-size:13px;margin-top:4px">+52 443 XXX XXXX</div></div>
-            <!-- EDITABLE: horario de atención -->
-            <div style="flex:1;min-width:140px;background:var(--surface-2);border-radius:var(--r);padding:1rem;border:1px solid var(--border)"><div style="font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em">Horario</div><div style="font-size:13px;margin-top:4px">Lun–Sáb 9:00–18:00</div></div>
-            <!-- EDITABLE: ubicación del negocio -->
+          <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:1rem">
+            <div style="flex:1;min-width:140px;background:var(--surface-2);border-radius:var(--r);padding:1rem;border:1px solid var(--border)"><div style="font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em">WhatsApp</div><div style="font-size:13px;margin-top:4px">+52 443 206 5503</div></div>
+            <div style="flex:1;min-width:140px;background:var(--surface-2);border-radius:var(--r);padding:1rem;border:1px solid var(--border)"><div style="font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em">Horario</div><div style="font-size:13px;margin-top:4px">Lun–Vie 9:00–20:00</div></div>
             <div style="flex:1;min-width:140px;background:var(--surface-2);border-radius:var(--r);padding:1rem;border:1px solid var(--border)"><div style="font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em">Ubicación</div><div style="font-size:13px;margin-top:4px">Huandacareo, Mich.</div></div>
           </div>
+          <a href="https://wa.me/524432065503?text=Hola%2C%20necesito%20soporte%20t%C3%A9cnico%20de%20Risch%20Network." target="_blank" style="text-decoration:none">
+            <button class="btn btn-wa" style="width:100%;padding:12px;font-size:13px;font-weight:600">📱 Escribir por WhatsApp al soporte</button>
+          </a>
         </div>
       </div>
 
@@ -932,7 +959,7 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
           </div>
           <div class="form-row"><div class="form-group"><label>Nombre completo</label><input id="perfil-input-nombre" type="text" placeholder="—"></div><div class="form-group"><label>Teléfono</label><input id="perfil-input-tel" type="text" placeholder="—"></div></div>
           <div class="form-row"><div class="form-group"><label>Dirección</label><input id="perfil-input-dir" type="text" placeholder="—"></div><div class="form-group"><label>Plan</label><input id="perfil-input-plan" type="text" placeholder="—" readonly></div></div>
-          <button class="btn btn-accent" style="margin-top:0.5rem" onclick="showAlert('Cambios guardados.')">Guardar cambios</button>
+          <button class="btn btn-accent" style="margin-top:0.5rem" onclick="guardarPerfilCliente()">Guardar cambios</button>
         </div>
         <div class="card mb-2">
           <div class="section-title" style="margin-bottom:1rem">Notificaciones</div>
@@ -961,12 +988,12 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
           <div class="card">
             <div class="section-title" style="margin-bottom:1.25rem">Ingresos — últimos 6 meses</div>
             <div class="chart-bars" id="chart-bars">
-              <div class="bar-wrap"><div class="bar" id="b0" style="height:0%"></div><div class="bar-label">E</div></div>
-              <div class="bar-wrap"><div class="bar" id="b1" style="height:0%"></div><div class="bar-label">F</div></div>
-              <div class="bar-wrap"><div class="bar" id="b2" style="height:0%"></div><div class="bar-label">M</div></div>
-              <div class="bar-wrap"><div class="bar" id="b3" style="height:0%"></div><div class="bar-label">A</div></div>
-              <div class="bar-wrap"><div class="bar" id="b4" style="height:0%"></div><div class="bar-label">M</div></div>
-              <div class="bar-wrap"><div class="bar hi" id="b5" style="height:0%"></div><div class="bar-label">J</div></div>
+              <div class="bar-wrap"><div class="bar" id="b0" style="height:0%" title=""></div><div class="bar-label">E</div><div class="bar-amount" id="ba0"></div></div>
+              <div class="bar-wrap"><div class="bar" id="b1" style="height:0%" title=""></div><div class="bar-label">F</div><div class="bar-amount" id="ba1"></div></div>
+              <div class="bar-wrap"><div class="bar" id="b2" style="height:0%" title=""></div><div class="bar-label">M</div><div class="bar-amount" id="ba2"></div></div>
+              <div class="bar-wrap"><div class="bar" id="b3" style="height:0%" title=""></div><div class="bar-label">A</div><div class="bar-amount" id="ba3"></div></div>
+              <div class="bar-wrap"><div class="bar" id="b4" style="height:0%" title=""></div><div class="bar-label">M</div><div class="bar-amount" id="ba4"></div></div>
+              <div class="bar-wrap"><div class="bar hi" id="b5" style="height:0%" title=""></div><div class="bar-label">J</div><div class="bar-amount" id="ba5"></div></div>
             </div>
           </div>
           <div class="card">
@@ -976,6 +1003,10 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
             <div class="system-item"><div><div style="font-weight:500;font-size:13px">Mercado Pago</div><div style="font-size:11px;color:var(--text-muted)">Cobros en línea</div></div><span class="badge badge-warning">Pendiente</span></div>
             <div class="system-item"><div><div style="font-weight:500;font-size:13px">Monitoreo de red</div><div style="font-size:11px;color:var(--text-muted)">Ping de antenas</div></div><span class="badge badge-success">Activo</span></div>
           </div>
+        </div>
+        <div class="card mb-3" id="panel-proximos" style="display:none">
+          <div class="card-header"><div class="section-title">📅 Vencen esta semana</div></div>
+          <div id="lista-proximos" style="display:flex;flex-direction:column;gap:8px"></div>
         </div>
         <div class="card" id="panel-alertas" style="display:none">
           <div class="card-header"><div class="section-title">⚠️ Atención requerida</div></div>
@@ -994,9 +1025,14 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
       </div>
 
       <!-- ADMIN: CLIENTES -->
-      <!-- EDITABLE: lista de clientes demo — cada <tr> es un cliente (nombre, tel, plan, dirección, días vencido, estado, próximo pago) -->
       <div class="view" id="view-clientes">
-        <div class="action-row"><input class="search-bar" id="buscar-cliente" style="max-width:280px" placeholder="Buscar cliente..." oninput="filtrarClientes(this.value)"><div style="display:flex;gap:8px"><button class="btn btn-sm" onclick="openModal('modal-reg-pago')">Registrar pago</button><button class="btn btn-accent btn-sm" onclick="openModal('modal-nuevo-cliente')">+ Nuevo cliente</button></div></div>
+        <div class="action-row"><input class="search-bar" id="buscar-cliente" style="max-width:240px" placeholder="Buscar cliente..." oninput="filtrarClientes(this.value)"><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-sm" onclick="openModal('modal-reg-pago')">Registrar pago</button><button class="btn btn-accent btn-sm" onclick="openModal('modal-nuevo-cliente')">+ Nuevo cliente</button></div></div>
+        <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap">
+          <button class="btn btn-sm btn-filtro active" onclick="setFiltroEstado('Todos',this)">Todos</button>
+          <button class="btn btn-sm btn-filtro" onclick="setFiltroEstado('Activo',this)">✓ Activos</button>
+          <button class="btn btn-sm btn-filtro" onclick="setFiltroEstado('Adeudo',this)">⚠ Adeudo</button>
+          <button class="btn btn-sm btn-filtro" onclick="setFiltroEstado('Suspendido',this)">⛔ Suspendidos</button>
+        </div>
         <div class="card"><div class="table-wrap"><table><thead><tr><th>Cliente</th><th>Plan</th><th>Dirección</th><th>Días vencido</th><th>Estado</th><th>Próx. pago</th><th></th></tr></thead>
         <tbody><tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:2rem">Cargando...</td></tr></tbody></table></div></div>
 
@@ -1007,13 +1043,17 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
 
       <!-- ADMIN: COBROS -->
       <div class="view" id="view-cobros">
+        <div class="card mb-3" id="card-comparacion" style="display:none">
+          <div class="section-title" style="margin-bottom:1rem">📊 Comparativa mensual</div>
+          <div id="comp-content" style="display:flex;gap:12px;flex-wrap:wrap"></div>
+        </div>
         <div class="grid-3 mb-3">
           <div class="card metric-card c-green card-glow-top"><div class="card-icon ci-green">💵</div><div class="card-label">Cobrado este mes</div><div class="card-value" id="c-cobrado">—</div><div class="card-sub" id="c-cobrado-sub">Cargando...</div></div>
           <div class="card metric-card c-red card-glow-top"><div class="card-icon ci-red">⚠</div><div class="card-label">Cartera vencida</div><div class="card-value" id="c-cartera" style="color:var(--red)">—</div><div class="card-sub" id="c-cartera-sub">Cargando...</div></div>
           <div class="card metric-card c-yellow card-glow-top"><div class="card-icon ci-yellow">📋</div><div class="card-label">Pendientes</div><div class="card-value" id="c-pendientes">—</div><div class="card-sub" id="c-pendientes-sub">Cargando...</div></div>
         </div>
         <div class="action-row"><div class="section-title">Cartera vencida</div><button class="btn btn-sm" onclick="showAlert('Enviando recordatorios por WhatsApp...')">Enviar recordatorios WA</button></div>
-        <div class="card mb-3"><div class="table-wrap"><table id="tabla-cartera"><thead><tr><th>Cliente</th><th>Mes</th><th>Monto</th><th>Estado</th><th>Último pago</th><th></th></tr></thead>
+        <div class="card mb-3"><div class="table-wrap"><table id="tabla-cartera"><thead><tr><th>Cliente</th><th>Plan</th><th>Mensualidad</th><th>Estado</th><th>Días vencido</th><th></th></tr></thead>
         <tbody><tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:2rem">Cargando...</td></tr></tbody></table></div></div>
         <div class="card-header" style="margin-bottom:.75rem"><div class="section-title">Pagos registrados</div><button class="btn btn-accent btn-sm" onclick="openModal('modal-reg-pago')">+ Registrar pago</button></div>
         <div class="card"><div class="table-wrap"><table id="tabla-pagados"><thead><tr><th>Cliente</th><th>Monto</th><th>Fecha</th><th>Método</th><th>Estado</th><th></th></tr></thead>
@@ -1021,10 +1061,21 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
       </div>
 
       <!-- ADMIN: AGENDA -->
-      <!-- EDITABLE: título del período de la agenda y todas las visitas/instalaciones -->
       <div class="view" id="view-agenda">
-        <!-- EDITABLE: rango de fechas mostrado -->
-        <div class="action-row"><div style="font-size:14px;font-weight:600">Agenda</div><button class="btn btn-accent btn-sm" onclick="openModal('modal-nueva-visita')">+ Nueva visita</button></div>
+        <div class="action-row">
+          <div style="font-size:14px;font-weight:600">Agenda</div>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <input type="date" id="agenda-filtro-fecha" class="search-bar" style="max-width:150px;padding:6px 10px" onchange="filtrarAgenda()" title="Filtrar por fecha">
+            <select id="agenda-filtro-tipo" class="search-bar" style="max-width:160px;padding:6px 10px" onchange="filtrarAgenda()">
+              <option value="">Todos los tipos</option>
+              <option>Instalación</option>
+              <option>Soporte técnico</option>
+              <option>Revisión</option>
+            </select>
+            <button class="btn btn-sm" onclick="limpiarFiltrosAgenda()">✕ Limpiar</button>
+            <button class="btn btn-accent btn-sm" onclick="openModal('modal-nueva-visita')">+ Nueva visita</button>
+          </div>
+        </div>
         <div class="card"><div id="agenda-lista" style="padding:.5rem"><div style="text-align:center;color:var(--text-muted);padding:2rem">Cargando...</div></div></div>
       </div>
 
@@ -1207,21 +1258,7 @@ async function doLogin(){
   const btn = document.querySelector('#login-form .btn-accent');
   btn.textContent = 'Verificando...'; btn.disabled = true;
 
-  // Usuarios locales — no dependen del Apps Script
-  const usuariosLocales = [
-    { usuario: 'RischAdmin', password: 'Zipkah-5dab', rol: 'admin' },
-    { usuario: 'Risch',      password: 'Rcahue1973',  rol: 'cliente' },
-  ];
-  const local = usuariosLocales.find(u => u.usuario === usuario && u.password === password);
-  if (local) {
-    const role = local.rol === 'cliente' ? 'user' : local.rol;
-    localStorage.setItem('risch_session', JSON.stringify({ role, nombre: usuario }));
-    iniciarSesion(role, usuario);
-    btn.textContent = 'Entrar al portal'; btn.disabled = false;
-    return;
-  }
-
-  // Fallback: intentar contra Apps Script
+  // Todo login se valida contra Apps Script — no hay credenciales en el código del portal
   try {
     const res = await fetch(`${API}?tipo=login&usuario=${encodeURIComponent(usuario)}&password=${encodeURIComponent(password)}`);
     const data = await res.json();
@@ -1244,8 +1281,6 @@ function iniciarSesion(role, nombre) {
   const isAdmin = role === 'admin';
   window._nombreCliente = isAdmin ? null : nombre;
   window._rolActual = role;
-  const mobileNav = document.getElementById('mobile-nav');
-  if (mobileNav) mobileNav.style.display = isAdmin ? 'flex' : 'none';
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('app').style.display = 'flex';
   document.getElementById('role-label').textContent = isAdmin ? 'Administrador' : 'Portal Cliente';
@@ -1257,6 +1292,7 @@ function iniciarSesion(role, nombre) {
   document.getElementById('topbar-date').textContent = new Date().toLocaleDateString('es-MX',{weekday:'short',day:'numeric',month:'short'});
   document.getElementById('notif-dot').style.display = 'block';
   if (isAdmin) cargarPlanesEnSelector();
+  setTimeout(() => showAlert(isAdmin ? `Bienvenido, ${nombre} 👋` : `Hola, ${nombre.split(' ')[0]} 👋 Bienvenido a tu portal`, 'ok'), 500);
 }
 
 function doLogout(){
@@ -1295,6 +1331,15 @@ function navigate(viewId){
 }
 function showRecover(){document.getElementById('login-form').style.display='none';document.getElementById('recover-form').style.display='block';}
 function hideRecover(){document.getElementById('recover-form').style.display='none';document.getElementById('login-form').style.display='block';}
+// EDITABLE: número de WhatsApp de Risch Network para soporte/recuperación de acceso
+const WHATSAPP_NEGOCIO = '524432065503';
+function solicitarRecuperacion(){
+  const usuario = document.getElementById('recover-user').value.trim();
+  if(!usuario){ showAlert('Escribe tu usuario del portal.', 'error'); return; }
+  const msg = encodeURIComponent(`Hola, olvidé mi contraseña del portal Risch Network.\nMi usuario es: ${usuario}\n¿Me ayudan a restablecerla?`);
+  window.open(`https://wa.me/${WHATSAPP_NEGOCIO}?text=${msg}`, '_blank');
+  showAlert('Te abrimos WhatsApp para contactar a Risch Network.', 'ok');
+}
 function openModal(id){document.getElementById(id).classList.add('open');}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
 document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');}));
@@ -1304,7 +1349,26 @@ function closeNotif(){document.getElementById('notif-panel').classList.remove('o
 document.addEventListener('click',e=>{const p=document.getElementById('notif-panel');if(p.classList.contains('open')&&!p.contains(e.target)&&!e.target.closest('.icon-btn'))p.classList.remove('open');});
 function selectMetodo(el){document.querySelectorAll('.metodo-card').forEach(c=>c.classList.remove('selected'));el.classList.add('selected');}
 function procesarPago(){closeModal('modal-pago');showAlert('Redirigiendo a Mercado Pago...\n\n(En producción, aquí se abre la pasarela de pago)');}
-function enviarTicket(){const t=document.getElementById('ticket-tipo').value,d=document.getElementById('ticket-desc').value;if(!t||!d.trim()){showAlert('Completa el tipo y la descripción.');return;}showAlert('Solicitud enviada. Te contactaremos pronto por WhatsApp.');document.getElementById('ticket-tipo').value='';document.getElementById('ticket-desc').value='';}
+async function enviarTicket() {
+  const tipo = document.getElementById('ticket-tipo').value;
+  const desc = document.getElementById('ticket-desc').value;
+  if (!tipo || !desc.trim()) { showAlert('Completa el tipo y la descripción.', 'error'); return; }
+  const btn = document.querySelector('#view-soporte .btn-accent');
+  if (btn) { btn.textContent = 'Enviando...'; btn.disabled = true; }
+  try {
+    const fecha = new Date().toISOString().split('T')[0];
+    const hora  = new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
+    const cliente = window._nombreCliente || 'Cliente';
+    await apiPost({ accion:'visita', cliente, fecha, hora, tipo:`Soporte: ${tipo}`, direccion: desc.substring(0,80) });
+    showAlert('✅ Solicitud enviada. Te contactaremos pronto.', 'ok');
+    document.getElementById('ticket-tipo').value = '';
+    document.getElementById('ticket-desc').value = '';
+  } catch(e) {
+    showAlert('Error al enviar. Intenta más tarde.', 'error');
+  } finally {
+    if (btn) { btn.textContent = 'Enviar solicitud'; btn.disabled = false; }
+  }
+}
 // ── TOAST (reemplaza alert) ───────────────────────────
 function showAlert(m, tipo) {
   const t = document.getElementById('toast');
@@ -1433,28 +1497,14 @@ async function cargarClientes() {
   try {
     const clientes = await apiGet('clientes');
     _clientesCache = clientes;
-    tbody.innerHTML = clientes.map((c, idx) => {
-      const tel = c.telefono.replace(/\s/g,'');
-      const msg = c.estado === 'Adeudo'
-        ? `Hola%20${encodeURIComponent(c.nombre.split(' ')[0])}%2C%20te%20recordamos%20que%20tienes%20un%20saldo%20pendiente%20de%20${encodeURIComponent(c.precio)}%20con%20Risch%20Network.%20%C2%BFCu%C3%A1ndo%20puedes%20ponerte%20al%20corriente%3F%20Gracias.`
-        : c.estado === 'Suspendido'
-        ? `Hola%20${encodeURIComponent(c.nombre.split(' ')[0])}%2C%20tu%20servicio%20est%C3%A1%20suspendido%20por%20adeudo%20con%20Risch%20Network.%20Cont%C3%A1ctanos%20para%20reactivarlo.`
-        : `Hola%20${encodeURIComponent(c.nombre.split(' ')[0])}%2C%20te%20contactamos%20de%20Risch%20Network.%20%C2%BFEn%20qu%C3%A9%20podemos%20ayudarte%3F`;
-      const dias = c.diasVencido > 0 ? `<span style="color:var(--${c.estado==='Suspendido'?'red':'yellow'});font-weight:600">${c.diasVencido} días</span>` : `<span style="color:var(--text-muted)">—</span>`;
-      const prox = c.proximoPago && c.proximoPago !== '—' && c.proximoPago !== 'Vencido'
-        ? new Date(c.proximoPago).toLocaleDateString('es-MX',{day:'numeric',month:'short'}) + ` · ${c.precio}`
-        : `Vencido · ${c.precio}`;
-      return `<tr>
-        <td><div style="font-weight:500">${c.nombre}</div><div style="font-size:11px;color:var(--text-muted)">${c.telefono}</div></td>
-        <td>${c.plan}</td><td>${c.direccion}</td><td>${dias}</td>
-        <td>${badgeEstado(c.estado)}</td><td>${prox}</td>
-        <td><div style="display:flex;gap:4px">
-          <button class="btn btn-sm" onclick="editarCliente(${idx})" title="Editar">✏️</button>
-          <button class="btn btn-sm btn-danger" onclick="eliminarCliente(${idx})" title="Eliminar">🗑</button>
-          <a href="https://wa.me/52${tel}?text=${msg}" target="_blank"><button class="btn btn-sm btn-wa">WA</button></a>
-        </div></td>
-      </tr>`;
-    }).join('');
+    let filtrados = clientes;
+    if (_filtroEstado !== 'Todos') filtrados = clientes.filter(c => c.estado === _filtroEstado);
+    tbody.innerHTML = filtrados.length
+      ? filtrados.map((c) => {
+          const idx = _clientesCache.findIndex(x => x.nombre === c.nombre);
+          return _renderClienteRow(c, idx);
+        }).join('')
+      : '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:2rem">Sin clientes</td></tr>';
   } catch(e) {
     tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--red);padding:2rem">Error al conectar con la base de datos</td></tr>';
   }
@@ -1464,42 +1514,56 @@ async function cargarClientes() {
 let _cobrosCache = [];
 async function cargarCobros() {
   try {
-    const cobros = await apiGet('cobros');
+    // Cargamos clientes Y cobros en paralelo
+    const [clientes, cobros] = await Promise.all([apiGet('clientes'), apiGet('cobros')]);
     _cobrosCache = cobros;
-    const vencidos = cobros.filter(c => c.estado === 'Vencido' || c.estado === 'Pendiente');
-    const pagados  = cobros.filter(c => c.estado === 'Pagado');
 
-    // Métricas reales
-    const totalCobrado = pagados.reduce((s,c)=>s+Number(c.monto.replace('$','')),0);
-    const totalCartera = vencidos.reduce((s,c)=>s+Number(c.monto.replace('$','')),0);
-    const totalPendiente = vencidos.filter(c=>c.estado==='Pendiente').reduce((s,c)=>s+Number(c.monto.replace('$','')),0);
+    // ── MÉTRICAS DE LAS TARJETAS ─────────────────────
+    // Cobrado este mes: pagos registrados con estado Pagado
+    const pagados = cobros.filter(c => c.estado === 'Pagado');
+    const totalCobrado = pagados.reduce((s,c) => s + Number((c.monto||'0').replace(/[$,]/g,'')), 0);
 
-    const cc=document.getElementById('c-cobrado');if(cc)cc.textContent='$'+totalCobrado.toLocaleString();
-    const cs=document.getElementById('c-cobrado-sub');if(cs)cs.textContent=`${pagados.length} pagos registrados`;
-    const cv=document.getElementById('c-cartera');if(cv)cv.textContent='$'+totalCartera.toLocaleString();
-    const cvs=document.getElementById('c-cartera-sub');if(cvs)cvs.textContent=`${vencidos.length} clientes`;
-    const cp=document.getElementById('c-pendientes');if(cp)cp.textContent='$'+totalPendiente.toLocaleString();
-    const cps=document.getElementById('c-pendientes-sub');if(cps)cps.textContent=`${vencidos.filter(c=>c.estado==='Pendiente').length} pendientes`;
+    // Cartera vencida: clientes con estado Adeudo O Suspendido → su mensualidad
+    const clientesAdeudo     = clientes.filter(c => c.estado === 'Adeudo' || c.estado === 'Suspendido');
+    const totalCartera       = clientesAdeudo.reduce((s,c) => s + Number((c.precio||'0').replace(/[$,]/g,'')), 0);
+
+    // Pendientes: solo los que están en Adeudo (no suspendidos aún)
+    const clientesPendientes = clientes.filter(c => c.estado === 'Adeudo');
+    const totalPendiente     = clientesPendientes.reduce((s,c) => s + Number((c.precio||'0').replace(/[$,]/g,'')), 0);
+
+    const cc  = document.getElementById('c-cobrado');     if(cc)  cc.textContent  = '$' + totalCobrado.toLocaleString();
+    const cs  = document.getElementById('c-cobrado-sub'); if(cs)  cs.textContent  = `${pagados.length} pagos registrados`;
+    const cv  = document.getElementById('c-cartera');     if(cv)  cv.textContent  = '$' + totalCartera.toLocaleString();
+    const cvs = document.getElementById('c-cartera-sub'); if(cvs) cvs.textContent = `${clientesAdeudo.length} cliente${clientesAdeudo.length !== 1 ? 's' : ''}`;
+    const cp  = document.getElementById('c-pendientes');  if(cp)  cp.textContent  = '$' + totalPendiente.toLocaleString();
+    const cps = document.getElementById('c-pendientes-sub'); if(cps) cps.textContent = `${clientesPendientes.length} en adeudo`;
+
+    // ── TABLA CARTERA VENCIDA ─────────────────────────
+    // Muestra los clientes en Adeudo/Suspendido con su mensualidad como monto a cobrar
 
     const tbodyVencidos = document.querySelector('#tabla-cartera tbody');
     if (tbodyVencidos) {
-      tbodyVencidos.innerHTML = vencidos.length ? vencidos.map(c => {
-        const tel = (c.telefono||'').replace(/\s/g,'');
-        const msg = `Hola%2C%20te%20recordamos%20tu%20adeudo%20de%20${encodeURIComponent(c.monto)}%20con%20Risch%20Network.`;
-        const cidx = _cobrosCache.findIndex(x => x.cliente===c.cliente && x.mes===c.mes);
-        return `<tr>
-          <td><div style="font-weight:500">${c.cliente}</div></td>
-          <td>${fmtMes(c.mes)}</td>
-          <td style="color:var(--red);font-weight:600">${c.monto}</td>
-          <td>${badgeEstado(c.estado)}</td>
-          <td>${c.fechaPago && c.fechaPago !== '—' ? fmtFecha(c.fechaPago) : 'Sin pago'}</td>
-          <td><div style="display:flex;gap:4px">
-            <button class="btn btn-sm btn-success" onclick="abrirPagoVencido('${c.cliente}','${c.monto}')">Registrar</button>
-            <button class="btn btn-sm" onclick="editarCobro(${cidx})" title="Editar">✏️</button>
-            <button class="btn btn-sm btn-danger" onclick="eliminarCobro(${cidx})" title="Eliminar">🗑</button>
-          </div></td>
-        </tr>`;
-      }).join('') : '<tr><td colspan="6" style="text-align:center;color:var(--green);padding:1rem">✓ Sin cartera vencida</td></tr>';
+      if (!clientesAdeudo.length) {
+        tbodyVencidos.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--green);padding:1rem">✓ Sin cartera vencida</td></tr>';
+      } else {
+        tbodyVencidos.innerHTML = clientesAdeudo.map(c => {
+          const tel = (c.telefono||'').replace(/\s/g,'');
+          const msg = c.estado === 'Suspendido'
+            ? `Hola%20${encodeURIComponent(c.nombre.split(' ')[0])}%2C%20tu%20servicio%20est%C3%A1%20suspendido.%20Cont%C3%A1ctanos%20para%20reactivarlo.`
+            : `Hola%20${encodeURIComponent(c.nombre.split(' ')[0])}%2C%20te%20recordamos%20que%20tienes%20un%20adeudo%20de%20${encodeURIComponent(c.precio)}%20con%20Risch%20Network.`;
+          return `<tr>
+            <td><div style="font-weight:500">${c.nombre}</div><div style="font-size:11px;color:var(--text-muted)">${c.telefono}</div></td>
+            <td style="font-size:12px;color:var(--text-muted)">${c.plan}</td>
+            <td style="color:var(--red);font-weight:600">${c.precio}</td>
+            <td>${badgeEstado(c.estado)}</td>
+            <td style="font-size:12px;color:var(--text-muted)">${c.diasVencido > 0 ? `${c.diasVencido} días` : '—'}</td>
+            <td><div style="display:flex;gap:4px">
+              <button class="btn btn-sm btn-success" onclick="abrirPagoVencido('${c.nombre.replace(/'/g,"\\'")}','${c.precio}')">Registrar</button>
+              <a href="https://wa.me/52${tel}?text=${msg}" target="_blank"><button class="btn btn-sm btn-wa">WA</button></a>
+            </div></td>
+          </tr>`;
+        }).join('');
+      }
     }
 
     const tbodyPagados = document.querySelector('#tabla-pagados tbody');
@@ -1507,43 +1571,102 @@ async function cargarCobros() {
       tbodyPagados.innerHTML = pagados.map(c => {
         const pidx = _cobrosCache.findIndex(x => x.cliente===c.cliente && x.mes===c.mes);
         return `<tr>
-          <td>${c.cliente}</td><td>${c.monto}</td><td>${fmtFecha(c.fechaPago)}</td><td>${c.metodo}</td><td>${badgeEstado(c.estado)}</td>
+          <td>${c.cliente}</td><td>${c.monto}</td><td>${fmtFecha(c.fechaPago)}</td><td>${c.metodo||'—'}</td><td>${badgeEstado(c.estado)}</td>
           <td><div style="display:flex;gap:4px">
+            <button class="btn btn-sm btn-wa" onclick="enviarReciboWA('${c.cliente.replace(/'/g,"\\'")}','${c.monto}','${c.mes}')" title="Recibo por WA">📱</button>
             <button class="btn btn-sm" onclick="editarCobro(${pidx})" title="Editar">✏️</button>
             <button class="btn btn-sm btn-danger" onclick="eliminarCobro(${pidx})" title="Eliminar">🗑</button>
           </div></td>
         </tr>`;
       }).join('');
     }
+
+    // Comparativa mes actual vs anterior
+    const hoy = new Date();
+    const mesA = hoy.getMonth(), anioA = hoy.getFullYear();
+    const mesP = mesA - 1 < 0 ? 11 : mesA - 1, anioP = mesA - 1 < 0 ? anioA - 1 : anioA;
+    const calcMes = (m, a) => cobros.filter(c => { const d = new Date(c.mes); return c.estado==='Pagado' && d.getMonth()===m && d.getFullYear()===a; }).reduce((s,c)=>s+Number((c.monto||'0').replace(/[$,]/g,'')),0);
+    const totalA = calcMes(mesA, anioA), totalP = calcMes(mesP, anioP);
+    const variacion = totalP > 0 ? Math.round(((totalA - totalP) / totalP) * 100) : null;
+    const lblA = hoy.toLocaleDateString('es-MX',{month:'long',year:'numeric'});
+    const lblP = new Date(anioP, mesP, 1).toLocaleDateString('es-MX',{month:'long',year:'numeric'});
+    const cardComp = document.getElementById('card-comparacion');
+    const compContent = document.getElementById('comp-content');
+    if (cardComp && compContent) {
+      cardComp.style.display = 'block';
+      compContent.innerHTML = `
+        <div class="comp-stat"><div class="comp-stat-label">${lblP}</div><div class="comp-stat-value" style="color:var(--text)">$${totalP.toLocaleString()}</div></div>
+        <div class="comp-stat"><div class="comp-stat-label">${lblA} (actual)</div><div class="comp-stat-value" style="color:var(--green)">$${totalA.toLocaleString()}</div></div>
+        ${variacion !== null ? `<div class="comp-stat" style="display:flex;flex-direction:column;justify-content:center;align-items:center"><div class="comp-stat-label">Variación</div><div class="comp-stat-value" style="color:${variacion>=0?'var(--green)':'var(--red)'}">${variacion>=0?'+':''}${variacion}%</div></div>` : ''}`;
+    }
   } catch(e) { console.error('Error cobros:', e); }
+}
+
+function enviarReciboWA(cliente, monto, mes) {
+  const cd = _clientesCache.find(c => c.nombre === cliente);
+  if (!cd) { showAlert('Teléfono del cliente no encontrado.', 'error'); return; }
+  const t = (cd.telefono||'').replace(/\D/g,'');
+  const msg = encodeURIComponent(`✅ *Recibo de pago — Risch Network*\n\nCliente: ${cliente}\nMensualidad: ${mes}\nMonto: ${monto}\nEstado: Pagado ✓\n\nGracias por tu pago 🙏`);
+  window.open(`https://wa.me/52${t}?text=${msg}`, '_blank');
 }
 
 // ── AGENDA ────────────────────────────────────────────
 let _agendaCache = [];
+
+function renderAgenda(lista) {
+  const cont = document.getElementById('agenda-lista');
+  if (!cont) return;
+  if (!lista.length) { cont.innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:2rem">Sin visitas</div>'; return; }
+  cont.innerHTML = lista.map((v) => {
+    const idx = _agendaCache.findIndex(x => x.cliente===v.cliente && x.fecha===v.fecha);
+    const fechaD = new Date(v.fecha);
+    return `<div style="display:flex;gap:12px;padding:12px;border-radius:var(--r);background:var(--surface-2);margin-bottom:8px;border:1px solid var(--border);align-items:center">
+      <div style="min-width:50px;text-align:center;background:var(--accent);border-radius:6px;padding:6px 4px;flex-shrink:0">
+        <div style="font-size:11px;color:rgba(255,255,255,0.7)">${fechaD.toLocaleDateString('es-MX',{month:'short',timeZone:'UTC'}).toUpperCase()}</div>
+        <div style="font-size:18px;font-weight:700;color:#fff">${fechaD.getUTCDate()}</div>
+      </div>
+      <div style="flex:1">
+        <div style="font-weight:600;font-size:13px">${v.cliente}</div>
+        <div style="font-size:11px;color:var(--text-muted)">${v.hora||'—'} · ${v.tipo} · ${v.direccion||'Sin dirección'}</div>
+      </div>
+      ${badgeEstado(v.estado)}
+      <div style="display:flex;gap:4px;margin-left:8px;flex-shrink:0">
+        ${v.estado !== 'Completada' ? `<button class="btn btn-sm btn-success" onclick="confirmarVisita(${idx})" title="Completada">✓</button>` : ''}
+        <button class="btn btn-sm" onclick="editarVisita(${idx})" title="Editar">✏️</button>
+        <button class="btn btn-sm btn-danger" onclick="eliminarVisita(${idx})" title="Eliminar">🗑</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
 async function cargarAgenda() {
   const cont = document.getElementById('agenda-lista');
   if (!cont) return;
+  cont.innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:2rem">Cargando...</div>';
   try {
     const agenda = await apiGet('agenda');
     _agendaCache = agenda;
-    cont.innerHTML = agenda.map((v, idx) => `
-      <div class="agenda-item" style="display:flex;gap:12px;padding:12px;border-radius:var(--r);background:var(--surface-2);margin-bottom:8px;border:1px solid var(--border);align-items:center">
-        <div style="min-width:50px;text-align:center;background:var(--accent);border-radius:6px;padding:6px 4px;flex-shrink:0">
-          <div style="font-size:11px;color:rgba(255,255,255,0.7)">${new Date(v.fecha).toLocaleDateString('es-MX',{month:'short'}).toUpperCase()}</div>
-          <div style="font-size:18px;font-weight:700;color:#fff">${new Date(v.fecha).getDate()}</div>
-        </div>
-        <div style="flex:1">
-          <div style="font-weight:600;font-size:13px">${v.cliente}</div>
-          <div style="font-size:11px;color:var(--text-muted)">${typeof v.hora === 'string' ? v.hora : new Date(v.hora).toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'})} · ${v.tipo} · ${v.direccion}</div>
-        </div>
-        ${badgeEstado(v.estado)}
-        <div style="display:flex;gap:4px;margin-left:8px;flex-shrink:0">
-          ${v.estado !== 'Completada' ? `<button class="btn btn-sm btn-success" onclick="confirmarVisita(${idx})" title="Completada">✓</button>` : ''}
-          <button class="btn btn-sm" onclick="editarVisita(${idx})" title="Editar">✏️</button>
-          <button class="btn btn-sm btn-danger" onclick="eliminarVisita(${idx})" title="Eliminar">🗑</button>
-        </div>
-      </div>`).join('');
+    filtrarAgenda();
   } catch(e) { console.error('Error agenda:', e); }
+}
+
+function filtrarAgenda() {
+  const fecha = document.getElementById('agenda-filtro-fecha')?.value || '';
+  const tipo = document.getElementById('agenda-filtro-tipo')?.value || '';
+  const filtrados = _agendaCache.filter(v => {
+    const matchFecha = !fecha || (v.fecha||'').startsWith(fecha);
+    const matchTipo = !tipo || (v.tipo||'').toLowerCase().includes(tipo.toLowerCase());
+    return matchFecha && matchTipo;
+  });
+  renderAgenda(filtrados);
+}
+
+function limpiarFiltrosAgenda() {
+  const f = document.getElementById('agenda-filtro-fecha');
+  const t = document.getElementById('agenda-filtro-tipo');
+  if (f) f.value = '';
+  if (t) t.value = '';
+  renderAgenda(_agendaCache);
 }
 
 // ── PROSPECTOS ────────────────────────────────────────
@@ -1630,13 +1753,40 @@ async function cargarDashboard() {
       const total = cobros.filter(c => {
         const d = new Date(c.mes); return d.getMonth()===m.mes && d.getFullYear()===m.anio && c.estado==='Pagado';
       }).reduce((s,c)=>s+Number((c.monto||'0').replace(/[$,]/g,'')),0);
-      const bar = document.getElementById('b'+i); if(bar) bar.style.height = Math.max((total/maxIng)*96,4)+'%';
+      const bar = document.getElementById('b'+i); if(bar){ bar.style.height = Math.max((total/maxIng)*96,4)+'%'; bar.title = `$${total.toLocaleString()}`; }
       const lbl = bar?.parentElement?.querySelector('.bar-label'); if(lbl) lbl.textContent = m.label;
+      const amt = document.getElementById('ba'+i); if(amt && total > 0) amt.textContent = `$${(total/1000).toFixed(1)}k`;
     });
 
     // Selector de clientes en modal de pago
     const sel = document.getElementById('pago-cliente');
     if (sel) sel.innerHTML = clientes.map(c=>`<option value="${c.nombre}">${c.nombre}</option>`).join('');
+
+    // Panel "Próximos a vencer esta semana"
+    const hoy7 = new Date(); const en7 = new Date(); en7.setDate(hoy7.getDate()+7);
+    const proximos = clientes.filter(c => {
+      if (!c.proximoPago || c.proximoPago === 'Vencido' || c.proximoPago === '—') return false;
+      const d = new Date(c.proximoPago);
+      return d >= hoy7 && d <= en7 && c.estado === 'Activo';
+    });
+    const panelProx = document.getElementById('panel-proximos');
+    const listaProx = document.getElementById('lista-proximos');
+    if (panelProx && listaProx) {
+      if (proximos.length) {
+        panelProx.style.display = 'block';
+        listaProx.innerHTML = proximos.map(c => {
+          const d = new Date(c.proximoPago);
+          const diasQ = Math.ceil((d - hoy7) / (1000*60*60*24));
+          return `<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--surface-2);border-radius:8px;border-left:3px solid var(--yellow)">
+            <div>
+              <div style="font-weight:600;font-size:13px">${c.nombre}</div>
+              <div style="font-size:11px;color:var(--text-muted)">${c.precio} · vence ${d.toLocaleDateString('es-MX',{day:'numeric',month:'short'})} · en ${diasQ} día${diasQ===1?'':'s'}</div>
+            </div>
+            <button class="btn btn-sm" onclick="abrirPagoVencido('${c.nombre.replace(/'/g,"\\'")}','${c.precio}')">Cobrar</button>
+          </div>`;
+        }).join('');
+      } else { panelProx.style.display = 'none'; }
+    }
   } catch(e) {
     console.error('dashboard:', e);
     animateDashboard();
@@ -1746,46 +1896,80 @@ async function guardarVisita() {
   }
 }
 
-// ── BÚSQUEDA DE CLIENTES ─────────────────────────────
+// ── FILTRO ESTADO CLIENTES ────────────────────────────
+let _filtroEstado = 'Todos';
 let _clientesCache = [];
+
+function setFiltroEstado(estado, btn) {
+  _filtroEstado = estado;
+  document.querySelectorAll('.btn-filtro').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  const q = document.getElementById('buscar-cliente')?.value || '';
+  filtrarClientes(q);
+}
+
+function _renderClienteRow(c, idx) {
+  const tel = (c.telefono||'').replace(/\s/g,'');
+  const msg = c.estado === 'Adeudo'
+    ? `Hola%20${encodeURIComponent(c.nombre.split(' ')[0])}%2C%20te%20recordamos%20un%20saldo%20pendiente%20de%20${encodeURIComponent(c.precio)}%20con%20Risch%20Network.`
+    : c.estado === 'Suspendido'
+    ? `Hola%20${encodeURIComponent(c.nombre.split(' ')[0])}%2C%20tu%20servicio%20est%C3%A1%20suspendido.%20Cont%C3%A1ctanos.`
+    : `Hola%20${encodeURIComponent(c.nombre.split(' ')[0])}%2C%20te%20contactamos%20de%20Risch%20Network.`;
+  const dias = c.diasVencido > 0 ? `<span style="color:var(--${c.estado==='Suspendido'?'red':'yellow'});font-weight:600">${c.diasVencido} días</span>` : `<span style="color:var(--text-muted)">—</span>`;
+  const prox = c.proximoPago && c.proximoPago !== '—' && c.proximoPago !== 'Vencido'
+    ? new Date(c.proximoPago).toLocaleDateString('es-MX',{day:'numeric',month:'short'}) + ` · ${c.precio}`
+    : `Vencido · ${c.precio}`;
+  const colorMap = { Activo:['var(--green-bg)','var(--green-text)','rgba(34,211,160,0.3)'], Adeudo:['var(--yellow-bg)','var(--yellow-text)','rgba(245,158,11,0.3)'], Suspendido:['var(--red-bg)','var(--red-text)','rgba(248,113,113,0.3)'] };
+  const [bg, color, border] = colorMap[c.estado] || colorMap['Activo'];
+  const pagarBtn = (c.estado === 'Adeudo' || c.estado === 'Suspendido')
+    ? `<button class="btn btn-sm btn-success" onclick="abrirPagoVencido('${c.nombre.replace(/'/g,"\\'")}','${c.precio}')" title="Marcar pagado">💰</button>`
+    : '';
+  return `<tr>
+    <td><div style="font-weight:500">${c.nombre}</div><div style="font-size:11px;color:var(--text-muted)">${c.telefono}</div></td>
+    <td>${c.plan}</td><td style="font-size:12px">${c.direccion||'—'}</td><td>${dias}</td>
+    <td><select class="estado-select-inline" onchange="cambiarEstadoCliente(${idx},this.value)" style="background:${bg};color:${color};border:1px solid ${border}">
+      <option value="Activo" ${c.estado==='Activo'?'selected':''}>Activo</option>
+      <option value="Adeudo" ${c.estado==='Adeudo'?'selected':''}>Adeudo</option>
+      <option value="Suspendido" ${c.estado==='Suspendido'?'selected':''}>Suspendido</option>
+    </select></td>
+    <td style="font-size:12px">${prox}</td>
+    <td><div style="display:flex;gap:4px">
+      ${pagarBtn}
+      <button class="btn btn-sm" onclick="editarCliente(${idx})" title="Editar">✏️</button>
+      <button class="btn btn-sm btn-danger" onclick="eliminarCliente(${idx})" title="Eliminar">🗑</button>
+      <a href="https://wa.me/52${tel}?text=${msg}" target="_blank"><button class="btn btn-sm btn-wa">WA</button></a>
+    </div></td>
+  </tr>`;
+}
+
 function filtrarClientes(q) {
   const tbody = document.querySelector('#view-clientes tbody');
   if (!tbody) return;
   const term = q.toLowerCase();
-  const filtrados = _clientesCache.filter(c =>
-    c.nombre.toLowerCase().includes(term) ||
-    c.telefono.includes(term) ||
-    c.plan.toLowerCase().includes(term) ||
-    c.estado.toLowerCase().includes(term)
+  let filtrados = _clientesCache.filter(c =>
+    (c.nombre||'').toLowerCase().includes(term) ||
+    (c.telefono||'').includes(term) ||
+    (c.plan||'').toLowerCase().includes(term)
   );
+  if (_filtroEstado !== 'Todos') filtrados = filtrados.filter(c => c.estado === _filtroEstado);
   if (!filtrados.length) {
-    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:1.5rem">Sin resultados para "${q}"</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:1.5rem">Sin resultados</td></tr>`;
     return;
   }
-  // Re-render con filtro
   tbody.innerHTML = filtrados.map(c => {
     const idx = _clientesCache.findIndex(x => x.nombre === c.nombre);
-    const tel = c.telefono.replace(/\s/g,'');
-    const msg = c.estado === 'Adeudo'
-      ? `Hola%20${encodeURIComponent(c.nombre.split(' ')[0])}%2C%20tienes%20un%20saldo%20pendiente%20de%20${encodeURIComponent(c.precio)}%20con%20Risch%20Network.`
-      : c.estado === 'Suspendido'
-      ? `Hola%20${encodeURIComponent(c.nombre.split(' ')[0])}%2C%20tu%20servicio%20est%C3%A1%20suspendido.%20Cont%C3%A1ctanos.`
-      : `Hola%20${encodeURIComponent(c.nombre.split(' ')[0])}%2C%20te%20contactamos%20de%20Risch%20Network.`;
-    const dias = c.diasVencido > 0 ? `<span style="color:var(--${c.estado==='Suspendido'?'red':'yellow'});font-weight:600">${c.diasVencido} días</span>` : `<span style="color:var(--text-muted)">—</span>`;
-    const prox = c.proximoPago && c.proximoPago !== '—' && c.proximoPago !== 'Vencido'
-      ? new Date(c.proximoPago).toLocaleDateString('es-MX',{day:'numeric',month:'short'}) + ` · ${c.precio}`
-      : `Vencido · ${c.precio}`;
-    return `<tr>
-      <td><div style="font-weight:500">${c.nombre}</div><div style="font-size:11px;color:var(--text-muted)">${c.telefono}</div></td>
-      <td>${c.plan}</td><td>${c.direccion}</td><td>${dias}</td>
-      <td>${badgeEstado(c.estado)}</td><td>${prox}</td>
-      <td><div style="display:flex;gap:4px">
-        <button class="btn btn-sm" onclick="editarCliente(${idx})" title="Editar">✏️</button>
-        <button class="btn btn-sm btn-danger" onclick="eliminarCliente(${idx})" title="Eliminar">🗑</button>
-        <a href="https://wa.me/52${tel}?text=${msg}" target="_blank"><button class="btn btn-sm btn-wa">WA</button></a>
-      </div></td>
-    </tr>`;
+    return _renderClienteRow(c, idx);
   }).join('');
+}
+
+async function cambiarEstadoCliente(idx, nuevoEstado) {
+  const c = _clientesCache[idx];
+  if (!c) return;
+  try {
+    await apiPost({ accion:'editar_cliente', nombre_original:c.nombre, nombre:c.nombre, telefono:c.telefono, direccion:c.direccion, plan:c.plan, monto:c.precio, estado:nuevoEstado });
+    _clientesCache[idx].estado = nuevoEstado;
+    showAlert(`✅ ${c.nombre} → ${nuevoEstado}`, 'ok');
+  } catch(e) { showAlert('Error al cambiar estado.', 'error'); }
 }
 
 // ── PORTAL CLIENTE CON DATOS REALES ──────────────────
@@ -1805,9 +1989,13 @@ async function cargarDatosCliente(nombre) {
     const cvv = document.getElementById('cli-vence');
     if (cvv) {
       if (c.proximoPago && c.proximoPago !== 'Vencido' && c.proximoPago !== '—') {
-        const fecha = new Date(c.proximoPago).toLocaleDateString('es-MX',{day:'numeric',month:'long'});
-        cvv.textContent = `Vence ${fecha}`;
-      } else { cvv.textContent = 'Vencido'; }
+        const fechaD = new Date(c.proximoPago);
+        const hoy = new Date();
+        const diasRestantes = Math.ceil((fechaD - hoy) / (1000*60*60*24));
+        const fechaStr = fechaD.toLocaleDateString('es-MX',{day:'numeric',month:'long'});
+        cvv.textContent = diasRestantes > 0 ? `Vence ${fechaStr} · ${diasRestantes} días` : 'Vencido';
+        cvv.style.color = diasRestantes <= 3 ? 'var(--yellow-text)' : '';
+      } else { cvv.textContent = 'Vencido'; cvv.style.color = 'var(--red-text)'; }
     }
 
     // Alerta de pago
@@ -1824,6 +2012,34 @@ async function cargarDatosCliente(nombre) {
         det.textContent = `Próximo pago: ${c.precio}`;
       }
     }
+    // Indicador visual de estado del servicio
+    const srvBanner = document.getElementById('cli-estado-servicio-banner');
+    const srvCuenta = document.getElementById('cli-srv-cuenta');
+    const srvDias   = document.getElementById('cli-srv-dias');
+    const srvProx   = document.getElementById('cli-srv-prox');
+    if (srvBanner) {
+      if (c.estado === 'Activo') {
+        srvBanner.className = 'alert-banner alert-success';
+        srvBanner.textContent = '✓ Servicio activo · Sin adeudos';
+      } else if (c.estado === 'Adeudo') {
+        srvBanner.className = 'alert-banner alert-warning';
+        srvBanner.textContent = `⚠ Adeudo pendiente · ${c.diasVencido} días vencido`;
+      } else {
+        srvBanner.className = 'alert-banner';
+        srvBanner.style.background = 'var(--red-bg)'; srvBanner.style.color = 'var(--red-text)'; srvBanner.style.border = '1px solid var(--red)';
+        srvBanner.textContent = '⛔ Servicio suspendido · Contactar a Risch Network';
+      }
+    }
+    if (srvCuenta) { srvCuenta.textContent = c.estado; srvCuenta.style.color = c.estado==='Activo'?'var(--green-text)':c.estado==='Adeudo'?'var(--yellow-text)':'var(--red-text)'; }
+    if (srvDias && c.proximoPago && c.proximoPago !== 'Vencido' && c.proximoPago !== '—') {
+      const diasSrv = Math.ceil((new Date(c.proximoPago) - new Date()) / (1000*60*60*24));
+      srvDias.textContent = diasSrv > 0 ? `${diasSrv} días` : 'Vencido';
+      srvDias.style.color = diasSrv <= 3 ? 'var(--yellow-text)' : (diasSrv < 0 ? 'var(--red-text)' : '');
+    } else if (srvDias) { srvDias.textContent = 'Vencido'; srvDias.style.color = 'var(--red-text)'; }
+    if (srvProx && c.proximoPago && c.proximoPago !== 'Vencido' && c.proximoPago !== '—') {
+      srvProx.textContent = new Date(c.proximoPago).toLocaleDateString('es-MX',{day:'numeric',month:'long'}) + ` · ${c.precio}`;
+    }
+
     // Actualizar modal de pago con monto real
     const modalPagoDesc = document.querySelector('#modal-pago p strong');
     if (modalPagoDesc) modalPagoDesc.textContent = `${c.precio} MXN`;
@@ -1936,18 +2152,45 @@ async function exportarCSV(tipo) {
 // ── BUSCADOR GLOBAL ───────────────────────────────────
 function activarBuscadorGlobal() {
   document.addEventListener('keydown', e => {
-    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-      e.preventDefault();
-      const q = prompt('Buscar cliente:');
-      if (q) {
-        navigate('clientes');
-        setTimeout(() => {
-          const input = document.getElementById('buscar-cliente');
-          if (input) { input.value = q; filtrarClientes(q); }
-        }, 500);
-      }
-    }
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); abrirBuscarGlobal(); }
+    if (e.key === 'Escape') cerrarBuscarGlobal();
   });
+}
+function abrirBuscarGlobal() {
+  const m = document.getElementById('modal-buscar-global');
+  if (!m) return;
+  m.style.display = 'flex';
+  const inp = document.getElementById('buscar-global-input');
+  if (inp) { inp.value = ''; inp.focus(); }
+  document.getElementById('buscar-global-resultados').innerHTML = '';
+}
+function cerrarBuscarGlobal() {
+  const m = document.getElementById('modal-buscar-global');
+  if (m) m.style.display = 'none';
+}
+async function buscarGlobal(q) {
+  const el = document.getElementById('buscar-global-resultados');
+  if (!q.trim() || !el) { if(el) el.innerHTML=''; return; }
+  el.innerHTML = '<div style="padding:1rem;text-align:center;color:var(--text-muted);font-size:12px">Buscando...</div>';
+  try {
+    const [clientes, prospectos, cobros] = await Promise.all([apiGet('clientes'), apiGet('prospectos'), apiGet('cobros')]);
+    const term = q.toLowerCase();
+    const results = [];
+    clientes.filter(c=>(c.nombre||'').toLowerCase().includes(term)||(c.telefono||'').includes(term)).slice(0,3).forEach(c=>{
+      results.push({icon:'👥',tipo:'Cliente',titulo:c.nombre,sub:`${c.plan} · ${c.estado}`,onclick:`navigate('clientes');setTimeout(()=>{const i=document.getElementById('buscar-cliente');if(i){i.value='${c.nombre.replace(/'/g,"\\'").replace(/"/g,'\\"')}';filtrarClientes(i.value);}},400);cerrarBuscarGlobal()`});
+    });
+    prospectos.filter(p=>(p.nombre||'').toLowerCase().includes(term)||(p.telefono||'').includes(term)).slice(0,2).forEach(p=>{
+      results.push({icon:'🔍',tipo:'Prospecto',titulo:p.nombre,sub:`${p.servicio||'Internet'} · ${p.estado}`,onclick:`navigate('prospectos');cerrarBuscarGlobal()`});
+    });
+    cobros.filter(c=>(c.cliente||'').toLowerCase().includes(term)).slice(0,2).forEach(c=>{
+      results.push({icon:'💵',tipo:'Cobro',titulo:c.cliente,sub:`${c.mes} · ${c.monto} · ${c.estado}`,onclick:`navigate('cobros');cerrarBuscarGlobal()`});
+    });
+    if (!results.length) { el.innerHTML=`<div style="padding:1rem;text-align:center;color:var(--text-muted)">Sin resultados para "${q}"</div>`; return; }
+    el.innerHTML = results.map(r=>`<div class="buscar-result-item" onclick="${r.onclick}">
+      <span style="font-size:20px">${r.icon}</span>
+      <div><div style="font-weight:500;font-size:13px">${r.titulo}</div><div style="font-size:11px;color:var(--text-muted)">${r.tipo} · ${r.sub}</div></div>
+    </div>`).join('');
+  } catch(e) { el.innerHTML=`<div style="padding:1rem;color:var(--text-muted)">Error al buscar</div>`; }
 }
 
 // ── NUEVO PROSPECTO ───────────────────────────────────
@@ -2277,6 +2520,26 @@ async function cargarPerfilCliente(nombre) {
   } catch(e) { console.error('perfil error:', e); }
 }
 
+async function guardarPerfilCliente() {
+  const nombre = document.getElementById('perfil-input-nombre')?.value?.trim();
+  const tel    = document.getElementById('perfil-input-tel')?.value?.trim();
+  const dir    = document.getElementById('perfil-input-dir')?.value?.trim();
+  if (!nombre || !tel) { showAlert('Nombre y teléfono son obligatorios.', 'error'); return; }
+  const btn = document.querySelector('#view-perfil .btn-accent');
+  if (btn) { btn.textContent = 'Guardando...'; btn.disabled = true; }
+  try {
+    const clientes = await apiGet('clientes');
+    const c = clientes.find(cl => cl.nombre.toLowerCase().includes((window._nombreCliente||'').toLowerCase()));
+    if (!c) { showAlert('No se encontró el perfil.', 'error'); return; }
+    await apiPost({ accion:'editar_cliente', nombre_original:c.nombre, nombre, telefono:tel, direccion:dir||c.direccion, plan:c.plan, monto:c.precio, estado:c.estado });
+    showAlert('✅ Perfil actualizado', 'ok');
+    const pn = document.getElementById('perfil-nombre'); if(pn) pn.textContent = nombre;
+    const pa = document.getElementById('perfil-avatar'); if(pa) pa.textContent = nombre.substring(0,2).toUpperCase();
+    const ud = document.getElementById('user-display'); if(ud) ud.textContent = nombre;
+  } catch(e) { showAlert('Error al guardar.', 'error'); }
+  finally { if(btn) { btn.textContent = 'Guardar cambios'; btn.disabled = false; } }
+}
+
 // ── INIT: cargar datos al navegar ─────────────────────
 const _navigateOriginal = navigate;
 window.navigate = function(viewId) {
@@ -2322,41 +2585,165 @@ async function animateReportes(){
 function easeOut(t){return 1-Math.pow(1-t,3);}
 
 // SPEED TEST
-function runSpeedTest(){
-  if(testRunning)return;testRunning=true;
-  const btn=document.getElementById('speed-btn'),numEl=document.getElementById('speed-num'),phaseEl=document.getElementById('speed-phase'),statusEl=document.getElementById('speed-status'),progress=document.getElementById('speed-progress'),arc=document.getElementById('speed-arc');
-  btn.textContent='Probando...';btn.disabled=true;
-  const setArc=p=>{arc.style.strokeDashoffset=502-(502*(p/40));};
-  const ping=Math.round(8+Math.random()*18);document.getElementById('result-ping').textContent=ping+' ms';document.getElementById('stat-ping').classList.add('lit');
-  statusEl.textContent='Midiendo ping...';progress.style.width='10%';
-  const dlTarget=22+Math.random()*10;let dlCurrent=0;
-  phaseEl.textContent='descarga';statusEl.textContent='Midiendo descarga...';
-  const dlInt=setInterval(()=>{
-    dlCurrent=Math.min(dlCurrent+dlTarget/18+Math.random()*1.5,dlTarget);
-    numEl.textContent=dlCurrent.toFixed(1);setArc(dlCurrent);
-    progress.style.width=(10+(dlCurrent/dlTarget)*40)+'%';
-    if(dlCurrent>=dlTarget){
-      clearInterval(dlInt);const dl=dlCurrent.toFixed(1);document.getElementById('result-dl').textContent=dl+' Mbps';document.getElementById('stat-dl').classList.add('lit');
-      const ulTarget=dlTarget*0.3+Math.random()*2;let ulCurrent=0;
-      phaseEl.textContent='subida';statusEl.textContent='Midiendo subida...';
-      const ulInt=setInterval(()=>{
-        ulCurrent=Math.min(ulCurrent+ulTarget/14+Math.random(),ulTarget);
-        numEl.textContent=ulCurrent.toFixed(1);setArc(ulCurrent);
-        progress.style.width=(50+(ulCurrent/ulTarget)*48)+'%';
-        if(ulCurrent>=ulTarget){
-          clearInterval(ulInt);const ul=ulCurrent.toFixed(1);document.getElementById('result-ul').textContent=ul+' Mbps';document.getElementById('stat-ul').classList.add('lit');
-          progress.style.width='100%';numEl.textContent=dl;setArc(parseFloat(dl));
-          phaseEl.textContent='✓ completado';statusEl.textContent='';btn.textContent='Probar de nuevo';btn.disabled=false;testRunning=false;
-          const qs=document.getElementById('quick-speed');if(qs)qs.textContent=dl;
-          const now=new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
-          speedHistory.unshift({time:now,dl,ul,ping});if(speedHistory.length>5)speedHistory.pop();
-          const wrap=document.getElementById('speed-history-wrap'),tbody=document.getElementById('speed-history-body');
-          if(wrap)wrap.style.display='block';
-          if(tbody)tbody.innerHTML=speedHistory.map(r=>`<tr><td>${r.time}</td><td>${r.dl} Mbps</td><td>${r.ul} Mbps</td><td>${r.ping} ms</td></tr>`).join('');
-        }
-      },110);
+// ── PRUEBA DE VELOCIDAD REAL ──────────────────────────
+// Descarga y sube datos reales contra los servidores de Cloudflare.
+// La velocidad = bytes transferidos / tiempo transcurrido (medido con performance.now).
+const CF_DOWN = 'https://speed.cloudflare.com/__down';
+const CF_UP   = 'https://speed.cloudflare.com/__up';
+
+async function runSpeedTest() {
+  if (testRunning) return;
+  testRunning = true;
+
+  const ui = {
+    btn:     document.getElementById('speed-btn'),
+    num:     document.getElementById('speed-num'),
+    phase:   document.getElementById('speed-phase'),
+    status:  document.getElementById('speed-status'),
+    prog:    document.getElementById('speed-progress'),
+    arc:     document.getElementById('speed-arc'),
+    resDL:   document.getElementById('result-dl'),
+    resUL:   document.getElementById('result-ul'),
+    resPing: document.getElementById('result-ping'),
+    statDL:  document.getElementById('stat-dl'),
+    statUL:  document.getElementById('stat-ul'),
+    statPing:document.getElementById('stat-ping'),
+  };
+
+  // Escala del arco: 502 = circunferencia SVG. Máximo visual = 150 Mbps.
+  const MAX_MBPS = 150;
+  const setArc = mbps => {
+    const pct = Math.min(mbps / MAX_MBPS, 1);
+    ui.arc.style.strokeDashoffset = 502 - 502 * pct;
+  };
+  const setNum   = v  => { ui.num.textContent = v.toFixed(1); };
+  const setPhase = (ph, st) => { ui.phase.textContent = ph; if(ui.status) ui.status.textContent = st || ''; };
+  const setProg  = p  => { ui.prog.style.width = Math.round(p * 100) + '%'; };
+
+  // Reiniciar UI
+  ['stat-dl','stat-ul','stat-ping'].forEach(id => document.getElementById(id)?.classList.remove('lit'));
+  ui.btn.textContent = 'Midiendo...'; ui.btn.disabled = true;
+  setNum(0); setArc(0); setProg(0);
+  ui.resDL.textContent = ui.resUL.textContent = ui.resPing.textContent = '—';
+
+  let pingMs = null, dlMbps = null, ulMbps = null;
+
+  try {
+    // ── FASE 1: PING ────────────────────────────────
+    setPhase('ping', 'Midiendo latencia...');
+    const pingTiempos = [];
+    for (let i = 0; i < 5; i++) {
+      const t0 = performance.now();
+      await fetch(`${CF_DOWN}?bytes=0&_=${Date.now()}`, { cache:'no-store', mode:'cors' });
+      pingTiempos.push(performance.now() - t0);
+      await new Promise(r => setTimeout(r, 80));
     }
-  },95);
+    pingTiempos.sort((a,b)=>a-b);
+    pingMs = Math.round(pingTiempos[1]); // descartar el peor y usar el segundo mejor
+    ui.resPing.textContent = pingMs + ' ms';
+    ui.statPing.classList.add('lit');
+    setProg(0.12);
+
+    // ── FASE 2: DESCARGA ────────────────────────────
+    // Descarga 25 MB en streaming y mide bytes/segundo en ventanas de 300 ms.
+    setPhase('descarga', 'Descargando datos de prueba...');
+    const DL_BYTES = 25 * 1024 * 1024; // 25 MB
+    const dlMediciones = [];
+    let dlRecibidos = 0;
+    let snapT = performance.now();
+    let snapB = 0;
+
+    const dlRes = await fetch(`${CF_DOWN}?bytes=${DL_BYTES}&_=${Date.now()}`, { cache:'no-store', mode:'cors' });
+    const reader = dlRes.body.getReader();
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      dlRecibidos += value.length;
+
+      const ahora = performance.now();
+      const ventana = ahora - snapT;
+      if (ventana >= 300) {
+        const mbps = ((dlRecibidos - snapB) * 8) / (ventana / 1000) / 1e6;
+        dlMediciones.push(mbps);
+        setNum(mbps); setArc(mbps);
+        snapT = ahora; snapB = dlRecibidos;
+      }
+      // Progreso: 12% → 60%
+      setProg(0.12 + 0.48 * (dlRecibidos / DL_BYTES));
+    }
+    // Mediana de las mediciones (más estable que el promedio)
+    if (dlMediciones.length) {
+      dlMediciones.sort((a,b)=>a-b);
+      dlMbps = dlMediciones[Math.floor(dlMediciones.length / 2)];
+    } else {
+      dlMbps = (dlRecibidos * 8) / ((performance.now() - snapT) / 1000) / 1e6;
+    }
+    ui.resDL.textContent = dlMbps.toFixed(1) + ' Mbps';
+    ui.statDL.classList.add('lit');
+    setNum(dlMbps); setArc(dlMbps);
+
+    // ── FASE 3: SUBIDA ──────────────────────────────
+    // Sube bloques de 1 MB hasta completar 8 MB en total y mide throughput.
+    setPhase('subida', 'Subiendo datos de prueba...');
+    const UL_CHUNK = 1 * 1024 * 1024; // 1 MB por solicitud
+    const UL_TOTAL = 8;
+    const chunk = new Uint8Array(UL_CHUNK);
+    const ulMediciones = [];
+
+    for (let i = 0; i < UL_TOTAL; i++) {
+      const t0 = performance.now();
+      const res = await fetch(CF_UP, {
+        method: 'POST',
+        body: chunk,
+        cache: 'no-store',
+        mode: 'cors',
+      });
+      await res.arrayBuffer(); // esperar a que el servidor acuse recibo
+      const mbps = (UL_CHUNK * 8) / ((performance.now() - t0) / 1000) / 1e6;
+      ulMediciones.push(mbps);
+
+      const promActual = ulMediciones.reduce((a,b)=>a+b,0) / ulMediciones.length;
+      setNum(promActual); setArc(promActual);
+      setProg(0.60 + 0.38 * ((i + 1) / UL_TOTAL));
+    }
+    ulMediciones.sort((a,b)=>a-b);
+    ulMbps = ulMediciones[Math.floor(ulMediciones.length / 2)];
+    ui.resUL.textContent = ulMbps.toFixed(1) + ' Mbps';
+    ui.statUL.classList.add('lit');
+
+  } catch (err) {
+    console.error('Speed test error:', err);
+    setPhase('error', 'Sin conexión o bloqueado por el navegador.');
+    ui.btn.textContent = 'Reintentar'; ui.btn.disabled = false;
+    testRunning = false;
+    return;
+  }
+
+  // ── RESULTADO FINAL ──────────────────────────────
+  setProg(1);
+  const dlStr  = dlMbps?.toFixed(1) ?? '—';
+  const ulStr  = ulMbps?.toFixed(1) ?? '—';
+  const pingStr = pingMs?.toString() ?? '—';
+
+  setNum(parseFloat(dlStr)); setArc(parseFloat(dlStr));
+  setPhase('✓ completado');
+  ui.btn.textContent = 'Probar de nuevo'; ui.btn.disabled = false;
+  testRunning = false;
+
+  const qs = document.getElementById('quick-speed');
+  if (qs) qs.textContent = dlStr;
+
+  const ahora = new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
+  speedHistory.unshift({ time: ahora, dl: dlStr, ul: ulStr, ping: pingStr });
+  if (speedHistory.length > 8) speedHistory.pop();
+
+  const wrap  = document.getElementById('speed-history-wrap');
+  const tbody = document.getElementById('speed-history-body');
+  if (wrap)  wrap.style.display = 'block';
+  if (tbody) tbody.innerHTML = speedHistory.map(r =>
+    `<tr><td>${r.time}</td><td>${r.dl} Mbps</td><td>${r.ul} Mbps</td><td>${r.ping} ms</td></tr>`
+  ).join('');
 }
 
 // ── EDITAR / ELIMINAR CLIENTES ────────────────────────
