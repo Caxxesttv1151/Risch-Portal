@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Risch Network — Portal</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="theme-color" content="#17171d">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -38,7 +42,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-
 @keyframes slideUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
 .login-logo-wrap{text-align:center;margin-bottom:2rem;}
 .login-logo{display:inline-flex;align-items:center;gap:10px;margin-bottom:6px;}
-.logo-mark{width:40px;height:40px;background:linear-gradient(135deg,var(--accent),var(--accent-2));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:white;box-shadow:0 0 20px var(--accent-glow);}
+.logo-mark{width:40px;height:40px;background:linear-gradient(135deg,var(--accent),var(--blue),var(--accent-2));background-size:200% 200%;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:white;box-shadow:0 0 20px var(--accent-glow);animation:markShift 6s ease-in-out infinite;}
 .logo-text{font-size:20px;font-weight:700;letter-spacing:-0.5px;}
 .login-sub{font-size:12px;color:var(--text-muted);}
 
@@ -57,9 +61,11 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-
 .btn{padding:9px 18px;border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:var(--surface-2);color:var(--text);transition:all 0.15s;font-family:'Inter',sans-serif;letter-spacing:0.01em;}
 .btn:hover{border-color:var(--border-h);background:var(--surface-3);}
 .btn:active{transform:scale(0.98);}
-.btn-accent{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:white;border-color:transparent;box-shadow:0 4px 16px var(--accent-glow);}
-.btn-accent:hover{box-shadow:0 6px 24px var(--accent-glow);transform:translateY(-1px);}
+.btn-accent{background:linear-gradient(135deg,var(--accent),var(--blue) 55%,var(--accent-2));background-size:200% 200%;color:white;border-color:transparent;box-shadow:0 4px 16px var(--accent-glow);position:relative;overflow:hidden;transition:box-shadow 0.2s,transform 0.2s,background-position 0.4s;}
+.btn-accent:hover{box-shadow:0 6px 28px var(--accent-glow);transform:translateY(-1px);background-position:100% 50%;}
 .btn-accent:active{transform:scale(0.97) translateY(0);}
+.btn-accent::after{content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(120deg,transparent,rgba(255,255,255,0.35),transparent);transform:skewX(-20deg);transition:left 0.6s ease;}
+.btn-accent:hover::after{left:130%;}
 .btn-sm{padding:5px 12px;font-size:12px;}
 .btn-full{width:100%;padding:11px;font-size:14px;margin-top:4px;}
 .btn-link{background:none;border:none;color:var(--accent);font-size:12px;cursor:pointer;padding:0;font-family:'Inter',sans-serif;}
@@ -88,7 +94,8 @@ a:has(.btn-wa){text-decoration:none;}
 
 .sidebar-header{padding:1.25rem 1rem 1rem;border-bottom:1px solid var(--border);}
 .sidebar-logo{display:flex;align-items:center;gap:10px;margin-bottom:4px;}
-.sidebar-mark{width:30px;height:30px;background:linear-gradient(135deg,var(--accent),var(--accent-2));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;box-shadow:0 0 12px var(--accent-glow);flex-shrink:0;}
+.sidebar-mark{width:30px;height:30px;background:linear-gradient(135deg,var(--accent),var(--blue),var(--accent-2));background-size:200% 200%;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;box-shadow:0 0 12px var(--accent-glow);flex-shrink:0;animation:markShift 6s ease-in-out infinite;}
+@keyframes markShift{0%,100%{background-position:0% 50%;}50%{background-position:100% 50%;}}
 .sidebar-brand{font-size:14px;font-weight:700;letter-spacing:-0.3px;}
 .sidebar-role{font-size:10px;color:var(--text-muted);letter-spacing:0.04em;text-transform:uppercase;}
 
@@ -100,11 +107,11 @@ a:has(.btn-wa){text-decoration:none;}
   border-radius:8px;transition:all 0.15s;border:none;background:none;
   width:100%;text-align:left;position:relative;overflow:hidden;
 }
-.nav-item::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,var(--accent),var(--accent-2));opacity:0;transition:opacity 0.2s;border-radius:8px;}
-.nav-item:hover{color:var(--text);background:rgba(255,255,255,0.04);}
-.nav-item.active{color:white;background:rgba(108,99,255,0.15);font-weight:500;}
-.nav-item.active::before{opacity:0.08;}
-.nav-item.active .nav-icon-wrap{color:var(--accent-2);}
+.nav-item::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,var(--accent),var(--blue),var(--accent-2));opacity:0;transition:opacity 0.25s;border-radius:8px;}
+.nav-item:hover{color:var(--text);background:rgba(255,255,255,0.04);transform:translateX(2px);}
+.nav-item.active{color:white;background:rgba(108,99,255,0.16);font-weight:500;box-shadow:inset 3px 0 0 var(--accent-2),0 0 16px rgba(108,99,255,0.12);}
+.nav-item.active::before{opacity:0.14;}
+.nav-item.active .nav-icon-wrap{color:var(--accent-2);filter:drop-shadow(0 0 4px var(--accent-glow));}
 .nav-icon-wrap{width:18px;height:18px;flex-shrink:0;display:flex;align-items:center;justify-content:center;position:relative;z-index:1;}
 .nav-icon-wrap svg{width:15px;height:15px;}
 .nav-label{position:relative;z-index:1;}
@@ -149,25 +156,36 @@ a:has(.btn-wa){text-decoration:none;}
   padding:1.25rem;transition:border-color 0.2s,transform 0.2s,box-shadow 0.2s;
   position:relative;overflow:hidden;
 }
-.card:hover{border-color:var(--border-h);}
+.card:hover{border-color:var(--border-h);transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,0.28);}
 .card-glow{border-color:rgba(108,99,255,0.25);box-shadow:0 0 30px rgba(108,99,255,0.07);}
 
-.metric-card{cursor:default;}
-.metric-card::before{content:'';position:absolute;top:0;right:0;width:60%;height:100%;opacity:0.04;border-radius:14px;}
+.metric-card{cursor:default;transition:border-color 0.25s,transform 0.25s,box-shadow 0.25s;}
+.metric-card::before{content:'';position:absolute;top:0;right:0;width:60%;height:100%;opacity:0.04;border-radius:14px;transition:opacity 0.25s;}
 .metric-card.c-purple::before{background:radial-gradient(ellipse at top right,var(--accent),transparent);}
 .metric-card.c-green::before{background:radial-gradient(ellipse at top right,var(--green),transparent);}
 .metric-card.c-yellow::before{background:radial-gradient(ellipse at top right,var(--yellow),transparent);}
 .metric-card.c-red::before{background:radial-gradient(ellipse at top right,var(--red),transparent);}
+.metric-card:hover::before{opacity:0.09;}
+.metric-card.c-purple:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(108,99,255,0.18);border-color:rgba(108,99,255,0.35);}
+.metric-card.c-green:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(34,211,160,0.18);border-color:rgba(34,211,160,0.35);}
+.metric-card.c-yellow:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(245,158,11,0.18);border-color:rgba(245,158,11,0.35);}
+.metric-card.c-red:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(248,113,113,0.18);border-color:rgba(248,113,113,0.35);}
 
-.card-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;font-size:16px;}
+.card-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;font-size:16px;transition:transform 0.25s,box-shadow 0.25s;}
+.card:hover .card-icon{transform:scale(1.08) rotate(-4deg);}
 .ci-purple{background:rgba(108,99,255,0.15);color:var(--accent-2);}
 .ci-green{background:var(--green-bg);color:var(--green);}
 .ci-yellow{background:var(--yellow-bg);color:var(--yellow);}
 .ci-red{background:var(--red-bg);color:var(--red);}
 .ci-blue{background:var(--blue-bg);color:var(--blue);}
+.metric-card.c-purple:hover .card-icon{box-shadow:0 0 16px var(--accent-glow);}
+.metric-card.c-green:hover .card-icon{box-shadow:0 0 16px rgba(34,211,160,0.4);}
+.metric-card.c-yellow:hover .card-icon{box-shadow:0 0 16px rgba(245,158,11,0.4);}
+.metric-card.c-red:hover .card-icon{box-shadow:0 0 16px rgba(248,113,113,0.4);}
 
 .card-label{font-size:11px;color:var(--text-muted);font-weight:500;letter-spacing:0.03em;margin-bottom:6px;}
-.card-value{font-size:28px;font-weight:700;letter-spacing:-1px;line-height:1;margin-bottom:4px;}
+.card-value{font-size:28px;font-weight:700;letter-spacing:-1px;line-height:1;margin-bottom:4px;
+  background:linear-gradient(135deg,var(--text) 40%,var(--accent-2));-webkit-background-clip:text;background-clip:text;color:transparent;}
 .card-sub{font-size:11px;color:var(--text-muted);}
 .card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.1rem;}
 .section-title{font-size:14px;font-weight:600;letter-spacing:-0.2px;}
@@ -183,15 +201,15 @@ table{width:100%;border-collapse:collapse;font-size:13px;}
 th{text-align:left;padding:8px 12px;font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.07em;border-bottom:1px solid var(--border);}
 td{padding:11px 12px;border-bottom:1px solid var(--border);color:var(--text);}
 tr:last-child td{border-bottom:none;}
-tr{transition:background 0.12s;}
-tbody tr:hover td{background:rgba(255,255,255,0.025);}
+tr{transition:background 0.15s;}
+tbody tr:hover td{background:rgba(108,99,255,0.05);box-shadow:inset 2px 0 0 var(--accent-2);}
 
 /* ── BADGES ── */
-.badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:0.02em;}
-.badge-success{background:var(--green-bg);color:var(--green-text);border:1px solid rgba(34,211,160,0.2);}
-.badge-warning{background:var(--yellow-bg);color:var(--yellow-text);border:1px solid rgba(245,158,11,0.2);}
-.badge-danger{background:var(--red-bg);color:var(--red-text);border:1px solid rgba(248,113,113,0.2);}
-.badge-accent{background:rgba(108,99,255,0.15);color:var(--accent-2);border:1px solid rgba(108,99,255,0.25);}
+.badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:0.02em;transition:box-shadow 0.2s;}
+.badge-success{background:var(--green-bg);color:var(--green-text);border:1px solid rgba(34,211,160,0.2);box-shadow:0 0 10px rgba(34,211,160,0.12);}
+.badge-warning{background:var(--yellow-bg);color:var(--yellow-text);border:1px solid rgba(245,158,11,0.2);box-shadow:0 0 10px rgba(245,158,11,0.12);}
+.badge-danger{background:var(--red-bg);color:var(--red-text);border:1px solid rgba(248,113,113,0.2);box-shadow:0 0 10px rgba(248,113,113,0.12);}
+.badge-accent{background:rgba(108,99,255,0.15);color:var(--accent-2);border:1px solid rgba(108,99,255,0.25);box-shadow:0 0 10px var(--accent-glow);}
 .badge-gray{background:rgba(255,255,255,0.05);color:var(--text-muted);border:1px solid var(--border);}
 
 /* ── AGENDA ── */
@@ -566,9 +584,79 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
     </div>
     <div class="form-group"><label>Cliente / Ubicación</label><input id="neq-ubicacion" type="text" placeholder="Ej: Juan Pérez — Morelos 12" style="font-size:15px;padding:10px"></div>
     <div class="form-group"><label>Notas</label><input id="neq-notas" type="text" placeholder="Ping, observaciones..." style="font-size:15px;padding:10px"></div>
+    <div style="border-top:1px solid var(--border);margin:1rem 0;padding-top:1rem">
+      <div style="font-size:11px;font-weight:600;color:var(--text-muted);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:10px">Calidad de enlace (opcional)</div>
+      <div class="form-row">
+        <div class="form-group"><label>Señal (dBm)</label><input id="neq-senal" type="number" placeholder="-55" style="font-size:15px;padding:10px"></div>
+        <div class="form-group"><label>Ruido base (dBm)</label><input id="neq-ruido" type="number" placeholder="-90" style="font-size:15px;padding:10px"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>CINR (dB)</label><input id="neq-cinr" type="number" placeholder="25" style="font-size:15px;padding:10px"></div>
+        <div class="form-group"><label>Airtime (%)</label><input id="neq-airtime" type="number" placeholder="20" style="font-size:15px;padding:10px"></div>
+      </div>
+    </div>
     <div class="modal-footer" style="gap:12px">
       <button class="btn" style="flex:1;padding:12px" onclick="closeModal('modal-nuevo-equipo')">Cancelar</button>
       <button class="btn btn-accent" style="flex:2;padding:12px" onclick="guardarNuevoEquipo()">✅ Guardar equipo</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL HISTORIAL DE ENLACE -->
+<div class="modal-overlay" id="modal-historial-enlace">
+  <div class="modal" style="max-width:560px">
+    <div class="modal-title" id="historial-enlace-titulo">📶 Últimas pruebas</div>
+    <div id="historial-enlace-cuerpo"></div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('modal-historial-enlace')">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL FICHA TÉCNICA DE CLIENTE -->
+<div class="modal-overlay" id="modal-ficha-tecnica">
+  <div class="modal" style="max-width:640px;max-height:85vh;overflow-y:auto">
+    <div class="modal-title" id="ficha-titulo">📋 Ficha técnica</div>
+    <div id="ficha-cuerpo">Cargando...</div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('modal-ficha-tecnica')">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL NUEVO INSUMO -->
+<div class="modal-overlay" id="modal-nuevo-insumo">
+  <div class="modal">
+    <div class="modal-title">🧰 Registrar insumo</div>
+    <div class="form-group"><label>Insumo *</label><input id="nins-nombre" type="text" placeholder="Ej: Cable UTP cat6" style="font-size:15px;padding:10px"></div>
+    <div class="form-row">
+      <div class="form-group"><label>Cantidad actual *</label><input id="nins-cantidad" type="number" placeholder="0" style="font-size:15px;padding:10px"></div>
+      <div class="form-group"><label>Stock mínimo *</label><input id="nins-minimo" type="number" placeholder="5" style="font-size:15px;padding:10px"></div>
+    </div>
+    <div class="form-group"><label>Unidad</label><input id="nins-unidad" type="text" placeholder="Ej: metros, piezas, rollos" style="font-size:15px;padding:10px"></div>
+    <div class="form-group"><label>Notas</label><input id="nins-notas" type="text" placeholder="Proveedor, ubicación en bodega..." style="font-size:15px;padding:10px"></div>
+    <div class="modal-footer" style="gap:12px">
+      <button class="btn" style="flex:1;padding:12px" onclick="closeModal('modal-nuevo-insumo')">Cancelar</button>
+      <button class="btn btn-accent" style="flex:2;padding:12px" onclick="guardarNuevoInsumo()">✅ Guardar insumo</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDITAR INSUMO -->
+<div class="modal-overlay" id="modal-editar-insumo">
+  <div class="modal">
+    <div class="modal-title">✏️ Editar insumo</div>
+    <input type="hidden" id="eins-nombre-orig">
+    <div class="form-group"><label>Insumo *</label><input id="eins-nombre" type="text" style="font-size:15px;padding:10px"></div>
+    <div class="form-row">
+      <div class="form-group"><label>Cantidad actual *</label><input id="eins-cantidad" type="number" style="font-size:15px;padding:10px"></div>
+      <div class="form-group"><label>Stock mínimo *</label><input id="eins-minimo" type="number" style="font-size:15px;padding:10px"></div>
+    </div>
+    <div class="form-group"><label>Unidad</label><input id="eins-unidad" type="text" style="font-size:15px;padding:10px"></div>
+    <div class="form-group"><label>Notas</label><input id="eins-notas" type="text" style="font-size:15px;padding:10px"></div>
+    <div class="modal-footer" style="gap:12px">
+      <button class="btn" style="flex:1;padding:12px" onclick="closeModal('modal-editar-insumo')">Cancelar</button>
+      <button class="btn btn-accent" style="flex:2;padding:12px" onclick="guardarEdicionInsumo()">✅ Guardar cambios</button>
     </div>
   </div>
 </div>
@@ -595,6 +683,17 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
     </div>
     <div class="form-group"><label>Cliente / Ubicación</label><input id="eeq-ubicacion" type="text" style="font-size:15px;padding:10px"></div>
     <div class="form-group"><label>Notas</label><input id="eeq-notas" type="text" style="font-size:15px;padding:10px"></div>
+    <div style="border-top:1px solid var(--border);margin:1rem 0;padding-top:1rem">
+      <div style="font-size:11px;font-weight:600;color:var(--text-muted);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:10px">Calidad de enlace (opcional)</div>
+      <div class="form-row">
+        <div class="form-group"><label>Señal (dBm)</label><input id="eeq-senal" type="number" style="font-size:15px;padding:10px"></div>
+        <div class="form-group"><label>Ruido base (dBm)</label><input id="eeq-ruido" type="number" style="font-size:15px;padding:10px"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>CINR (dB)</label><input id="eeq-cinr" type="number" style="font-size:15px;padding:10px"></div>
+        <div class="form-group"><label>Airtime (%)</label><input id="eeq-airtime" type="number" style="font-size:15px;padding:10px"></div>
+      </div>
+    </div>
     <div class="modal-footer" style="gap:12px">
       <button class="btn" style="flex:1;padding:12px" onclick="closeModal('modal-editar-equipo')">Cancelar</button>
       <button class="btn btn-accent" style="flex:2;padding:12px" onclick="guardarEdicionEquipo()">✅ Guardar cambios</button>
@@ -774,6 +873,10 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
       <!-- CLIENTE: DASHBOARD -->
       <!-- EDITABLE: tarjetas de resumen del cliente (plan, pago, estado de red, velocidad) -->
       <div class="view active" id="view-dashboard-user">
+        <div style="margin-bottom:1.25rem">
+          <div style="font-size:20px;font-weight:700;letter-spacing:-0.3px" id="cli-saludo">Hola 👋</div>
+          <div style="font-size:13px;color:var(--text-muted);margin-top:2px" id="cli-saludo-sub">Cargando tu información...</div>
+        </div>
         <div class="grid-4 mb-3">
           <div class="card metric-card c-purple card-glow-top">
             <div class="card-icon ci-purple">📡</div>
@@ -816,6 +919,31 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
               <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--text-muted)">Días restantes</span><span id="cli-srv-dias" style="font-weight:500">—</span></div>
               <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--text-muted)">Próximo pago</span><span id="cli-srv-prox" style="font-weight:500">—</span></div>
             </div>
+          </div>
+        </div>
+        <div class="grid-2" style="margin-top:1rem">
+          <div class="card card-glow">
+            <div class="card-header"><div class="section-title">Vista previa de tu Internet</div><button class="btn-link" onclick="actualizarVistaPreviaInternet()">↺ Actualizar</button></div>
+            <div id="cli-calidad-conexion" style="font-size:12px;color:var(--text-muted);margin-bottom:10px">Cargando...</div>
+            <div style="display:flex;gap:10px;margin-bottom:10px">
+              <div style="flex:1;background:var(--surface-2);border-radius:8px;padding:8px 10px;text-align:center">
+                <div style="font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em">Ping</div>
+                <div id="vp-ping" style="font-size:15px;font-weight:700;margin-top:2px">—</div>
+              </div>
+              <div style="flex:1;background:var(--surface-2);border-radius:8px;padding:8px 10px;text-align:center">
+                <div style="font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em">Última descarga</div>
+                <div id="vp-dl" style="font-size:15px;font-weight:700;margin-top:2px">—</div>
+              </div>
+              <div style="flex:1;background:var(--surface-2);border-radius:8px;padding:8px 10px;text-align:center">
+                <div style="font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em">Última subida</div>
+                <div id="vp-ul" style="font-size:15px;font-weight:700;margin-top:2px">—</div>
+              </div>
+            </div>
+            <button class="btn btn-sm" style="width:100%" onclick="navigate('velocidad')">Hacer prueba completa de velocidad</button>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="section-title">Próxima visita</div></div>
+            <div id="cli-proxima-visita" style="font-size:12px;color:var(--text-muted)">Cargando...</div>
           </div>
         </div>
       </div>
@@ -933,9 +1061,8 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
             </div>
           </div>
           <div class="card">
-            <div class="section-title" style="margin-bottom:1rem">Mis tickets</div>
-            <div class="agenda-item"><div style="flex:1"><div class="agenda-title">#001 — Sin internet desde ayer</div><div class="agenda-detail">Abierto 28 jun · Alta urgencia</div></div><span class="badge badge-warning">En revisión</span></div>
-            <div style="padding-top:1rem;text-align:center;color:var(--text-muted);font-size:12px">Sin más tickets recientes.</div>
+            <div class="card-header"><div class="section-title">Mis tickets</div><button class="btn-link" onclick="cargarMisTickets(window._nombreCliente)">↺ Actualizar</button></div>
+            <div id="mis-tickets-lista"><div style="text-align:center;color:var(--text-muted);font-size:12px;padding:1rem 0">Cargando...</div></div>
           </div>
         </div>
         <div class="card"><div class="section-title" style="margin-bottom:1rem">Contacto directo</div>
@@ -984,7 +1111,7 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
           <div class="card metric-card c-red card-glow-top"><div class="card-icon ci-red">⚠</div><div class="card-label">Cartera vencida</div><div class="card-value" id="m-cartera" style="color:var(--red)">—</div><div class="card-sub" id="m-cartera-sub">Cargando...</div></div>
           <div class="card metric-card c-yellow card-glow-top"><div class="card-icon ci-yellow">🎯</div><div class="card-label">Con adeudo/suspendido</div><div class="card-value" id="m-tickets">—</div><div class="card-sub" id="m-tickets-sub">Cargando...</div></div>
         </div>
-        <div class="grid-2 mb-3">
+        <div class="mb-3">
           <div class="card">
             <div class="section-title" style="margin-bottom:1.25rem">Ingresos — últimos 6 meses</div>
             <div class="chart-bars" id="chart-bars">
@@ -996,21 +1123,14 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
               <div class="bar-wrap"><div class="bar hi" id="b5" style="height:0%" title=""></div><div class="bar-label">J</div><div class="bar-amount" id="ba5"></div></div>
             </div>
           </div>
-          <div class="card">
-            <div class="section-title" style="margin-bottom:1rem">Estado del sistema</div>
-            <div class="system-item"><div><div style="font-weight:500;font-size:13px">Google Sheets</div><div style="font-size:11px;color:var(--text-muted)">Base de datos</div></div><span class="badge badge-success">Conectado</span></div>
-            <div class="system-item"><div><div style="font-weight:500;font-size:13px">WhatsApp</div><div style="font-size:11px;color:var(--text-muted)">Links directos activos</div></div><span class="badge badge-success">Activo</span></div>
-            <div class="system-item"><div><div style="font-weight:500;font-size:13px">Mercado Pago</div><div style="font-size:11px;color:var(--text-muted)">Cobros en línea</div></div><span class="badge badge-warning">Pendiente</span></div>
-            <div class="system-item"><div><div style="font-weight:500;font-size:13px">Monitoreo de red</div><div style="font-size:11px;color:var(--text-muted)">Ping de antenas</div></div><span class="badge badge-success">Activo</span></div>
-          </div>
+        </div>
+        <div class="card mb-3" id="panel-alertas" style="display:none">
+          <div class="card-header"><div class="section-title">📞 Contactar hoy — adeudo o suspendidos</div></div>
+          <div id="lista-alertas" style="display:flex;flex-direction:column;gap:8px"></div>
         </div>
         <div class="card mb-3" id="panel-proximos" style="display:none">
           <div class="card-header"><div class="section-title">📅 Vencen esta semana</div></div>
           <div id="lista-proximos" style="display:flex;flex-direction:column;gap:8px"></div>
-        </div>
-        <div class="card" id="panel-alertas" style="display:none">
-          <div class="card-header"><div class="section-title">⚠️ Atención requerida</div></div>
-          <div id="lista-alertas" style="display:flex;flex-direction:column;gap:8px"></div>
         </div>
         <div class="card">
           <div class="card-header"><div class="section-title">Acciones rápidas</div></div>
@@ -1052,7 +1172,7 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
           <div class="card metric-card c-red card-glow-top"><div class="card-icon ci-red">⚠</div><div class="card-label">Cartera vencida</div><div class="card-value" id="c-cartera" style="color:var(--red)">—</div><div class="card-sub" id="c-cartera-sub">Cargando...</div></div>
           <div class="card metric-card c-yellow card-glow-top"><div class="card-icon ci-yellow">📋</div><div class="card-label">Pendientes</div><div class="card-value" id="c-pendientes">—</div><div class="card-sub" id="c-pendientes-sub">Cargando...</div></div>
         </div>
-        <div class="action-row"><div class="section-title">Cartera vencida</div><button class="btn btn-sm" onclick="showAlert('Enviando recordatorios por WhatsApp...')">Enviar recordatorios WA</button></div>
+        <div class="action-row"><div class="section-title">Cartera vencida</div><span style="font-size:11px;color:var(--text-muted)">Usa el botón WA de cada cliente para enviar su recordatorio</span></div>
         <div class="card mb-3"><div class="table-wrap"><table id="tabla-cartera"><thead><tr><th>Cliente</th><th>Plan</th><th>Mensualidad</th><th>Estado</th><th>Días vencido</th><th></th></tr></thead>
         <tbody><tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:2rem">Cargando...</td></tr></tbody></table></div></div>
         <div class="card-header" style="margin-bottom:.75rem"><div class="section-title">Pagos registrados</div><button class="btn btn-accent btn-sm" onclick="openModal('modal-reg-pago')">+ Registrar pago</button></div>
@@ -1104,21 +1224,38 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
         <tbody><tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:2rem">Cargando...</td></tr></tbody></table></div></div>
       </div>
 
+      <!-- ADMIN: INSUMOS -->
+      <!-- EDITABLE: inventario de insumos consumibles (tóner, cables, conectores, refacciones) -->
+      <div class="view" id="view-insumos">
+        <div class="grid-3 mb-3">
+          <div class="card metric-card c-blue card-glow-top"><div class="card-icon ci-blue">🧰</div><div class="card-label">Total insumos</div><div class="card-value" id="ins-total">—</div><div class="card-sub">Registrados</div></div>
+          <div class="card metric-card c-red card-glow-top"><div class="card-icon ci-red">⚠</div><div class="card-label">Stock bajo</div><div class="card-value" id="ins-bajo" style="color:var(--red)">—</div><div class="card-sub">Requieren reabasto</div></div>
+        </div>
+        <div class="action-row"><input class="search-bar" id="buscar-insumo" style="max-width:280px" placeholder="Buscar insumo..." oninput="filtrarInsumos(this.value)"><button class="btn btn-accent btn-sm" onclick="openModal('modal-nuevo-insumo')">+ Registrar insumo</button></div>
+        <div class="card"><div class="table-wrap"><table id="tabla-insumos"><thead><tr><th>Insumo</th><th>Cantidad</th><th>Stock mínimo</th><th>Unidad</th><th>Notas</th><th></th></tr></thead>
+        <tbody><tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:2rem">Cargando...</td></tr></tbody></table></div></div>
+      </div>
+
       <!-- ADMIN: RED -->
       <!-- EDITABLE: métricas de red y estado de cada antena (IP, cliente, dirección, ping) -->
       <div class="view" id="view-red">
         <div class="grid-3 mb-3">
           <!-- EDITABLE: conteo de antenas en línea y sub-label -->
           <div class="card metric-card c-green card-glow-top"><div class="card-icon ci-green">📡</div><div class="card-label">Antenas en línea</div><div class="card-value" id="red-online" style="color:var(--green)">—</div><div class="card-sub" id="red-online-sub">Cargando...</div></div>
-          <div class="card metric-card c-purple card-glow-top"><div class="card-icon ci-purple">⚡</div><div class="card-label">Ping promedio</div><div class="card-value" id="red-ping">— ms</div><div class="card-sub">Última medición</div></div>
+          <div class="card metric-card c-purple card-glow-top"><div class="card-icon ci-purple">📶</div><div class="card-label">Señal promedio</div><div class="card-value" id="red-ping">— dBm</div><div class="card-sub" id="red-ping-sub">Antenas con datos</div></div>
           <div class="card metric-card c-yellow card-glow-top"><div class="card-icon ci-yellow">🕐</div><div class="card-label">Última verificación</div><div class="card-value" style="font-size:18px" id="last-check">—</div><div class="card-sub"><button class="btn-link" onclick="runMonitor()">Verificar ahora</button></div></div>
         </div>
         <div class="card mb-3">
           <div class="card-header"><div class="section-title">Estado de antenas</div><button class="btn btn-sm" onclick="runMonitor()">Actualizar</button></div>
           <div id="monitor-lista" style="color:var(--text-muted);font-size:13px;padding:1rem 0">Cargando antenas...</div>
         </div>
-        <div class="card"><div class="section-title" style="margin-bottom:1rem">Mapa de cobertura</div>
-          <div class="map-placeholder"><div style="font-size:36px">🗺</div><div style="font-size:13px;font-weight:500;color:var(--text-muted)">Mapa de clientes y antenas</div><div style="font-size:11px;color:var(--text-dim)">Conecta Google Maps API para ver ubicaciones</div><button class="btn btn-sm" style="margin-top:8px" onclick="showAlert('Configura GOOGLE_MAPS_API_KEY en el backend.')">Configurar mapa</button></div>
+        <!-- EDITABLE: calidad de enlace por cliente (Señal / Ruido base / CINR / Airtime) -->
+        <div class="card mb-3">
+          <div class="card-header">
+            <div class="section-title">Calidad de enlace por cliente</div>
+            <div style="text-align:right"><div class="card-value" id="enlace-alerta" style="font-size:20px;color:var(--red)">—</div><div class="card-sub" id="enlace-alerta-sub">Cargando...</div></div>
+          </div>
+          <div id="enlace-lista" style="color:var(--text-muted);font-size:13px;padding:0.5rem 0">Cargando...</div>
         </div>
       </div>
 
@@ -1222,13 +1359,19 @@ tbody tr:hover td{background:rgba(255,255,255,0.025);}
 </div>
 
 <script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(err => console.error('SW error:', err));
+  });
+}
+
 const menus={
   user:[
     {id:'dashboard-user',label:'Inicio',icon:ico('home')},
     {id:'servicios',label:'Mis servicios',icon:ico('wifi')},
     {id:'pagos',label:'Estado de pagos',icon:ico('cash')},
     {id:'velocidad',label:'Prueba de velocidad',icon:ico('zap')},
-    {id:'soporte',label:'Soporte',icon:ico('ticket'),badge:'1'},
+    {id:'soporte',label:'Soporte',icon:ico('ticket')},
     {id:'perfil',label:'Mi perfil',icon:ico('user')},
   ],
   admin:[
@@ -1240,6 +1383,7 @@ const menus={
     {section:'Operaciones'},
     {id:'prospectos',label:'Prospectos',icon:ico('target')},
     {id:'equipos',label:'Equipos',icon:ico('server')},
+    {id:'insumos',label:'Insumos',icon:ico('box')},
     {id:'red',label:'Monitoreo de red',icon:ico('wifi'),badge:'1'},
     {section:'Análisis'},
     {id:'reportes',label:'Reportes',icon:ico('chart')},
@@ -1247,7 +1391,7 @@ const menus={
   ]
 };
 
-const titles={'dashboard-user':'Inicio','servicios':'Mis servicios','pagos':'Pagos','velocidad':'Prueba de velocidad','soporte':'Soporte','perfil':'Mi perfil','dashboard-admin':'Dashboard','clientes':'Clientes','cobros':'Cobros','agenda':'Agenda','prospectos':'Prospectos','equipos':'Equipos','red':'Monitoreo de red','reportes':'Reportes','configuracion':'Configuración'};
+const titles={'dashboard-user':'Inicio','servicios':'Mis servicios','pagos':'Pagos','velocidad':'Prueba de velocidad','soporte':'Soporte','perfil':'Mi perfil','dashboard-admin':'Dashboard','clientes':'Clientes','cobros':'Cobros','agenda':'Agenda','prospectos':'Prospectos','equipos':'Equipos','insumos':'Insumos','red':'Monitoreo de red','reportes':'Reportes','configuracion':'Configuración'};
 let speedHistory=[],testRunning=false;
 
 async function doLogin(){
@@ -1268,8 +1412,8 @@ async function doLogin(){
       return;
     }
     const role  = data.rol === 'cliente' ? 'user' : data.rol;
-    localStorage.setItem('risch_session', JSON.stringify({ role, nombre: usuario }));
-    iniciarSesion(role, usuario);
+    localStorage.setItem('risch_session', JSON.stringify({ role, nombre: usuario, token: data.token }));
+    iniciarSesion(role, usuario, data.token);
   } catch(e) {
     showAlert('Usuario o contraseña incorrectos.');
   } finally {
@@ -1277,10 +1421,11 @@ async function doLogin(){
   }
 }
 
-function iniciarSesion(role, nombre) {
+function iniciarSesion(role, nombre, token) {
   const isAdmin = role === 'admin';
   window._nombreCliente = isAdmin ? null : nombre;
   window._rolActual = role;
+  window._sessionToken = token;
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('app').style.display = 'flex';
   document.getElementById('role-label').textContent = isAdmin ? 'Administrador' : 'Portal Cliente';
@@ -1291,11 +1436,15 @@ function iniciarSesion(role, nombre) {
   try { navigate(isAdmin ? 'dashboard-admin' : 'dashboard-user'); } catch(e) {}
   document.getElementById('topbar-date').textContent = new Date().toLocaleDateString('es-MX',{weekday:'short',day:'numeric',month:'short'});
   document.getElementById('notif-dot').style.display = 'block';
-  if (isAdmin) cargarPlanesEnSelector();
+  if (isAdmin) { cargarPlanesEnSelector(); runMonitor(); }
+  else cargarMisTickets(nombre);
   setTimeout(() => showAlert(isAdmin ? `Bienvenido, ${nombre} 👋` : `Hola, ${nombre.split(' ')[0]} 👋 Bienvenido a tu portal`, 'ok'), 500);
 }
 
 function doLogout(){
+  const token = window._sessionToken;
+  if (token) fetch(`${API}?tipo=logout&token=${encodeURIComponent(token)}`).catch(()=>{});
+  window._sessionToken = null;
   localStorage.removeItem('risch_session');
   document.getElementById('app').style.display='none';
   document.getElementById('login-screen').style.display='flex';
@@ -1307,7 +1456,7 @@ function doLogout(){
 window.addEventListener('load', () => {
   try {
     const s = localStorage.getItem('risch_session');
-    if (s) { const { role, nombre } = JSON.parse(s); iniciarSesion(role, nombre); }
+    if (s) { const { role, nombre, token } = JSON.parse(s); iniciarSesion(role, nombre, token); }
   } catch(e) { localStorage.removeItem('risch_session'); }
 });
 function buildNav(role){
@@ -1363,10 +1512,48 @@ async function enviarTicket() {
     showAlert('✅ Solicitud enviada. Te contactaremos pronto.', 'ok');
     document.getElementById('ticket-tipo').value = '';
     document.getElementById('ticket-desc').value = '';
+    cargarMisTickets(cliente);
   } catch(e) {
     showAlert('Error al enviar. Intenta más tarde.', 'error');
   } finally {
     if (btn) { btn.textContent = 'Enviar solicitud'; btn.disabled = false; }
+  }
+}
+
+// Etiquetas amigables de estado para el cliente (el dato guardado sigue siendo el mismo que usa Agenda)
+const TICKET_ESTADO_LABEL = { 'Pendiente':'Abierto', 'Confirmada':'En proceso', 'Completada':'Resuelto', 'Cancelada':'Cancelado' };
+const TICKET_ESTADO_BADGE = { 'Pendiente':'badge-warning', 'Confirmada':'badge-accent', 'Completada':'badge-success', 'Cancelada':'badge-danger' };
+async function cargarMisTickets(nombreCliente) {
+  const cont = document.getElementById('mis-tickets-lista');
+  if (!cont || !nombreCliente) return;
+  cont.innerHTML = '<div style="text-align:center;color:var(--text-muted);font-size:12px;padding:1rem 0">Cargando...</div>';
+  try {
+    const agenda = await apiGet('agenda');
+    const tickets = agenda
+      .filter(v => v.cliente === nombreCliente && (v.tipo||'').startsWith('Soporte:'))
+      .sort((a,b) => new Date(b.fecha) - new Date(a.fecha));
+
+    const abiertos = tickets.filter(t => t.estado === 'Pendiente' || t.estado === 'Confirmada').length;
+    const btnSoporte = document.querySelector('.nav-item[data-view="soporte"]');
+    if (btnSoporte) {
+      const badge = btnSoporte.querySelector('.nav-badge');
+      if (abiertos > 0) {
+        if (badge) badge.textContent = abiertos;
+        else btnSoporte.insertAdjacentHTML('beforeend', `<span class="nav-badge">${abiertos}</span>`);
+      } else if (badge) badge.remove();
+    }
+
+    if (!tickets.length) {
+      cont.innerHTML = '<div style="text-align:center;color:var(--text-muted);font-size:12px;padding:1rem 0">Sin tickets registrados.</div>';
+      return;
+    }
+    cont.innerHTML = tickets.map(t => {
+      const label = TICKET_ESTADO_LABEL[t.estado] || t.estado;
+      const badgeClass = TICKET_ESTADO_BADGE[t.estado] || 'badge-gray';
+      return `<div class="agenda-item"><div style="flex:1"><div class="agenda-title">${escHtml(t.tipo.replace('Soporte: ',''))}</div><div class="agenda-detail">${fmtFecha(t.fecha)} · ${escHtml(t.direccion)||'Sin descripción'}</div></div><span class="badge ${badgeClass}">${label}</span></div>`;
+    }).join('');
+  } catch(e) {
+    cont.innerHTML = '<div style="text-align:center;color:var(--red);font-size:12px;padding:1rem 0">Error al cargar tickets.</div>';
   }
 }
 // ── TOAST (reemplaza alert) ───────────────────────────
@@ -1390,7 +1577,9 @@ async function runMonitor(){
   const el = document.getElementById('last-check'); if(el) el.textContent = now;
   try {
     const equipos = await apiGet('equipos');
-    const antenas = equipos.filter(e => ['antena','rocket','litebeam','nanobeam'].some(k=>e.equipo.toLowerCase().includes(k)));
+    // Se muestran todas las antenas registradas en Equipos (sin filtrar por nombre),
+    // para no dejar fuera antenas con nombres como "Higuera 01" que no contienen la palabra "antena".
+    const antenas = equipos;
     const online  = antenas.filter(e => e.estado === 'En línea');
     const offline = antenas.filter(e => e.estado === 'Sin respuesta');
 
@@ -1399,15 +1588,17 @@ async function runMonitor(){
     if(elOnline) elOnline.textContent = `${online.length} / ${antenas.length}`;
     if(elSub)    elSub.textContent    = offline.length ? `${offline.length} sin respuesta` : 'Todas en línea';
 
-    // Ping simulado por antena (en una red real vendría del backend)
-    const pings = antenas.map(e => e.estado === 'En línea' ? Math.round(8 + Math.random()*20) : null);
-    const validPings = pings.filter(p=>p!==null);
-    const avgPing = validPings.length ? Math.round(validPings.reduce((a,b)=>a+b,0)/validPings.length) : 0;
-    const elPing = document.getElementById('red-ping'); if(elPing) elPing.textContent = avgPing ? `${avgPing} ms` : '— ms';
+    // Señal promedio real (dBm), tomada de las lecturas del poller sobre las antenas con datos
+    const senales = antenas.filter(e => e.senal !== '' && e.senal !== undefined).map(e => Number(e.senal)).filter(v => !isNaN(v));
+    const avgSenal = senales.length ? Math.round(senales.reduce((a,b)=>a+b,0)/senales.length) : null;
+    const elPing = document.getElementById('red-ping');
+    const elPingSub = document.getElementById('red-ping-sub');
+    if(elPing) elPing.textContent = avgSenal !== null ? `${avgSenal} dBm` : '— dBm';
+    if(elPingSub) elPingSub.textContent = senales.length ? `${senales.length} antena(s) con datos` : 'Sin lecturas aún';
 
     const lista = document.getElementById('monitor-lista');
-    if(lista) lista.innerHTML = antenas.length ? antenas.map((e,i) => {
-      const ping = pings[i]; const enLinea = e.estado === 'En línea';
+    if(lista) lista.innerHTML = antenas.length ? antenas.map((e) => {
+      const nivel = nivelEnlaceEquipo(e);
       return `<div class="monitor-row">
         <div class="monitor-icon">📡</div>
         <div class="monitor-info">
@@ -1415,10 +1606,11 @@ async function runMonitor(){
           <div class="monitor-ip">${e.ip||'—'} · ${e.modelo||''}</div>
         </div>
         ${badgeEstado(e.estado)}
-        <div class="monitor-ping ${enLinea?'ping-good':'ping-bad'}">${ping ? ping+' ms' : '— ms'}</div>
+        ${nivel ? badgeNivel(nivel) : '<span class="monitor-ping" style="color:var(--text-muted)">Sin datos</span>'}
       </div>`;
     }).join('') : '<p style="color:var(--text-muted);font-size:13px;padding:1rem 0">Sin antenas registradas en Sheets.</p>';
 
+    renderCalidadEnlace(equipos);
     actualizarBadges(-1, offline.length);
     generarNotificaciones();
   } catch(e) { console.error('monitor:', e); }
@@ -1428,7 +1620,7 @@ async function generarNotificaciones() {
   const lista = document.getElementById('notif-lista');
   if (!lista) return;
   try {
-    const [clientes, equipos] = await Promise.all([apiGet('clientes'), apiGet('equipos')]);
+    const [clientes, equipos, insumos] = await Promise.all([apiGet('clientes'), apiGet('equipos'), apiGet('insumos')]);
     const notifs = [];
     // Clientes con adeudo o suspendidos
     clientes.filter(c=>c.estado==='Adeudo'||c.estado==='Suspendido').forEach(c=>{
@@ -1437,6 +1629,15 @@ async function generarNotificaciones() {
     // Antenas sin respuesta
     equipos.filter(e=>e.estado==='Sin respuesta').forEach(e=>{
       notifs.push({ unread:true, titulo:'Antena sin respuesta', sub:`${e.equipo} — ${e.ubicacion}` });
+    });
+    // Enlaces en alerta (Señal / Ruido base / CINR / Airtime fuera de rango)
+    equipos.filter(e=>nivelEnlaceEquipo(e)==='alerta').forEach(e=>{
+      const metricasAlerta = ['senal','ruido','cinr','airtime'].filter(t=>clasificarMetrica(t,e[t])==='alerta').map(t=>ENLACE_THRESHOLDS[t].label);
+      notifs.push({ unread:true, titulo:'Enlace en alerta', sub:`${e.equipo} — ${e.ubicacion} · ${metricasAlerta.join(', ')}` });
+    });
+    // Insumos con stock bajo
+    (insumos||[]).filter(i=>Number(i.cantidad)<=Number(i.minimo)).forEach(i=>{
+      notifs.push({ unread:true, titulo:'Stock bajo', sub:`${i.nombre} · quedan ${i.cantidad} ${i.unidad||''} (mínimo ${i.minimo})` });
     });
     // Próximos pagos (3 días)
     const hoy = new Date(); const en3 = new Date(); en3.setDate(hoy.getDate()+3);
@@ -1455,16 +1656,25 @@ async function generarNotificaciones() {
 const API = 'https://script.google.com/macros/s/AKfycbxu2dGMT2ok64E5wpEUauG3PCayzByy1ZvHq1Tnq_hnwnhUUFJ4gLmrFIkyBtN7698d/exec';
 
 async function apiGet(tipo) {
-  const res = await fetch(`${API}?tipo=${tipo}`);
-  return res.json();
+  const res = await fetch(`${API}?tipo=${tipo}&token=${encodeURIComponent(window._sessionToken||'')}`);
+  const data = await res.json();
+  if (data && data.codigo === 401) { manejarSesionExpirada_(); throw new Error('No autorizado'); }
+  return data;
 }
 
 async function apiPost(datos) {
   const tipo = datos.accion || datos.tipo || '';
-  const params = new URLSearchParams({ tipo });
+  const params = new URLSearchParams({ tipo, token: window._sessionToken || '' });
   Object.entries(datos).forEach(([k, v]) => { if (k !== 'accion' && k !== 'tipo') params.append(k, v ?? ''); });
   const res = await fetch(`${API}?${params.toString()}`);
-  return res.json();
+  const data = await res.json();
+  if (data && data.codigo === 401) { manejarSesionExpirada_(); throw new Error('No autorizado'); }
+  return data;
+}
+
+function manejarSesionExpirada_() {
+  showAlert('Tu sesión expiró. Vuelve a iniciar sesión.', 'error');
+  doLogout();
 }
 
 // Formato de fecha legible — maneja ISO, texto y Date
@@ -1484,10 +1694,162 @@ function fmtMes(val) {
   return d.toLocaleDateString('es-MX', { month:'short', year:'numeric', timeZone:'America/Mexico_City' });
 }
 
+// Escapa HTML — usar siempre que se inserte texto escrito por un cliente (tickets, etc.)
+// para evitar XSS almacenado (ej. un ticket con "<script>" en la descripción).
+function escHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str ?? '';
+  return div.innerHTML;
+}
+
 // Badge de estado
 function badgeEstado(estado) {
   const map = { 'Activo':'badge-success','Adeudo':'badge-warning','Suspendido':'badge-danger','Nuevo':'badge-gray','Cotizado':'badge-accent','En revisión':'badge-warning','Confirmada':'badge-success','Pendiente':'badge-warning','Pagado':'badge-success','Vencido':'badge-danger','En línea':'badge-success','Sin respuesta':'badge-danger','Disponible':'badge-accent' };
   return `<span class="badge ${map[estado]||'badge-gray'}">${estado}</span>`;
+}
+
+// ── CALIDAD DE ENLACE (Señal / Ruido / CINR / Airtime) ──
+// EDITABLE: umbrales de clasificación del enlace inalámbrico por métrica
+const ENLACE_THRESHOLDS = {
+  senal:   { unidad:'dBm', label:'Señal',    bueno:v=>v>=-65, alerta:v=>v<-75  },
+  ruido:   { unidad:'dBm', label:'Ruido base',bueno:v=>v<=-85, alerta:v=>v>-80 },
+  cinr:    { unidad:'dB',  label:'CINR',     bueno:v=>v>=20,  alerta:v=>v<15  },
+  airtime: { unidad:'%',   label:'Airtime',  bueno:v=>v<=30,  alerta:v=>v>70  },
+};
+function clasificarMetrica(tipo, valor) {
+  if (valor === null || valor === undefined || valor === '') return null;
+  const v = Number(valor);
+  if (isNaN(v)) return null;
+  const t = ENLACE_THRESHOLDS[tipo];
+  if (t.bueno(v)) return 'bueno';
+  if (t.alerta(v)) return 'alerta';
+  return 'regular';
+}
+const NIVEL_BADGE = { bueno:'badge-success', regular:'badge-warning', alerta:'badge-danger' };
+const NIVEL_LABEL = { bueno:'Bueno', regular:'Regular', alerta:'Alerta' };
+const NIVEL_ORDEN = { alerta:2, regular:1, bueno:0 };
+function badgeNivel(nivel) {
+  if (!nivel) return '<span class="badge badge-gray">Sin dato</span>';
+  return `<span class="badge ${NIVEL_BADGE[nivel]}">${NIVEL_LABEL[nivel]}</span>`;
+}
+function badgeMetrica(tipo, valor) {
+  const nivel = clasificarMetrica(tipo, valor);
+  if (!nivel) return '<span class="badge badge-gray">Sin dato</span>';
+  const t = ENLACE_THRESHOLDS[tipo];
+  return `<span class="badge ${NIVEL_BADGE[nivel]}">${valor}${t.unidad}</span>`;
+}
+// Nivel general del enlace de un equipo = el peor de sus 4 métricas (null si no hay ningún dato)
+function nivelEnlaceEquipo(e) {
+  const niveles = ['senal','ruido','cinr','airtime'].map(t => clasificarMetrica(t, e[t])).filter(Boolean);
+  if (!niveles.length) return null;
+  return niveles.reduce((peor, n) => NIVEL_ORDEN[n] > NIVEL_ORDEN[peor] ? n : peor, 'bueno');
+}
+function renderCalidadEnlace(equipos) {
+  const cont = document.getElementById('enlace-lista');
+  if (!cont) return;
+  const conDatos = equipos.filter(e => nivelEnlaceEquipo(e) !== null);
+  const enAlerta = conDatos.filter(e => nivelEnlaceEquipo(e) === 'alerta');
+  const elA = document.getElementById('enlace-alerta'); if (elA) elA.textContent = enAlerta.length;
+  const elAS = document.getElementById('enlace-alerta-sub'); if (elAS) elAS.textContent = conDatos.length ? `de ${conDatos.length} con datos` : 'Sin datos de enlace aún';
+  if (!conDatos.length) {
+    cont.innerHTML = '<p style="color:var(--text-muted);font-size:13px;padding:1rem 0">Sin datos de calidad de enlace. Captúralos en "Editar equipo" o conecta el lector automático de antenas.</p>';
+    return;
+  }
+  cont.innerHTML = `<div class="table-wrap"><table><thead><tr><th>Equipo</th><th>Señal</th><th>Ruido base</th><th>CINR</th><th>Airtime</th><th>Enlace</th><th></th></tr></thead><tbody>
+    ${conDatos.map(e => `<tr>
+      <td><div style="font-weight:500">${e.equipo}</div><div style="font-size:11px;color:var(--text-muted)">${e.ubicacion||'—'}</div></td>
+      <td>${badgeMetrica('senal', e.senal)}</td>
+      <td>${badgeMetrica('ruido', e.ruido)}</td>
+      <td>${badgeMetrica('cinr', e.cinr)}</td>
+      <td>${badgeMetrica('airtime', e.airtime)}</td>
+      <td>${badgeNivel(nivelEnlaceEquipo(e))}</td>
+      <td><button class="btn btn-sm" onclick="verHistorialEnlace('${e.equipo.replace(/'/g,"\\'")}')">Últimas 5</button></td>
+    </tr>`).join('')}
+  </tbody></table></div>`;
+}
+
+async function verHistorialEnlace(equipoNombre) {
+  const modal = document.getElementById('modal-historial-enlace');
+  document.getElementById('historial-enlace-titulo').textContent = `📶 Últimas pruebas — ${equipoNombre}`;
+  document.getElementById('historial-enlace-cuerpo').innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:1rem 0">Cargando...</p>';
+  openModal('modal-historial-enlace');
+  try {
+    const historial = await apiGet('historial_enlace');
+    const delEquipo = historial.filter(h => h.equipo === equipoNombre).slice(-5).reverse();
+    const cuerpo = document.getElementById('historial-enlace-cuerpo');
+    if (!delEquipo.length) {
+      cuerpo.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:1rem 0">Sin lecturas registradas todavía.</p>';
+      return;
+    }
+    cuerpo.innerHTML = `<div class="table-wrap"><table><thead><tr><th>Fecha/Hora</th><th>Señal</th><th>Ruido base</th><th>CINR</th><th>Airtime</th></tr></thead><tbody>
+      ${delEquipo.map(h => `<tr>
+        <td style="font-size:12px;color:var(--text-muted)">${h.fecha}</td>
+        <td>${badgeMetrica('senal', h.senal)}</td>
+        <td>${badgeMetrica('ruido', h.ruido)}</td>
+        <td>${badgeMetrica('cinr', h.cinr)}</td>
+        <td>${badgeMetrica('airtime', h.airtime)}</td>
+      </tr>`).join('')}
+    </tbody></table></div>`;
+  } catch(e) {
+    document.getElementById('historial-enlace-cuerpo').innerHTML = '<p style="text-align:center;color:var(--red);padding:1rem 0">Error al cargar el historial.</p>';
+  }
+}
+
+// ── FICHA TÉCNICA DE CLIENTE ───────────────────────────
+async function verFichaTecnica(idx) {
+  const c = _clientesCache[idx];
+  if (!c) return;
+  document.getElementById('ficha-titulo').textContent = `📋 Ficha técnica — ${c.nombre}`;
+  const cuerpo = document.getElementById('ficha-cuerpo');
+  cuerpo.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:1rem 0">Cargando...</p>';
+  openModal('modal-ficha-tecnica');
+  try {
+    const [agenda, equipos, cobros] = await Promise.all([apiGet('agenda'), apiGet('equipos'), apiGet('cobros')]);
+
+    const visitas = agenda.filter(v => v.cliente === c.nombre)
+      .sort((a,b) => new Date(b.fecha) - new Date(a.fecha));
+
+    const primerNombre = c.nombre.split(' ')[0].toLowerCase();
+    const equipo = equipos.find(e =>
+      (e.ubicacion || '').toLowerCase().includes(primerNombre) ||
+      (e.equipo || '').toLowerCase().includes(primerNombre)
+    );
+
+    const pagados = cobros.filter(co => co.cliente === c.nombre && co.estado === 'Pagado');
+    const totalPagado = pagados.reduce((s,co) => s + (Number((co.monto||'0').toString().replace('$','')) || 0), 0);
+
+    cuerpo.innerHTML = `
+      <div class="grid-2 mb-2">
+        <div style="font-size:12px"><div style="color:var(--text-muted)">Teléfono</div><div style="font-weight:600">${c.telefono}</div></div>
+        <div style="font-size:12px"><div style="color:var(--text-muted)">Dirección</div><div style="font-weight:600">${c.direccion || '—'}</div></div>
+        <div style="font-size:12px"><div style="color:var(--text-muted)">Plan</div><div style="font-weight:600">${c.plan} · ${c.precio}</div></div>
+        <div style="font-size:12px"><div style="color:var(--text-muted)">Estado</div><div style="font-weight:600">${badgeEstado(c.estado)}</div></div>
+        <div style="font-size:12px"><div style="color:var(--text-muted)">Cliente desde</div><div style="font-weight:600">${visitas.length ? new Date(visitas[visitas.length-1].fecha).toLocaleDateString('es-MX',{day:'numeric',month:'short',year:'numeric'}) : '—'}</div></div>
+        <div style="font-size:12px"><div style="color:var(--text-muted)">Total pagado histórico</div><div style="font-weight:600">$${totalPagado.toLocaleString()}</div></div>
+      </div>
+
+      <div class="section-title" style="margin:1rem 0 0.5rem">Equipo / antena asignada</div>
+      ${equipo ? `
+        <div style="display:flex;justify-content:space-between;align-items:center;background:var(--surface-2);border-radius:8px;padding:10px 12px;margin-bottom:0.5rem">
+          <div>
+            <div style="font-weight:600;font-size:13px">${equipo.equipo} <span style="font-weight:400;color:var(--text-muted)">— ${equipo.modelo||'—'}</span></div>
+            <div style="font-size:11px;color:var(--text-muted)">IP: ${equipo.ip||'—'} · ${equipo.ubicacion||'—'}</div>
+          </div>
+          ${badgeEstado(equipo.estado)}
+        </div>
+        ${nivelEnlaceEquipo(equipo) ? `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1rem">
+          ${badgeMetrica('senal', equipo.senal)}${badgeMetrica('ruido', equipo.ruido)}${badgeMetrica('cinr', equipo.cinr)}${badgeMetrica('airtime', equipo.airtime)}
+        </div>` : '<p style="font-size:12px;color:var(--text-muted);margin-bottom:1rem">Sin lecturas de calidad de enlace aún.</p>'}
+      ` : '<p style="font-size:12px;color:var(--text-muted);margin-bottom:1rem">No se encontró un equipo asignado a este cliente.</p>'}
+
+      <div class="section-title" style="margin:1rem 0 0.5rem">Historial de visitas (${visitas.length})</div>
+      ${visitas.length ? `<div class="table-wrap"><table><thead><tr><th>Fecha</th><th>Tipo</th><th>Estado</th></tr></thead><tbody>
+        ${visitas.map(v => `<tr><td style="font-size:12px">${new Date(v.fecha).toLocaleDateString('es-MX',{day:'numeric',month:'short',year:'numeric'})}${v.hora?' · '+v.hora:''}</td><td style="font-size:12px">${v.tipo||'—'}</td><td>${badgeEstado(v.estado)}</td></tr>`).join('')}
+      </tbody></table></div>` : '<p style="font-size:12px;color:var(--text-muted)">Sin visitas registradas.</p>'}
+    `;
+  } catch(e) {
+    cuerpo.innerHTML = '<p style="text-align:center;color:var(--red);padding:1rem 0">Error al cargar la ficha técnica.</p>';
+  }
 }
 
 // ── CLIENTES ──────────────────────────────────────────
@@ -1574,6 +1936,7 @@ async function cargarCobros() {
           <td>${c.cliente}</td><td>${c.monto}</td><td>${fmtFecha(c.fechaPago)}</td><td>${c.metodo||'—'}</td><td>${badgeEstado(c.estado)}</td>
           <td><div style="display:flex;gap:4px">
             <button class="btn btn-sm btn-wa" onclick="enviarReciboWA('${c.cliente.replace(/'/g,"\\'")}','${c.monto}','${c.mes}')" title="Recibo por WA">📱</button>
+            <button class="btn btn-sm" onclick="imprimirRecibo('${c.cliente.replace(/'/g,"\\'")}','${c.monto}','${c.mes}','${fmtFecha(c.fechaPago)}','${c.metodo||'—'}')" title="Imprimir / Guardar PDF">🧾</button>
             <button class="btn btn-sm" onclick="editarCobro(${pidx})" title="Editar">✏️</button>
             <button class="btn btn-sm btn-danger" onclick="eliminarCobro(${pidx})" title="Eliminar">🗑</button>
           </div></td>
@@ -1610,6 +1973,47 @@ function enviarReciboWA(cliente, monto, mes) {
   window.open(`https://wa.me/52${t}?text=${msg}`, '_blank');
 }
 
+// Recibo imprimible — abre una ventana con el formato listo; el usuario usa "Imprimir → Guardar como PDF" del navegador.
+function imprimirRecibo(cliente, monto, mes, fechaPago, metodo) {
+  const folio = 'R-' + Date.now().toString().slice(-8);
+  const html = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Recibo ${folio}</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,Segoe UI,Arial,sans-serif;}
+    body{padding:40px;color:#17171d;}
+    .header{display:flex;align-items:center;gap:14px;border-bottom:3px solid #6c63ff;padding-bottom:16px;margin-bottom:24px;}
+    .logo{width:44px;height:44px;background:linear-gradient(135deg,#6c63ff,#a78bfa);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:white;}
+    .brand{font-size:20px;font-weight:700;}
+    .sub{font-size:12px;color:#666;}
+    .titulo{font-size:16px;font-weight:700;margin-bottom:4px;}
+    .folio{font-size:12px;color:#666;margin-bottom:24px;}
+    table{width:100%;border-collapse:collapse;margin-bottom:24px;}
+    td{padding:10px 0;border-bottom:1px solid #eee;font-size:14px;}
+    td:first-child{color:#666;width:40%;}
+    td:last-child{font-weight:600;text-align:right;}
+    .monto{font-size:28px;font-weight:700;color:#22d3a0;text-align:center;margin:24px 0;}
+    .footer{text-align:center;font-size:12px;color:#999;margin-top:32px;}
+    @media print{body{padding:20px;}}
+  </style></head><body>
+    <div class="header"><div class="logo">R</div><div><div class="brand">Risch Network</div><div class="sub">Centro de Servicios Tecnológicos · Huandacareo, Michoacán</div></div></div>
+    <div class="titulo">Recibo de pago</div>
+    <div class="folio">Folio: ${folio} · Emitido: ${new Date().toLocaleDateString('es-MX',{day:'numeric',month:'long',year:'numeric'})}</div>
+    <table>
+      <tr><td>Cliente</td><td>${cliente}</td></tr>
+      <tr><td>Mensualidad correspondiente a</td><td>${mes}</td></tr>
+      <tr><td>Fecha de pago</td><td>${fechaPago}</td></tr>
+      <tr><td>Método de pago</td><td>${metodo}</td></tr>
+      <tr><td>Estado</td><td>Pagado ✓</td></tr>
+    </table>
+    <div class="monto">${monto}</div>
+    <div class="footer">Gracias por tu preferencia — Risch Network<br>Excelencia en mantenimiento y redes</div>
+    <script>window.onload=()=>{window.print();}<\/script>
+  </body></html>`;
+  const w = window.open('', '_blank');
+  if (!w) { showAlert('Tu navegador bloqueó la ventana. Permite pop-ups para ver el recibo.', 'error'); return; }
+  w.document.write(html);
+  w.document.close();
+}
+
 // ── AGENDA ────────────────────────────────────────────
 let _agendaCache = [];
 
@@ -1626,8 +2030,8 @@ function renderAgenda(lista) {
         <div style="font-size:18px;font-weight:700;color:#fff">${fechaD.getUTCDate()}</div>
       </div>
       <div style="flex:1">
-        <div style="font-weight:600;font-size:13px">${v.cliente}</div>
-        <div style="font-size:11px;color:var(--text-muted)">${v.hora||'—'} · ${v.tipo} · ${v.direccion||'Sin dirección'}</div>
+        <div style="font-weight:600;font-size:13px">${escHtml(v.cliente)}</div>
+        <div style="font-size:11px;color:var(--text-muted)">${escHtml(v.hora)||'—'} · ${escHtml(v.tipo)} · ${escHtml(v.direccion)||'Sin dirección'}</div>
       </div>
       ${badgeEstado(v.estado)}
       <div style="display:flex;gap:4px;margin-left:8px;flex-shrink:0">
@@ -1777,12 +2181,17 @@ async function cargarDashboard() {
         listaProx.innerHTML = proximos.map(c => {
           const d = new Date(c.proximoPago);
           const diasQ = Math.ceil((d - hoy7) / (1000*60*60*24));
+          const tel = (c.telefono||'').replace(/\s/g,'');
+          const msg = `Hola%20${encodeURIComponent(c.nombre.split(' ')[0])}%2C%20te%20recordamos%20que%20tu%20pago%20de%20${encodeURIComponent(c.precio)}%20vence%20el%20${encodeURIComponent(d.toLocaleDateString('es-MX',{day:'numeric',month:'short'}))}.%20Gracias%20por%20tu%20preferencia%20%F0%9F%99%8F`;
           return `<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--surface-2);border-radius:8px;border-left:3px solid var(--yellow)">
             <div>
               <div style="font-weight:600;font-size:13px">${c.nombre}</div>
               <div style="font-size:11px;color:var(--text-muted)">${c.precio} · vence ${d.toLocaleDateString('es-MX',{day:'numeric',month:'short'})} · en ${diasQ} día${diasQ===1?'':'s'}</div>
             </div>
-            <button class="btn btn-sm" onclick="abrirPagoVencido('${c.nombre.replace(/'/g,"\\'")}','${c.precio}')">Cobrar</button>
+            <div style="display:flex;gap:4px">
+              <a href="https://wa.me/52${tel}?text=${msg}" target="_blank"><button class="btn btn-sm btn-wa">WA</button></a>
+              <button class="btn btn-sm" onclick="abrirPagoVencido('${c.nombre.replace(/'/g,"\\'")}','${c.precio}')">Cobrar</button>
+            </div>
           </div>`;
         }).join('');
       } else { panelProx.style.display = 'none'; }
@@ -1935,6 +2344,7 @@ function _renderClienteRow(c, idx) {
     <td style="font-size:12px">${prox}</td>
     <td><div style="display:flex;gap:4px">
       ${pagarBtn}
+      <button class="btn btn-sm" onclick="verFichaTecnica(${idx})" title="Ficha técnica">📋</button>
       <button class="btn btn-sm" onclick="editarCliente(${idx})" title="Editar">✏️</button>
       <button class="btn btn-sm btn-danger" onclick="eliminarCliente(${idx})" title="Eliminar">🗑</button>
       <a href="https://wa.me/52${tel}?text=${msg}" target="_blank"><button class="btn btn-sm btn-wa">WA</button></a>
@@ -1978,6 +2388,22 @@ async function cargarDatosCliente(nombre) {
     const clientes = await apiGet('clientes');
     const c = clientes.find(cl => cl.nombre.toLowerCase().includes(nombre.toLowerCase()));
     if (!c) return;
+
+    // Saludo personalizado
+    const saludoEl = document.getElementById('cli-saludo');
+    const saludoSubEl = document.getElementById('cli-saludo-sub');
+    if (saludoEl) saludoEl.textContent = `Hola, ${c.nombre.split(' ')[0]} 👋`;
+    if (saludoSubEl) {
+      if (c.estado === 'Activo') {
+        saludoSubEl.textContent = c.proximoPago && c.proximoPago !== 'Vencido'
+          ? `Tu servicio está activo · próximo pago el ${new Date(c.proximoPago).toLocaleDateString('es-MX',{day:'numeric',month:'long'})}`
+          : 'Tu servicio está activo';
+      } else if (c.estado === 'Adeudo') {
+        saludoSubEl.textContent = `Tienes un adeudo de ${c.diasVencido} días — evita la suspensión poniéndote al corriente`;
+      } else {
+        saludoSubEl.textContent = 'Tu servicio está suspendido — contáctanos para reactivarlo';
+      }
+    }
 
     // Dashboard tarjetas
     const cp = document.getElementById('cli-plan');
@@ -2103,7 +2529,74 @@ async function cargarDatosCliente(nombre) {
           <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-muted)">Teléfono registrado</span><span style="font-weight:500">${c.telefono}</span></div>
         </div>`;
     }
+
+    // Calidad de conexión — busca la antena asociada por nombre/ubicación
+    const calidadEl = document.getElementById('cli-calidad-conexion');
+    if (calidadEl) {
+      const primerNombre = c.nombre.split(' ')[0].toLowerCase();
+      const equipos = await apiGet('equipos');
+      const equipo = equipos.find(e =>
+        (e.ubicacion || '').toLowerCase().includes(primerNombre) ||
+        (e.equipo || '').toLowerCase().includes(primerNombre)
+      );
+      const nivel = equipo ? nivelEnlaceEquipo(equipo) : null;
+      if (equipo && nivel) {
+        const msg = nivel === 'bueno' ? 'Tu conexión está funcionando bien.'
+          : nivel === 'regular' ? 'Tu conexión funciona, pero podría mejorar.'
+          : 'Tu conexión presenta problemas — probablemente notes fallas o lentitud.';
+        calidadEl.innerHTML = `<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">${badgeNivel(nivel)}<span style="font-size:12px;color:var(--text-muted)">${msg}</span></div>`;
+      } else {
+        calidadEl.innerHTML = `<span style="font-size:12px;color:var(--text-muted)">Aún no hay datos de tu antena disponibles.</span>`;
+      }
+    }
+
+    // Próxima visita programada (instalación o soporte)
+    const proxVisitaEl = document.getElementById('cli-proxima-visita');
+    if (proxVisitaEl) {
+      const agendaCli = await apiGet('agenda');
+      const hoy = new Date(); hoy.setHours(0,0,0,0);
+      const proximas = agendaCli
+        .filter(v => v.cliente === c.nombre && (v.estado === 'Pendiente' || v.estado === 'Confirmada') && new Date(v.fecha) >= hoy)
+        .sort((a,b) => new Date(a.fecha) - new Date(b.fecha));
+      if (proximas.length) {
+        const v = proximas[0];
+        const fechaStr = new Date(v.fecha).toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long'});
+        proxVisitaEl.innerHTML = `
+          <div style="font-weight:600;font-size:13px;margin-bottom:4px">${v.tipo || 'Visita técnica'}</div>
+          <div style="font-size:12px;color:var(--text-muted)">${fechaStr}${v.hora ? ' · ' + v.hora : ''}</div>`;
+      } else {
+        proxVisitaEl.innerHTML = `<span style="font-size:12px;color:var(--text-muted)">No tienes visitas programadas.</span>`;
+      }
+    }
+
+    actualizarVistaPreviaInternet();
   } catch(e) { console.error('Error datos cliente:', e); }
+}
+
+// ── VISTA PREVIA DE INTERNET (ping en vivo + último resultado de velocidad) ──
+async function actualizarVistaPreviaInternet() {
+  const dlEl = document.getElementById('vp-dl');
+  const ulEl = document.getElementById('vp-ul');
+  if (dlEl) dlEl.textContent = speedHistory[0] ? speedHistory[0].dl + ' Mbps' : 'Sin datos';
+  if (ulEl) ulEl.textContent = speedHistory[0] ? speedHistory[0].ul + ' Mbps' : 'Sin datos';
+
+  const pingEl = document.getElementById('vp-ping');
+  if (!pingEl) return;
+  pingEl.textContent = '...';
+  try {
+    const tiempos = [];
+    for (let i = 0; i < 3; i++) {
+      const t0 = performance.now();
+      await fetch(`${CF_DOWN}?bytes=0&_=${Date.now()}`, { cache:'no-store', mode:'cors' });
+      tiempos.push(performance.now() - t0);
+    }
+    tiempos.sort((a,b) => a-b);
+    const ping = Math.round(tiempos[1]);
+    pingEl.textContent = ping + ' ms';
+    pingEl.style.color = ping <= 60 ? 'var(--green-text)' : ping <= 150 ? 'var(--yellow-text)' : 'var(--red-text)';
+  } catch(e) {
+    pingEl.textContent = 'N/D';
+  }
 }
 
 // ── ALERTAS EN DASHBOARD ADMIN ────────────────────────
@@ -2315,12 +2808,16 @@ async function guardarNuevoEquipo() {
   const estado   = document.getElementById('neq-estado')?.value || 'En bodega';
   const ubicacion= document.getElementById('neq-ubicacion')?.value?.trim() || '';
   const notas    = document.getElementById('neq-notas')?.value?.trim() || '';
+  const senal    = document.getElementById('neq-senal')?.value?.trim() || '';
+  const ruido    = document.getElementById('neq-ruido')?.value?.trim() || '';
+  const cinr     = document.getElementById('neq-cinr')?.value?.trim() || '';
+  const airtime  = document.getElementById('neq-airtime')?.value?.trim() || '';
   const btn = document.querySelector('#modal-nuevo-equipo .btn-accent');
   btn.textContent = 'Guardando...'; btn.disabled = true;
   try {
-    await apiPost({ accion:'equipo', equipo, modelo, ip, ubicacion, estado, notas });
+    await apiPost({ accion:'equipo', equipo, modelo, ip, ubicacion, estado, notas, senal, ruido, cinr, airtime });
     closeModal('modal-nuevo-equipo');
-    ['neq-equipo','neq-modelo','neq-ip','neq-ubicacion','neq-notas'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+    ['neq-equipo','neq-modelo','neq-ip','neq-ubicacion','neq-notas','neq-senal','neq-ruido','neq-cinr','neq-airtime'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
     showAlert(`✅ ${equipo} registrado`, 'ok');
     cargarEquipos();
   } catch(e) { showAlert('Error al guardar.', 'error'); }
@@ -2337,6 +2834,10 @@ function editarEquipo(idx) {
   document.getElementById('eeq-estado').value      = e.estado || 'En línea';
   document.getElementById('eeq-ubicacion').value   = e.ubicacion || '';
   document.getElementById('eeq-notas').value       = e.notas || '';
+  document.getElementById('eeq-senal').value       = e.senal ?? '';
+  document.getElementById('eeq-ruido').value       = e.ruido ?? '';
+  document.getElementById('eeq-cinr').value        = e.cinr ?? '';
+  document.getElementById('eeq-airtime').value     = e.airtime ?? '';
   openModal('modal-editar-equipo');
 }
 
@@ -2349,10 +2850,14 @@ async function guardarEdicionEquipo() {
   const estado   = document.getElementById('eeq-estado').value;
   const ubicacion= document.getElementById('eeq-ubicacion').value.trim();
   const notas    = document.getElementById('eeq-notas').value.trim();
+  const senal    = document.getElementById('eeq-senal').value.trim();
+  const ruido    = document.getElementById('eeq-ruido').value.trim();
+  const cinr     = document.getElementById('eeq-cinr').value.trim();
+  const airtime  = document.getElementById('eeq-airtime').value.trim();
   const btn = document.querySelector('#modal-editar-equipo .btn-accent');
   btn.textContent = 'Guardando...'; btn.disabled = true;
   try {
-    await apiPost({ accion:'editar_equipo', equipo_original:equipoOrig, equipo, modelo, ip, ubicacion, estado, notas });
+    await apiPost({ accion:'editar_equipo', equipo_original:equipoOrig, equipo, modelo, ip, ubicacion, estado, notas, senal, ruido, cinr, airtime });
     closeModal('modal-editar-equipo');
     showAlert('✅ Equipo actualizado', 'ok');
     cargarEquipos();
@@ -2497,6 +3002,118 @@ function renderEquipos(lista, tbody) {
   }).join('');
 }
 
+// ── INSUMOS ───────────────────────────────────────────
+let _insumosCache = [];
+async function cargarInsumos() {
+  const tbody = document.querySelector('#tabla-insumos tbody');
+  if (!tbody) return;
+  try {
+    const insumos = await apiGet('insumos');
+    _insumosCache = insumos;
+    const bajo = insumos.filter(i => Number(i.cantidad) <= Number(i.minimo)).length;
+    const elT = document.getElementById('ins-total'); if(elT) elT.textContent = insumos.length;
+    const elB = document.getElementById('ins-bajo');  if(elB) elB.textContent = bajo;
+    renderInsumos(insumos, tbody);
+  } catch(e) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--red);padding:2rem">Error al conectar con la base de datos</td></tr>`;
+  }
+}
+
+function filtrarInsumos(q) {
+  const tbody = document.querySelector('#tabla-insumos tbody');
+  if (!tbody) return;
+  const term = q.toLowerCase();
+  const filtrados = q ? _insumosCache.filter(i => (i.nombre||'').toLowerCase().includes(term)) : _insumosCache;
+  if (!filtrados.length) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:1.5rem">Sin resultados para "${q}"</td></tr>`;
+    return;
+  }
+  renderInsumos(filtrados, tbody);
+}
+
+function renderInsumos(lista, tbody) {
+  if (!lista.length) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:2rem">Sin insumos registrados</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = lista.map((i) => {
+    const idx = _insumosCache.findIndex(x => x.nombre === i.nombre);
+    const bajo = Number(i.cantidad) <= Number(i.minimo);
+    return `<tr>
+      <td><div style="font-weight:500">${i.nombre}</div></td>
+      <td style="font-weight:600;${bajo?'color:var(--red)':''}">${i.cantidad}</td>
+      <td style="font-size:12px;color:var(--text-muted)">${i.minimo}</td>
+      <td style="font-size:12px;color:var(--text-muted)">${i.unidad||'—'}</td>
+      <td style="font-size:11px;color:var(--text-muted)">${i.notas||'—'}</td>
+      <td><div style="display:flex;gap:4px">
+        <button class="btn btn-sm" onclick="editarInsumo(${idx})" title="Editar">✏️</button>
+        <button class="btn btn-sm btn-danger" onclick="eliminarInsumo(${idx})" title="Eliminar">🗑</button>
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+
+async function guardarNuevoInsumo() {
+  const nombre   = document.getElementById('nins-nombre')?.value?.trim();
+  if (!nombre) { showAlert('El nombre del insumo es obligatorio.', 'error'); return; }
+  const cantidad = document.getElementById('nins-cantidad')?.value?.trim() || '0';
+  const minimo   = document.getElementById('nins-minimo')?.value?.trim() || '0';
+  const unidad   = document.getElementById('nins-unidad')?.value?.trim() || '';
+  const notas    = document.getElementById('nins-notas')?.value?.trim() || '';
+  const btn = document.querySelector('#modal-nuevo-insumo .btn-accent');
+  btn.textContent = 'Guardando...'; btn.disabled = true;
+  try {
+    await apiPost({ accion:'insumo', nombre, cantidad, minimo, unidad, notas });
+    closeModal('modal-nuevo-insumo');
+    ['nins-nombre','nins-cantidad','nins-minimo','nins-unidad','nins-notas'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+    showAlert(`✅ ${nombre} registrado`, 'ok');
+    cargarInsumos();
+  } catch(e) { showAlert('Error al guardar.', 'error'); }
+  finally { btn.textContent = '✅ Guardar insumo'; btn.disabled = false; }
+}
+
+function editarInsumo(idx) {
+  const i = _insumosCache[idx];
+  if (!i) return;
+  document.getElementById('eins-nombre-orig').value = i.nombre;
+  document.getElementById('eins-nombre').value      = i.nombre;
+  document.getElementById('eins-cantidad').value    = i.cantidad || '';
+  document.getElementById('eins-minimo').value      = i.minimo || '';
+  document.getElementById('eins-unidad').value      = i.unidad || '';
+  document.getElementById('eins-notas').value       = i.notas || '';
+  openModal('modal-editar-insumo');
+}
+
+async function guardarEdicionInsumo() {
+  const nombreOrig = document.getElementById('eins-nombre-orig').value;
+  const nombre     = document.getElementById('eins-nombre').value.trim();
+  if (!nombre) { showAlert('El nombre es obligatorio.', 'error'); return; }
+  const cantidad = document.getElementById('eins-cantidad').value.trim();
+  const minimo   = document.getElementById('eins-minimo').value.trim();
+  const unidad   = document.getElementById('eins-unidad').value.trim();
+  const notas    = document.getElementById('eins-notas').value.trim();
+  const btn = document.querySelector('#modal-editar-insumo .btn-accent');
+  btn.textContent = 'Guardando...'; btn.disabled = true;
+  try {
+    await apiPost({ accion:'editar_insumo', nombre_original:nombreOrig, nombre, cantidad, minimo, unidad, notas });
+    closeModal('modal-editar-insumo');
+    showAlert('✅ Insumo actualizado', 'ok');
+    cargarInsumos();
+  } catch(e) { showAlert('Error al guardar.', 'error'); }
+  finally { btn.textContent = '✅ Guardar cambios'; btn.disabled = false; }
+}
+
+async function eliminarInsumo(idx) {
+  const i = _insumosCache[idx];
+  if (!i) return;
+  if (!confirm(`¿Eliminar "${i.nombre}" del inventario?`)) return;
+  try {
+    await apiPost({ accion:'eliminar_insumo', nombre: i.nombre });
+    showAlert(`${i.nombre} eliminado`, 'ok');
+    cargarInsumos();
+  } catch(e) { showAlert('Error al eliminar.', 'error'); }
+}
+
 // ── PERFIL CLIENTE ────────────────────────────────────
 let _usuarioActual = null;
 async function cargarPerfilCliente(nombre) {
@@ -2551,7 +3168,9 @@ window.navigate = function(viewId) {
   if (viewId === 'agenda')     cargarAgenda();
   if (viewId === 'prospectos') cargarProspectos();
   if (viewId === 'equipos')    cargarEquipos();
+  if (viewId === 'insumos')    cargarInsumos();
   if (viewId === 'perfil' && window._nombreCliente) cargarPerfilCliente(window._nombreCliente);
+  if (viewId === 'soporte' && window._nombreCliente) cargarMisTickets(window._nombreCliente);
   if ((viewId === 'dashboard-user' || viewId === 'servicios' || viewId === 'pagos') && window._nombreCliente) cargarDatosCliente(window._nombreCliente);
 };
 
@@ -3085,6 +3704,7 @@ function ico(n){const d={
   calendar:'<rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>',
   target:'<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
   server:'<rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6" stroke-width="2"/><line x1="6" y1="18" x2="6.01" y2="18" stroke-width="2"/>',
+  box:'<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>',
   chart:'<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>',
   settings:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>',
 };
